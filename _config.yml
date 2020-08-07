@@ -1,11 +1,11 @@
 # Site settings
 author: Karson Kalt
-title: 
+title: Karson's Blog
 header-img: img/home-bg.png
 email: kars.kalt@gmail.com
 copyright_name: Karson Kalt
 description: > # this means to ignore newlines until "baseurl:"
-  
+  A short subtitle
 baseurl: "" # the subpath of your site, e.g. /blog
 twitter_username: KarsonKalt
 github_username:  karsonkalt
