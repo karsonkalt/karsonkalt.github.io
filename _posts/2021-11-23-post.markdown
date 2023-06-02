@@ -1,0 +1,206 @@
+---
+layout: post
+title:  "Building Efficient Algorithms Using Memoization and Closures in Javascript"
+date:   2021-11-23 10:36:39 -0400
+---
+## What Is Memoization?
+
+Memoization is an approach to designing effective algorithms by breaking them down into sub-problems and saving solutions we have seen before. Caching is a way we store values so that when we run into a problem we have seen before, we can use the data we had from before.
+
+Let's think about the real world –– maybe you made a new friend and were going to meet them at a restaurant you have never been to before. You might look up the instructions how to get to the restaurant from your house. A few weeks later, you decide to go back to the restaurant. Would it be effective if you looked up how to get there again? After all you have already been there and should be able to remember where it was.
+
+Enter memoization! Essentially a “note to self” about things we have seen before or a value we need to keep track of.
+
+## Basic Example 
+
+Suppose we were building a function that takes an argument `n` and multiplies it by 231. We could get started by building something like what is outlined below. Every time we call `multiplyBy231(40)` we ask the computer to take our argument and multiply it by 231.
+
+```javascript
+function multiplyBy231(n) {
+  console.log("Calculating the product")
+  return n * 231;
+}
+
+multiplyBy231(40)
+// "Calculating the product"
+// => 9240
+multiplyBy231(40)
+// "Calculating the product"
+// => 9240
+```
+
+### Caches
+But what if we were doing this by hand, let's say on a test of some sort with just a pen and paper. Would you re-calculate the product again, or just look at the answer you had from before?
+
+Sure, computers are fast, and in this example the amount of work required is relatively small. For this example we will use this easy to understand function, but let's imagine the function required a large amount of work from the computer.
+
+So how can we record things we have seen before? Let's declare a new `cache` object in the global scope that keeps track of what we have seen. Every time we run our function, we will check the cache to see if we have run into this problem before. If we have, we can just take the solution out of the cache, and if not we will calculate the product and then add it to the cache.
+
+```javascript
+let cache = {};
+function multiplyBy231(n) {
+  if (!(n in cache)) {
+    console.log("Adding to cache");
+    cache[n] = n * 231;
+  }
+  return cache[n];
+}
+
+multiplyBy231(22);
+// Adding to cache
+// => 5082
+multiplyBy231(22);
+// => 5082
+```
+
+### Pure Functions
+Great, the function looked for the cache and found the value. But we as developers know that functions that rely on global variables are not ideal, and at scale can become difficult to maintain function/global variable relationships. We as developers usually tend to like [pure functions](https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-pure-function-d1c076bec976) that avoid side effects and will always produce the same result. We want controlled, predictable functions that always behave in the same way.
+
+Let's try moving our cache inside our function.
+
+```javascript
+function multiplyBy231(n) {
+  let cache = {};
+  if (!(n in cache)) {
+    console.log("Adding to cache");
+    cache[n] = n * 231;
+  }
+  return cache[n];
+}
+
+multiplyBy231(50);
+// Adding to cache
+// => 11550
+multiplyBy231(50);
+// Adding to cache
+// => 11550
+```
+
+### Adding a Closure
+Each time we called `multiplyBy231`, the `cache` was reset to an empty object. If we want `cache` to exist only inside the world of `multiplyBy231` we can use a great feature of functional programming –– closures!
+
+A closure is a way we can keep variables bound to a function. 
+i.e. Unlike a regular old function, a closure lets us access a scope-defined variable that persists even when we are not executing that function.
+
+Since functions are treated as [first-class citizens](https://www.developintelligence.com/blog/2016/10/javascript-functions-as-first-class-objects/#:~:text=Basically%2C%20first%2Dclass%20citizenship%20simply,be%20assigned%20key%3A%20value%20pairs) in JavaScript, the return value of a function can be another function.
+
+When we move the cache inside the scope of `multiplyBy231`, we can persist the cache's value by changing the return statement to return another function.
+
+The return value of `multiplyBy231` will give us `[Function (anonymous)]`, which we can invoke by assigning to a variable.
+
+```javascript
+function multiplyBy231(n) {
+  let cache = {};
+  return function(n) {
+    console.log(cache);
+    if (!(n in cache)) {
+      console.log("Adding to cache");
+      cache[n] = n * 231;
+    }
+    return cache[n];
+  }
+}
+
+multiplyBy231(15);
+// => [Function (anonymous)]
+
+let multiply = multiplyBy231();
+
+multiply(40);
+// Adding to cache
+// => 9240
+multiply(40);
+// => 9240
+```
+
+### Refactoring as an IIFE
+Great, now `multiplyBy231` remembers its `cache` but we had to assign it to another variable before invoking it -- not our ideal situation. To solve this, we can re-write the function as an [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE), aka an "immediately invoked function expression".
+
+In an IIFE, we invoke our anonymous function immediately after defining it. Since we have multi-lines we need to invoke, we wrap them with `()` and then invoke the function immediately with `()` 
+
+```javascript
+let multiplyBy231 = (function(n) {
+  let cache = {};
+  return function (n) {
+    console.log(cache);
+    if (!(n in cache)) {
+      console.log("Adding to cache");
+      cache[n] = n * 231;
+    }
+    return cache[n];
+  }
+})()
+
+multiplyBy231(31);
+// Adding to cache
+// => 7161
+multiplyBy231(31);
+// => 7161
+```
+
+## Fibonacci Example
+Let's try a more complex example using the information we learned above to see the real power of memoization and closures in action. Take this well-known approach to finding the `n`th number in the fibonacci sequence using recursion. I am going to define a global `calculations` variable for now.
+
+```javascript
+let calculations = 0;
+
+function fibonacci(n) {
+  calculations++;
+  if (n < 2) {
+    return n;
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+fibonacci(30);
+// => 832040
+
+calculations;
+// => 2692537
+```
+
+To find the 30th fibonacci number, the computer had to complete **two and half million calculations**! Surely there has to be a better way to approach this. Let's take a look the recursion tree of `fibonacci(6)` and see if we can identify any ways to make. our function more efficient.
+
+![An image of the recursion tree calling fibonacci(6)](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/qrtei3l38jj2jtiasrtu.png)
+
+Immediately, we can identify a few places where caching would save us time. Is there anywhere else we see patterns?
+
+![The recursion tree highlighting duplicate fibonacci(1) and fibonacci(2) calls](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/o5pv9ioyzog6a5h3lnnl.png)
+
+The pattern continues up two more levels, we can see mirrored tree structures for fibonacci(3) and fibonacci(4) calls.
+
+![The recursion tree highlighting duplicate fibonacci(3) calls](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8c3r2cudcta02squgc36.png)
+
+![The recursion tree highlighting duplicate fibonacci(4) calls](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/x0ku5dh3vbx8ztlu8gcc.png)
+
+A cache would certainly help us out! By stopping the recursion tree and returning the value we have seen before, we can cut our number of calculations way down! Let's implement a `cache` and a closure just like we did in our multiplier example.
+
+```javascript
+calculations = 0;
+const fibonacci = (function (n) {
+  let cache = {};
+
+  return function fibHelper(n) {
+    calculations++;
+    console.log(cache);
+    if (n in cache) {
+      return cache[n];
+    } else {
+      if (n < 2) {
+        return n;
+      }
+      sum = fibHelper(n - 1) + fibHelper(n - 2);
+      cache[n] = sum;
+      return sum;
+    }
+  };
+})();
+
+fibonacci(30);
+// => 832040
+
+calculations;
+// => 59
+```
+
+By implementing a cache, we built a function that is a whopping **45,636% more efficient**!

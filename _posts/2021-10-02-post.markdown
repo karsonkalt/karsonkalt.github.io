@@ -1,0 +1,250 @@
+---
+layout: post
+title:  "What is a 'Hash' and How to Build one from Scratch in Ruby"
+date:   2021-10-02 10:36:39 -0400
+---
+Because I am a visual learner, when learning about data structures, I usually find myself looking for or drawing a visual representation of what the structure looks like. But when I took an in-depth look at hashes (similar to dictionaries in other languages), I realized that I didn't have a very deep understanding of what was going on below the surface.
+
+## What is a Hash anyway?
+Like a lot of data structures, Ruby provides us with a ready to use class `Hash`, which we can use by calling `Hash.new` or using the hash literal `{}`.
+
+Like other data structures, a hash holds a collection of data, but that data is not ordered. Instead, a hash uses keys (which can be any data type), to point to it's values. Hashes also provide us lot of benefits over similar data structures (like Arrays or LinkedLists), because they provide us an [O1 lookup time](https://www.bigocheatsheet.com/) for access/searches, insertion, and deletion.
+
+In computer memory, we know arrays are a block of memory set aside next to each other, and that each successive item in the array comes immediately after the next. Similarly, data structures like linked lists always have a "pointer" that gets us to the next item in the structure. But what is going on under the surface with a hash?
+
+Well, it turns out they are usually made of both arrays and linked lists!
+
+## How it Works
+The primary data structure of a hash is usually something like an array. When we want to store an item, Ruby takes the key we provide it and transforms it into an index by running it through a [hashing algorithm](https://crosstower.com/resources/education/what-is-a-hashing-algorithm-and-how-does-it-work/#:~:text=A%20hashing%20algorithm%20is%20a,by%20using%20a%20hashing%20table). We can do this quickly using the Ruby the `.hash` method already built in to Ruby.
+
+```ruby
+"karson".hash
+ # => 3190424403111594787
+"ruby".hash
+ # => -211952950235035342
+```
+
+Unless we are working with an extremely large array, `3190424403111594787` probably isn't a valid index of our array, so we can shop it down by dividing the hashcode by the size of the array. After invoking the [modulo](https://ruby-doc.org/core-2.4.1/Numeric.html#method-i-modulo) operator we are returned the remainder, which we can confidently assume will always be an index inside this array. From here, we can begin to store our values.
+
+Let's write a helper method that can do this quickly for us
+
+```ruby
+class HashTable
+
+...
+
+private
+
+    def h(key)
+        key.hash % @size
+        # For now let's assume @size represents the size of the array.
+    end
+
+
+end
+```
+
+![A image showing how a key is transformed into the index and stored in a hash](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/e97gxs5famwnstzy1anr.png)
+
+## Collisions
+If we aren't using a great hashing algorithm, we run the possibility of getting the same hashcode from the hashing algorithm. Though the probability is unlikely, it does exist and could cause issues where we get multiple hashcodes that point to the same index, and thus the same value. Even more likely, is that when dividing our hashcode by the size of the array, we get the same index back. Both of these issues are called *collisions*, when we try to store data when there is already something located.
+
+We can avoid these by using a linked list, storing both the key and value pairs, and re-hashing to traverse down the linked list.
+
+If we were using a bad hashing algorithm, time complexity again approaches On, but for the most part, we can safely assume that we avoid this with a good implementation and can stay close to O1 runtime.
+
+## Building A Hash From Scratch
+
+Let's begin building out our own hash from scratch in Ruby to get a better idea of what's going on. We can begin by initializing our class and setting a few instance variables. I'm going to use `@size` to set the default size of our array, and `@count` to count how many items we have stored in the array.
+
+```ruby
+class HashTable
+
+    def initialize
+        @size = 10
+        @array = Array.new(@size) { [] }
+        @count = 0
+    end
+
+end
+```
+
+Let's think about how we want to add items into our hash and how we want to retrieve them -- commonly called our getter and setter methods. With hashes, these are usually in bracket notation, luckily for us Ruby provides us a way to access this notation inside of a class. Let's start by writing some psuedo-code.
+
+```ruby
+class HashTable
+...
+    def []=(key, value)
+        # 1. Take the key and hash it
+        # 2. Take the hashcode and divide it by the length of the array
+        # 3. Take the index and see if there is already an item in that spot
+        # 4. If there is an item in this index and it has the same key, overwrite the value
+        # 5. If there is an item in this index and it is not the same key, add the key-value pair to the linked list
+        # 6. If there is no item in this index, add the key-value pair
+    end
+end
+```
+
+This method is trying to do a lot of things up front, let's invoke our helper method we defined previously.
+
+```ruby
+class HashTable
+...
+
+private
+    def h(key)
+        key.hash % @size
+    end
+end
+```
+
+**NOTE:** Instead of using a linked list to chain through all items with the same index, I decided to use another array for the sake of simplicity.
+
+When our HashTable starts to fill up, we need some way of resizing our array to ensure we avoid collisions and have room to continue storing items. Commonly, this is called a [load factor](https://www.javatpoint.com/load-factor-in-hashmap#:~:text=The%20Load%20factor%20is%20a,%25%20of%20the%20map%20size) and defaults somewhere around 70%. When 70% capacity is reached, we can double the size of the array. To get started, I created a class constant, another helper method, and an `attr_accessor` to quickly get our array.
+
+```ruby
+class HashTable
+
+    LOAD_FACTOR = 0.7
+
+    attr_accessor :array
+
+    def initialize
+        @size = 10
+        @array = Array.new(@size) { [] }
+        @count = 0
+    end
+
+...
+
+private
+
+    def h(key)
+        key.hash % @size
+    end
+
+    def resize
+        old_array = @array
+        @size *= 2
+        @array = Array.new(@size) { [] }
+        # Reassign everything to our new array
+    end
+end
+```
+
+Let's now revisit our setter method we defined above. When attempting to put something inside of our array, this would be the perfect time to check if the array needs to be resized.
+
+1. Check if the array needs to be resized. ✅
+2. Take the key and hash it ✅
+3. Take the hashcode and divide it by the length of the array ✅
+
+```ruby
+class HashTable
+
+...
+
+    def []=(key, value)
+        resize if (@count.to_f / @size > LOAD_FACTOR)
+        slot = h(key)
+        ...
+    end
+...
+
+end
+```
+
+Now we have the appropriate `index` of which array we need to select, called `slot`. Let's select the array and then check if it already contains a key-value pair in that slot. Following our psuedo code, let's knock out number 4: Take the index and see if there is already an item in that spot.
+
+```ruby
+class HashTable
+
+...
+
+    def []=(key, value)
+        resize if (@count.to_f / @size > LOAD_FACTOR)
+        slot = h(key)
+        kv_pair = arr.find { |pair|
+            pair[0] == key
+        }
+        ...
+    end
+...
+
+end
+
+```
+
+We can address the last few items in our psuedocode with the following if statement:
+
+```ruby
+...
+    if kv_pair
+        kv_pair[1] = value
+        # Overwrite the value of the current key-value with the new value.
+    else
+        @count += 1
+        arr << [key, value]
+        # Oherwise, increase our counter and add our new key-value pair into the array
+    end
+...
+
+```
+
+Adding a a getter method that mirrors the structure of our setter, our entire HashTable class should look like the following:
+
+```ruby
+class HashTable
+
+    LOAD_FACTOR = 0.7
+
+    attr_accessor :array
+
+    def initialize
+        @size = 10
+        @array = Array.new(@size) { [] }
+        @count = 0
+    end
+
+    def []=(key, value)
+        resize if (@count.to_f / @size > LOAD_FACTOR)
+        slot = h(key)
+        arr = @array[slot]
+        kv_pair = arr.find { |pair|
+            pair[0] == key
+        }
+        if kv_pair
+            kv_pair[1] = value
+        else
+            @count += 1
+            arr << [key, value]
+        end
+    end
+
+    def [](key)
+        slot = h(key)
+        arr = @array[slot]
+        kv_pair = arr.find { |pair|
+            pair[0] == key
+        }
+        kv_pair[1] if kv_pair
+    end
+
+    private
+
+    def h(key)
+        key.hash % @size
+    end
+
+    def resize
+        old_array = @array
+        @size *= 2
+        @array = Array.new(@size) { [] }
+        count = 0
+        old_array.each do |arr|
+            array.each do |key, value|
+                self[key] = value
+            end
+        end
+    end
+end
+```
