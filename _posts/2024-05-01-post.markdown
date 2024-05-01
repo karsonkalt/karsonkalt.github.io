@@ -1,0 +1,138 @@
+---
+layout: post
+title:  "Managing View State and Client-side Routing in SPAs"
+date:   2024-05-01 17:57:00 -0400
+---
+At [JupiterOne](https://www.jupiterone.com/), we've made a significant transition from a monolithic frontend to a distributed frontend architecture using microfrontends, powered by (single-spa-react)[https://single-spa.js.org/]. This architectural shift has brought many benefits, such as lazy loading sections of the app and accelerating our development cycle. However, like any significant change, it has also come with its set of challenges.
+
+One particular challenge we've faced is the divergence of routing strategies across our microfrontends, with some SPAs taking very different approaches to routing than others. While all SPAs seem to face this challenge, I'll explore a more scalable client-side routing approach that has helped us overcome these challenges.
+
+## Why Care About Routing
+
+Routing is not just about manipulating UI state, it's an integral part of the user experience. Consistent routing ensures that users understand where they are in the app, can share or bookmark a particular view, and is an often forgot-about interface of your application.
+
+## The Pattern I See Often
+
+Take this pattern of a collection rendering a list of items, when they are clicked a dialog opens to be able to inspect the resource.
+
+```tsx
+export const App: React.FC = () = > {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/collection" element={<Collection />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export const Collection: React.FC = () => {
+  const [resourceId, setResourceId] = useState<number | null>(null)
+  const isDialogOpen = resourceId !== null;
+
+  return (
+    <div>
+      <h2>Collection</h2>
+      <ol>
+        <li>
+          <button onClick={() => setResourceId(1)}>
+            Resource 1
+          </button>
+        </li>
+      </ol>
+      {isDialogOpen && (
+        <div>
+          <h2>Resource: {resourceId}</h2>
+          <button onClick={() => setResourceId(null)}>Close</button>
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+What issues do you see right off the bat with this? A few things immediately stand out to me:
+1. The dialog is the only way to view the specific resource and there is not route updates to share this.
+1. Other developers probably will not know that this dialog exists at all unless they are in this specific file.
+
+Well what's a better approach, after all this is a dialog, which kind of float around without a clear place in the app.
+
+## Managing Views Within Views
+
+How do we manage "views within a view"? As our applications grow in complexity, we have a need to shove more inofrmation into them, leading us to various types of show/hide components: drawers, confirmation alerts, dialogs, etc. With so many elements opening and closing, it becomes challenging to distinguish what should be considered a "view" and what isn't.
+
+REST to the rescue!
+
+We don't have to re-invent the wheel, just think through a REST paradigm:
+- Does the component display specific resource information?
+- Is it responsible for CRUD operations on a resource?
+- Does it handle a specific feature or functionality within the application?
+
+This usually helps me think more clearly about what should get a route update:
+- Resource drawers
+- Tabs
+- Resource dialogs
+
+And what isn't:
+- Confirmation dialogs
+
+## Adding to Routes.tsx
+
+Once we've identified that a particular component is indeed a view, it's essential we have a single source of truth managing all of these views in our Routes.tsx. By centralizing the management of views, we ensure consistency and improve the overall experience (for devs and users), simplifying our state management and avoiding inconsistencies.
+
+To address these issues, I've revamped our approach to route handling and view state management. Here, I've integrated our dialog view into the router leveraging `Outlet` from `react-router-dom`.
+
+
+```tsx
+export const Collection: React.FC = () => {
+  return (
+    <div>
+      <h2>Collection</h2>
+      <ol>
+        <li>
+          <Link to='/collection/1'>Resource 1</Link>
+        </li>
+      </ol>
+      <Outlet />
+    </div>
+  );
+};
+
+const Dialog: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+
+  return (
+    <div>
+      <h2>Resource: {id}</h2>
+      <Link to='/collection'>Close</Link>
+    </div>
+  );
+};
+```
+
+We then can nest routes and allow multiple views to be rendered at once.
+
+```tsx
+export const App: React.FC = () = > {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/collection" element={<Collection />}>
+          <Route path=":id" element={<Dialog />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+## Takeaways
+
+To wrap up, embracing a more organized and centralized approach to route handling and view state management, we've addressed the challenges posed by divergent routing strategies across our microfrontends. My takeaways are these three principles:
+
+- Avoid onClicks for View Manipulation: Utilize route manipulation instead of onClick events for view manipulation.
+- Centralize Route Handling: Ensure that routes are the single source of truth for rendering all views in the SPA, simplifying state management and ensuring consistency.
+- Define What Constitutes a View: Clearly define what should be considered a view within your application, making development decisions easier for everyone involved.
+
+We've not only improved the developer experience but also enhanced the user experience by ensuring better consistency and URL synchronization with the application state. This approach sets a strong foundation for future development, making our application more scalable and maintainable in the long run.
+
