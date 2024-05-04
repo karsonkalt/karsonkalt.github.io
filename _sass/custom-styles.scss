@@ -46,7 +46,8 @@
   }
 }
 
-.nav button[role="tab"] {
+.nav button[role="tab"],
+.nav a {
   border: unset;
   background-color: unset;
   color: unset;
