@@ -19,6 +19,7 @@
 }
 
 .home {
+  width: 100%;
   position: absolute;
   height: 100vh;
   box-sizing: border-box;
@@ -35,8 +36,8 @@ canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   box-sizing: border-box;
 }
 
@@ -58,6 +59,7 @@ canvas {
 .home-title {
   margin-top: 100px;
   max-width: 1000px;
+  width: 100%;
 }
 
 .spacer {

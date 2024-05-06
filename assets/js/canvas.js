@@ -32,95 +32,25 @@ document.addEventListener("DOMContentLoaded", function () {
   camera.position.z = 1;
   camera.position.x = 1;
 
-  // Mouse variables
-  let isDragging = false;
-  let previousMousePosition = {
-    x: 0,
-    y: 0,
-  };
+  // Add this after setting the initial renderer size
+  window.addEventListener("resize", function () {
+    console.log("resized");
+    // Update renderer size
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-  // Auto-rotate cube
-  let autoRotate = true;
-  const autoRotateSpeed = 0.001;
-
-  // Mouse events
-  renderer.domElement.addEventListener("mousedown", (event) => {
-    isDragging = true;
-    autoRotate = false;
-  });
-
-  renderer.domElement.addEventListener("mousemove", (event) => {
-    const deltaMove = {
-      x: event.offsetX - previousMousePosition.x,
-      y: event.offsetY - previousMousePosition.y,
-    };
-
-    if (isDragging) {
-      const deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
-        new THREE.Euler(
-          toRadians(deltaMove.y * 1),
-          toRadians(deltaMove.x * 1),
-          0,
-          "XYZ"
-        )
-      );
-
-      cube.quaternion.multiplyQuaternions(
-        deltaRotationQuaternion,
-        cube.quaternion
-      );
-    }
-
-    previousMousePosition = {
-      x: event.offsetX,
-      y: event.offsetY,
-    };
-  });
-
-  renderer.domElement.addEventListener("mouseup", (event) => {
-    isDragging = false;
-    autoRotate = true;
-  });
-
-  const playPauseButton = document.getElementById("playPauseButton");
-  playPauseButton.addEventListener("click", () => {
-    autoRotate = !autoRotate;
-    playPauseButton.innerHTML = autoRotate
-      ? `<svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="currentColor"
-      >
-        <path d="M560-200v-560h160v560H560Zm-320 0v-560h160v560H240Z" />
-      </svg>`
-      : `<svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24px"
-        viewBox="0 -960 960 960"
-        width="24px"
-        fill="currentColor"
-      >
-        <path d="M320-200v-560l440 280-440 280Z" />
-      </svg>`;
+    // Update camera aspect ratio
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
   });
 
   function animate() {
     requestAnimationFrame(animate);
 
-    if (autoRotate || isDragging) {
-      cube.rotation.x += autoRotateSpeed;
-      cube.rotation.y += autoRotateSpeed;
-    }
+    cube.rotation.x += 0.001;
+    cube.rotation.y += 0.001;
 
     renderer.render(scene, camera);
   }
 
   animate();
-
-  // Helper function to convert degrees to radians
-  function toRadians(angle) {
-    return angle * (Math.PI / 180);
-  }
 });
