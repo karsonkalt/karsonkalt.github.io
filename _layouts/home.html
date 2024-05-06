@@ -3,8 +3,13 @@ layout: base
 ---
 
     {% assign posts = site.posts %}
+<canvas id="background"></canvas>
 
+<button id="playPauseButton">
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M560-200v-560h160v560H560Zm-320 0v-560h160v560H240Z"/></svg>
+</button>
 <div class="home">
+  
   <div class="subtitle-container">
   <div class="subtitle">
     <!-- New York City-based full-stack engineer and designer known for crafting exceptional user experiences. -->
@@ -47,3 +52,6 @@ layout: base
 
 
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="{{ 'assets/js/canvas.js' | relative_url }}"></script>
