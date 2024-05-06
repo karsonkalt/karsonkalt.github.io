@@ -19,14 +19,24 @@ document.addEventListener("DOMContentLoaded", function () {
   // Create cube
   const geometry = new THREE.BoxGeometry();
   const materials = [
-    new THREE.MeshBasicMaterial({ color: 0x080808 }), // very dark grey
-    new THREE.MeshBasicMaterial({ color: 0x101010 }), // very dark grey
-    new THREE.MeshBasicMaterial({ color: 0x181818 }), // very dark grey
-    new THREE.MeshBasicMaterial({ color: 0x202020 }), // very dark grey
-    new THREE.MeshBasicMaterial({ color: 0x282828 }), // very dark grey
-    new THREE.MeshBasicMaterial({ color: 0x303030 }), // very dark grey
+    new THREE.MeshPhongMaterial({ color: 0x333333 }), // dark grey
+    new THREE.MeshPhongMaterial({ color: 0x444444 }), // medium dark grey
+    new THREE.MeshPhongMaterial({ color: 0x555555 }), // medium grey
+    new THREE.MeshPhongMaterial({ color: 0x333333 }), // medium light grey
+    new THREE.MeshPhongMaterial({ color: 0x444444 }), // light grey
+    new THREE.MeshPhongMaterial({ color: 0x333333 }), // very light grey
   ];
+
   const cube = new THREE.Mesh(geometry, materials);
+
+  // Add a light source
+  const light = new THREE.PointLight(0xffffff, 1, 100);
+  light.position.set(10, 10, 10);
+  scene.add(light);
+
+  cube.rotation.x = Math.random() * 2 * Math.PI;
+  cube.rotation.y = Math.random() * 2 * Math.PI;
+
   scene.add(cube);
 
   camera.position.z = 1;
