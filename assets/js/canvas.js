@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
   scene.add(cube);
 
   camera.position.z = 1;
-  camera.position.x = 1;
+  camera.position.x = 0.5;
 
   // Add this after setting the initial renderer size
   window.addEventListener("resize", function () {
@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function animate() {
     requestAnimationFrame(animate);
 
-    cube.rotation.x += 0.001;
-    cube.rotation.y += 0.001;
+    cube.rotation.x += 0.002;
+    cube.rotation.y += 0.002;
 
     renderer.render(scene, camera);
   }
