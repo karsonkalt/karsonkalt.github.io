@@ -13,8 +13,13 @@
   border: none;
   width: 40px;
   height: 40px;
+  z-index: 100;
   &:hover {
     background-color: #787878aa;
+  }
+  @media (max-width: 600px) {
+    top: 32px;
+    right: 32px;
   }
 }
 

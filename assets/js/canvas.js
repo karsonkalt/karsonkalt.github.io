@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
   camera.position.z = 1;
   camera.position.x = 0.5;
 
+  let autoRotate = true;
+
   // Add this after setting the initial renderer size
   window.addEventListener("resize", function () {
     console.log("resized");
@@ -56,11 +58,39 @@ document.addEventListener("DOMContentLoaded", function () {
   function animate() {
     requestAnimationFrame(animate);
 
-    cube.rotation.x += 0.002;
-    cube.rotation.y += 0.002;
+    if (autoRotate) {
+      cube.rotation.x += 0.002;
+      cube.rotation.y += 0.002;
+    }
 
     renderer.render(scene, camera);
   }
+
+  const playPauseButton = document.getElementById("playPauseButton");
+
+  playPauseButton.addEventListener("click", () => {
+    console.log("clicked");
+    autoRotate = !autoRotate;
+    playPauseButton.innerHTML = autoRotate
+      ? `<svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="currentColor"
+      >
+        <path d="M560-200v-560h160v560H560Zm-320 0v-560h160v560H240Z" />
+      </svg>`
+      : `<svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="currentColor"
+      >
+        <path d="M320-200v-560l440 280-440 280Z" />
+      </svg>`;
+  });
 
   animate();
 });
