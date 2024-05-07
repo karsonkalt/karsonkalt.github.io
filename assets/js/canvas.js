@@ -46,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add this after setting the initial renderer size
   window.addEventListener("resize", function () {
-    console.log("resized");
     // Update renderer size
     renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -69,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const playPauseButton = document.getElementById("playPauseButton");
 
   playPauseButton.addEventListener("click", () => {
-    console.log("clicked");
     autoRotate = !autoRotate;
     playPauseButton.innerHTML = autoRotate
       ? `<svg
