@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
-  {%- include head.html -%}
+{%- include head.html -%}
 
-  <body>
+<meta name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<html lang='{{ page.lang | default: site.lang | default: " en" }}'>
 
-    <main>
-        {{ content }}
-    </main>
-
-  </body>
+<body>
+  <main>
+    {{ content }}
+  </main>
+  <script src="{{ 'assets/js/devToolsGreeting.js' | relative_url }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="{{ 'assets/js/canvas.js' | relative_url }}"></script>
+</body>
 
 </html>

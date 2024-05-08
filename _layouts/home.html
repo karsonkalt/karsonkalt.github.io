@@ -2,56 +2,57 @@
 layout: base
 ---
 
-    {% assign posts = site.posts %}
+{% assign posts = site.posts %}
+
 <canvas id="background"></canvas>
 
 <button id="playPauseButton">
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M560-200v-560h160v560H560Zm-320 0v-560h160v560H240Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+    <path d="M560-200v-560h160v560H560Zm-320 0v-560h160v560H240Z" />
+  </svg>
 </button>
 <div class="home">
-  
+
   <div class="subtitle-container">
-  <div class="subtitle">
-    <!-- New York City-based full-stack engineer and designer known for crafting exceptional user experiences. -->
-  </div></div>
-  <div class="spacer"></div>
-<img class="home-title" src="{{ '/assets/svg/karson-kalt-wordmark-vertical.svg'}}" alt="Karson Kalt"/>
-<nav class="nav">
-  <div class="tab-container">
-    <button role="tab" aria-selected="true" aria-controls="tab-panel" id="tab-id">
-      Blog
-    </button>
-    <a id="tab-id" href="http://www.github.com/karsonkalt" target="_blank">
-      GitHub
-    </a>
-    <a id="tab-id" href="https://www.linkedin.com/in/kaltkarson/" target="_blank">
-      LinkedIn
-    </a>
+    <div class="subtitle">
+      <!-- New York City-based full-stack engineer and designer known for crafting exceptional user experiences. -->
+    </div>
   </div>
-  <div id="tab-panel" class="tab-panel">
-    <ul class="post-list">
-      {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-      {%- for post in posts -%}
-      <li>
-        <div>
+  <div class="spacer"></div>
+  <img class="home-title" src="{{ '/assets/svg/karson-kalt-wordmark-vertical.svg'}}" alt="Karson Kalt" />
+  <nav class="nav">
+    <div class="tab-container">
+      <a role="tab" aria-selected="true" aria-controls="tab-panel" id="blog-tab">
+        Blog
+      </a>
+      <a id="tab-id" href="http://www.github.com/karsonkalt" target="_blank">
+        GitHub
+      </a>
+      <a id="tab-id" href="https://www.linkedin.com/in/kaltkarson/" target="_blank">
+        LinkedIn
+      </a>
+    </div>
+    <div id="tab-panel" class="tab-panel" role="tabpanel" aria-labelledby="blog-tab">
+      <ul class="post-list">
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        {%- for post in posts -%}
+        <li>
+          <div>
             <a class="post-link" href="{{ post.url | relative_url }}">
-          <span class="post-meta">{{ post.date | date: date_format }}</span>
-          <span>
-              {{ post.title | escape }}
+              <span class="post-meta">{{ post.date | date: date_format }}</span>
+              <span>
+                {{ post.title | escape }}
               </span>
             </a>
-        </div>
-        {%- if site.show_excerpts -%}
+          </div>
+          {%- if site.show_excerpts -%}
           {{ post.excerpt }}
-        {%- endif -%}
-      </li>
-      {%- endfor -%}
-    </ul>
-  </div>
-</nav>
+          {%- endif -%}
+        </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </nav>
 
 
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="{{ 'assets/js/canvas.js' | relative_url }}"></script>
