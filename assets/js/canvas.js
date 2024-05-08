@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Create scene, camera and renderer
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -13,10 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  // Enable high-resolution rendering
   renderer.setPixelRatio(window.devicePixelRatio);
 
-  // Create cube
   const geometry = new THREE.BoxGeometry();
   const materials = [
     new THREE.MeshPhongMaterial({ color: 0x333333 }), // dark grey
@@ -29,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const cube = new THREE.Mesh(geometry, materials);
 
-  // Add a light source
   const light = new THREE.PointLight(0xffffff, 1, 100);
   light.position.set(10, 10, 10);
   scene.add(light);
@@ -44,12 +40,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let autoRotate = true;
 
-  // Add this after setting the initial renderer size
   window.addEventListener("resize", function () {
-    // Update renderer size
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    // Update camera aspect ratio
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
   });
