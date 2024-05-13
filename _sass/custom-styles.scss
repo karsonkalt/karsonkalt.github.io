@@ -52,11 +52,28 @@ canvas {
 .subtitle-container {
   display: flex;
   justify-content: flex-end;
+  @media (max-width: 600px) {
+    display: none;
+  }
 }
 
-.subtitle {
-  margin-top: 100px;
-  width: 500px;
+.subtitle-large {
+  margin-right: 50px;
+  border-left: 2px solid red;
+  padding-left: 20px;
+  margin-top: 120px;
+  width: 450px;
+}
+
+.subtitle-small {
+  display: none;
+  @media (max-width: 600px) {
+    border-left: 2px solid red;
+    padding-left: 20px;
+    margin-top: 40px;
+    display: inline-block;
+    font-size: 14px;
+  }
 }
 
 .home-title {
@@ -68,15 +85,18 @@ canvas {
 
 .spacer {
   flex-grow: 1;
+  @media (max-width: 600px) {
+    display: none;
+  }
 }
 
 .nav {
   margin-top: 24px;
   display: flex;
-  gap: 50px;
   height: 200px;
-
+  gap: 20px;
   @media (max-width: 600px) {
+    margin-top: 80px;
     flex-direction: column;
   }
 }
