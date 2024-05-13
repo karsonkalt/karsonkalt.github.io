@@ -1,0 +1,106 @@
+---
+layout: post
+title:  "Building a Turn-based Game Using JS and Rails"
+date:   2021-06-24  12:00:00 -0400
+---
+# Overview
+[GamePage](github.com/karsonkalt/gamepage_front_end) is a web app built in Rails and JavaScript that lets two players play the classic board game "Reversi" aka "Othello". The basic premise of the game is to place tokens on the board. When placing a token, you attempt to also swap any opponent's tokens that lay between your placed token and your other tokens with your own.
+
+Players take turns placing tokens, until the entire board is filled. At the end of the game, the player with the highest amount of tokens on the board wins. Watch Triple S's video ["How to Play Othello"](https://www.youtube.com/watch?v=xDnYEOsjZnM&ab_channel=TripleSGames) to learn more.
+
+Once a player wins a game, their score is recorded to the database and the players have the options of playing again.
+
+GamePage is split into two repositories, frontend and backend:
+- Frontend: [github.com/karsonkalt/gamepage_front_end](https://github.com/karsonkalt/gamepage_front_end)
+- Backend: [github.com/karsonkalt/gamepage_back_end](https://github.com/karsonkalt/gamepage_back_end)
+
+# Project Architecture
+GamePage is served by a Rails API that responds to HTTP `GET` and `POST` requests and returns a JSON response. The front end Document-Object Model is manipulated by JS scripts that run with a successful fetch response, so the frontend user experiences a seamless single page application.
+
+## Rails Controllers
+To access the main menu, a `User` must log in. They then are presented with a choice of options: Play Reversi, Leaderboard, and My Scores.
+
+![Main menu with three options, play reversi, leaderboard, and my scores](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/e0gxl132y63o8re6hlh9.png)
+
+Choosing `My Scores` makes a `fetch` call which routes to the `ScoresController`'s `index` action and returns an array of JSON objects which are then mapped into `Score` objects in JS and rendered on the page.
+
+```ruby
+class ScoresController < ApplicationController
+    def index
+        scores = Score.where(user_id: params[:user_id])
+
+        seralized_scores = scores.map do |score|
+            {points: score.points, created_at: score.created_at.strftime('%b %d, %Y at %l:%M%P')}
+        end
+
+        render json: seralized_scores
+    end
+end
+```
+
+Similarly, choosing Leaderboard makes a fetch call to the rails server and returns an array of JSON objects which are mapped to JS `User` Objects.
+
+![GamePage menu showing leaderboard.](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/t5r1wkz8hd1q6z1ofwmq.png)
+
+To begin playing a game, another `User` must log in and to access the same `Board`. Once the front end receives a response from `BoardController`, a board is rendered on the front end. Each user then takes turns placing tokens by making POST calls to the `BoardController`'s `play` action.
+
+```ruby
+class BoardController < ApplicationController
+    def play
+        board_id = params[:board]["boardId"]
+        cell = params[:id]
+
+        board = Board.find(board_id)
+
+        if board.set(current_user(board), cell)
+            render json: board.cells_to_be_flipped
+        else
+            render json: {error: "You can't play here"}
+        end
+    end
+end
+```
+
+If the POST call returns an invalid move, the turn indicator shakes and allows the `User` to try again. If the move is successful, a JSON object is returned with each cell that needs to be updated.
+
+![GIF of GamePage in action with multiple cells being clicked and the page responding.](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3emlk26w7r2zgobrp2s1.gif)
+
+## Frontend OO JavaScript
+The front end of GamePage is made up of two main js directories: `components` and `services`. While `components` holds each object and object methods, `services` holds objects that are explicitly responsible for fetch requests.
+
+```js
+class UserAPI {
+    static getTopUsers() {
+        fetch(root + "/users")
+            .then(resp => resp.json())
+            .then(json => {
+                User.addAllTopUserDivs(json)
+        })
+    }
+}
+```
+
+# Reducing N+1 Queries
+To increase the speed of fetch requests and reduce workload of ActiveRecord, I used the `.includes` method to specify relationships to be included in the result set. If I can tell Active Record about the associations I plan to use later, ActiveRecord can load the data eagerly which reduces queries in iterative methods.
+
+```ruby
+class User < ApplicationRecord
+    def self.top_users
+        top_users = self.includes(:scores).sort_by { |user| -user.average_score}
+        top_users.map {|user| {user: user, average_score: user.average_score, games_played: user.scores.length}}
+    end
+end
+```
+
+# Resources
+Feel free to check out [GamePage](github.com/karsonkalt/gamepage_front_end) on my Github or give me a follow on [Twitter](https://twitter.com/KarsonKalt) to continue following my coding journey.
+
+GamePage is licensed with a BSD 2-Clause License.
+
+## Dependencies
+- [GamePage Backend](https://github.com/karsonkalt/gamepage_back_end)
+- [othello_ruby](https://rubygems.org/gems/othello_ruby/versions/0.1.0)
+- [hashdiff](https://rubygems.org/gems/hashdiff)
+
+GamePage does not have any `npm` dependencies, full `npm` data can be found in [package.json](https://github.com/karsonkalt/gamepage_front_end/blob/main/package.json).
+

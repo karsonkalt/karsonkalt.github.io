@@ -1,0 +1,131 @@
+---
+layout: post
+title:  "Recursive Thinking"
+date:   2021-12-06  12:00:00 -0400
+---
+Like most new programmers, as I began to study data structures and algorithms, I struggled to grasp recursive approaches to solving algo challenges. When I saw the recursive functions, I could easily understand how they worked, but when asked to write them myself, I struggled to break down problems with a recursive approach.
+
+In this post, my goal is not to explain what recursion is, but instead to break down how to solve a problem using a recursive approach. Let's start with some simple tips about recursive functions.
+
+### Tips for writing recursive functions.
+1. Solve the problem with an iterable approach
+2. Identify the base case
+3. Look for patterns in the expected returns
+4. Refactor iterative loop with a recursive call with a smaller input
+
+The [Church-Turing thesis](https://en.wikipedia.org/wiki/Church%E2%80%93Turing_thesis#:~:text=It%20states%20that%20a%20function,the%20British%20mathematician%20Alan%20Turing) states that we can solve any recursive problem with an iterable approach. As we begin trying to get in the recursive mindset, it's usually easier for us to break down a problem declaring variables and loops, then refactoring towards a recursive solution.
+
+The base case is the lowest level of our function. This is the case at which we have reached the end and need to return something. When trying to solve a recursive problem, try to avoid breaking the problem all the way down from the largest input, and instead think *"What is the smallest input this function could receive"*
+
+### Rules of Recursive Functions
+- A recursive function will always have two or more returns
+- The recursive call needs to be returned
+- [Locally defined variables will be re-defined in the scope of each recursive call.](https://dev.to/karsonkalt/building-efficient-algorithms-using-memoization-and-closures-in-javascript-5pj) Closures will keep variables bound to the outer scope of the recursive function.
+- The base case should be returned before the recursive case
+
+Knowing these tips and rules, we can define a fairly simple template for most recursive functions. In this blog post, I'm going to be using javascript.
+
+### Recursive Function Template
+```javascript
+function recursiveFunction(input) {
+  // Base Case
+  // If we passed it the smallest input, what should be returned?
+  if (input === baseCaseConditional) {
+    return baseCaseReturn
+  }
+
+  // Recursive Case
+  // Returns the function itself with a smaller input
+  return recursiveFunction(input - 1)
+}
+```
+
+## Our First Example
+
+Let's write a simple function that runs five times, and after that returns the string `"done"`. Following our tips from above, we first try to solve with an iterable approach.
+
+```javascript
+function countToNumber(num) {
+   let counter = 0
+   while (counter < num) {
+      counter++;
+   }
+
+   return "done";
+}
+```
+
+What is the **base case** for this problem? At the end of our recursive call or iterable loop, what should we be returning? In this case, once the counter is equal to 5, we want to return `"done"`
+
+```javascript
+function countToNum(num) {
+  let counter = 0;
+  while (counter < num) {
+    counter++;
+  }
+  if (counter === num) {
+    return "done";
+  }
+}
+```
+
+Following our tips defined above, we return our base case before our recursive case and move locally scoped variables outside of the recursive function.
+
+```javascript
+let counter = 0;
+
+function countToFive() {
+  if (counter === 5) {
+    return "done";
+  }
+  counter++;
+  return countToFive();
+}
+```
+
+## Factorial Example
+
+Let's try a problem that is a bit more challenging. Let's define a function that takes an argument `n` and returns the factorial of that number.
+
+For example, if we call `factorial(5)`, we should receive `5 * 4 * 3 * 2 * 1`
+
+Let's first think about our base case, remember we want to think of the most simple input we could receive in our function. Instead of starting from a large input and trying to break down the recursive calls, let's *build from the smallest input up*.
+
+The simplest input our function could receive is an `n` of `1`, so let's first define the return of the base case.
+
+```javascript
+function factorial(n) {
+  // Base Case
+  if (n <= 1) {
+    return 1
+  }
+
+  // Recursive Case
+
+}
+```
+
+What is the recursive case in this function, as we look at our example of `n = 5`, let's look at the expected output and see if we see any patterns.
+
+`5 * 4 * 3 * 2 * 1`
+
+As we work our way *up from our base case*, do we see any patterns?
+
+`1`
+`2 * 1`
+`3 * 2 * 1`
+`4 * 3 * 2 * 1`
+`5 * 4 * 3 * 2 * 1`
+
+As our `n` grows, we can see the pattern between each number is `n * n-1 * n-2 ...`.
+
+```javascript
+function factorial(n) {
+  if (n <= 1) {
+    return 1
+  }
+  return n * factorial(n - 1)
+}
+```
+
+To follow along with a more complex example, check out my blog post [Building efficient algorithms using memoization and closures in JavaScript](https://dev.to/karsonkalt/building-efficient-algorithms-using-memoization-and-closures-in-javascript-5pj) that builds out a recursive function that returns the fibonacci number of `n`.

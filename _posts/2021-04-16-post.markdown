@@ -1,0 +1,96 @@
+---
+layout: post
+title:  "Building a Web App with Rails"
+date:   2021-04-16  12:00:00 -0400
+---
+[Houseplant Helper](https://github.com/karsonkalt/houseplant_helper) is a web app built with Rails that helps `Users` track how recently they have watered their `Plants` and lets them know when a `Plant` needs to be watered.
+
+# Project Architecture
+Houseplant Helper employs "MVC" (Model, View, Controller) architecture that is convention in Rails. This architecture defines clear boundaries to handle model logic, presentation, and HTTP request handling.
+
+## Models
+Models are connected to the database with `ActiveRecord::Base` and take advantage of Active Record Lifecycle Callbacks -- specifically the `Plant` class which invokes `before_validation` and `before_save`.
+
+`Users` and `Species` are joined by the `Plants` table which also has custom attributes of `nickname` and `water_frequency`. If `water_frequency` is `nil`, the `Plant` will match the `water_frequency` of the `Species` before it is saved to the database.
+
+![Database schema](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/yfubcnh1v069wv2iuyr8.png)
+
+## Partials
+Houseplant Helper takes advantage of Rails partials to DRY up its views. Since all views share the `errors` partial, it is located inside the `shared` directory. Most views also take advantage of rendering a shared `form` partial which uses `form_with` to accept one or more instance variables.
+
+Since Houseplant Helper takes advantage of nested routes, forms rely on a `url` to be passed in through an array. If the value of the instance variable is `nil` (it was never created in the controller), Rails will remove the variable.
+
+The `new_user_plant_path` (/users/:user_id/plants/new) relies on a `@user`, while `edit_plant_path` (/plants/:id/edit) relies on a `@plant`. Since `@user` is not created in the `edit_plant_path`, Rails will remove the `nil` value, use the `@plant` variable, and create a `<form>` with the `PATCH` method as a hidden input.
+
+```erb
+<%= form_with(model: @plant, url: [@user, @plant]) do |f| %>
+    <div class="form-section application-form">  
+        <%= f.label :nickname %>
+        <%= f.text_field :nickname %>
+    </div>
+    <div class="form-section application-form">  
+        <%= f.label :species_id %>
+        <%= f.collection_select :species_id, Species.all, :id, :common_name, prompt: true %>
+    </div>
+    <div class="form-section application-form">  
+        <%= f.label :water_frequency, "Number of days between watering your plant" %>
+        <%= f.number_field :water_frequency, step: 1 %>
+    </div>
+    <%= f.submit id: "application-button"%>
+<% end %>
+```
+
+Houseplant Helper also uses the `plant` partial across several views which accepts a collection of `@plants` and renders the partial for every item in the collection. With some additional logic from the helpers, this partial is used in the `user_plants_path` and `species_path`, and will display different buttons if the `Plant` belongs to the logged in `User`.
+
+*Plant partial rendered in the `user_plants_path`*
+![Plant partial rendered in the user_plants_path](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jgsmbmupn1436kqjjo7z.png)
+ 
+*Plant partial rendered in the `species_path`* 
+![Plant partial rendered in the species_path](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xox1utgn041xomctguce.png)
+
+# Helpers and Controllers
+
+Since all controller inherit from `ApplicationController`, `ApplicationController` calls a `before_action` of a private method `redirect_if_not_logged_in`. The `HomeController` is uses `skip_before_action` to allow users to create sessions. Similarly, the `UsersController` uses `skip_before_action` on `new` and `create`.
+
+`ApplicationController` uses `helper_method` to make two of its private methods available to in the views -- `current_user` and `logged_in?`. To avoid unnecessary queries, the `current_user` method uses or-equals to rely on the same instance variable.
+
+```ruby
+def current_user
+    @current_user ||= User.find_by_id(session[:user_id])
+end
+```
+
+# Adhering to RESTful Convention
+The `plants#index` controller action will look to the URI for query parameters and filter the `@plants` collection for the `@user` in the `user_plants_path` (/users/:user_id/plants).
+
+```ruby
+def find_and_set_plants_and_filter_query_parameters(request)
+    if !request.query_parameters.empty?
+        request.query_parameters.each do |scope, value|
+            @plants ||= @user.plants
+            @plants = @plants.select do |plant|
+                plant.send("#{scope}").to_s == value
+            end
+        end
+    else
+        @plants = @user.plants
+    end
+end
+```
+
+*A user can quickly apply these query parameters by clicking 'Show Overdue' at the top of the page.*
+![A user can quickly apply these query parameters by clicking 'Show Overdue' at the top of the page.](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/j3o3lewof7wmph89b70z.png)
+
+*The collection can be queried with any instance method and adhering to query parameter restful convention*
+![The collection can be queried with any instance method and adhering to query parameter restful convention](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mbd5pyucesph9i7r5eqp.png)
+
+# Third Party Authentication
+Users can also create an account and log in through Google thanks to the `omniauth` gem. The User model has a class method `from_omniauth` that uses `find_or_create_by` to find a User with a `uid` that matches the `request.env['omniauth.auth'] returned from Google.
+
+![Log in with Google button](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/u45jjkdnyoxntnx4zgic.png)
+
+# Resources
+Feel free to check out [Houseplant Helper on my Github](https://github.com/karsonkalt/houseplant_helper) or [give me a follow on Twitter](https://twitter.com/karsonkalt) to continue following my coding journey.
+
+Houseplant Helper is licensed with a BSD 2-Clause License.
+

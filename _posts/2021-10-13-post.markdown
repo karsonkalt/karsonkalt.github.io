@@ -1,0 +1,249 @@
+---
+layout: post
+title:  "Using React and Rails to build a SPA"
+date:   2021-10-13  12:00:00 -0400
+---
+After a year of studying software engineering at [Flatiron School](https://flatironschool.com/), it's finally time for my final project. This project is supposed to highlight everything we have learned throughout the course using a Rails back end and a React front end. And, because this project is the capstone of my bootcamp, I wanted to create something that not only showcases who I am as a person, but also solves a real-world problem.
+
+I spent a lot of time figuring out what project I wanted to go after and wanted to consider if it was easy to understand for my portfolio. I went back and forth between this and a workout app and decided on this because I really could get into the problem solving and not just re-hash a project that has been done a lot of times. My worry was that electronic music is too complex for someone to quickly understand, so it was a risk going in this direction. But I had faith that I could simplify and make these complex issues easy to understrand and to use.
+
+I love electronic music. House, Techno, Progressive, all the tiny sub-genres under the "EDM" umbrella. I follow a lot of DJs on the internet and stream hours of their mixes everyday. I find myself constantly trying to identify tracks that my favorite DJs play. Usually, I try to use tools like Shazam and Soundhound, but they are notoriously terrible at identifying house music (especially since DJs will "mashup" a track over another or change the key of a track). That leaves me searching the internet for song recommendations and artist charts, hoping that I run into the track. To make it a little more complicated, a lot of DJs will play tracks that are unreleased, making them nearly impossible to find on online.
+
+To solve this problem, I created OnRotation -- a SPA web app where fans of electronic music can collaborate to identify electronic music and receive notifications when their favorite tracks have been identified. 
+
+![Gif of GamePage being rendered in a browser](https://github.com/karsonkalt/onrotation_react/blob/master/README_assets/overview.gif?raw=true)
+
+## Features
+
+- User login
+- Add a tracklist, tracklist_tracks tracks, artists, and labels
+- Enter YouTube video to follow along using cue times
+- Enter identification suggestions for unknown tracks
+- Vote on track identificaitons submitted by other users
+- Bookmark tracks to receive a notification once a correct identification has been approved
+
+## Project Approach
+
+Before writing a single line of code, I tried to envision the final product. I asked myself:
+* What would the app look and behave like?
+* How can I present data to a user in an understandable way?
+* Given the nature of electronic music, how should I handle and validate missing data?
+* What features should be available to the public vs. users who are signed in?
+* What features would not be considered part of the minimum viable product (MVP)?
+
+I started designing the project drawing in a notebook, refining how I wanted features to work and look. I made notes and drew out ideas to icons and to reusable Components. I then made a wireframe of how it would look and function in Adobe XD. I spent a few days drafting wireframes of the app and brainstorming different ways to present data. This helped me figure out exactly how data would talk to each other, especially because part of the core function of the app is filling in missing data. I reworked some icons that I wanted to use so that as I created the back end, I would have proper names for how buttons would work. For example, instead of bookmark, I started with a "eye" icon to watch the track, but it didn't seem exciting enough to be used. I then thought about a star or a heart, but that seemed to imply a "like" rather than "let me know when someone figures out what this track is." I settled on a bookmark with a star on it because it implies it is a "favorite" and also "come back to this later".
+
+![A photo of various notebook sketches, showing icons, graphics and text to be developed for the app.](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/a4cdmg71xqpgg6z2fra3.JPG)
+
+# Backend
+
+## DB Schema
+
+I then drew out my schema in drawio and wrote the data types and the validations as well as requirements. This really helped me think about how things would be enforeced and relate to each other. I then started building my models and migrations, models, and building relationships as well as db constraints, then model validations. I wrote seed files while working on ensuring validations/constraints and relationships were being handled propertly in rails console. I stayed in this phase for a while to make sure everything was working.
+
+![A graphic showing the db schema an all relationships.](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/a26zlgjupu9cy5s4q4tz.png)
+
+I decided to use column reference aliases for both models and db constraints to write more understandable code. I started with the migration passing the `{foreign_key: }` hash and `{references: }` hash.
+
+```ruby
+# /db/migrate/create_tracklists.rb
+
+class CreateTracklists < ActiveRecord::Migration[6.1]
+  def change
+    create_table :tracklists do |t|
+      t.string :name, :null => false
+      t.date :date_played, :null => false
+      t.references :artist, :null => false, :foreign_key => true
+      t.string :youtube_url
+      t.references :creator, :references => :users, :null => false, :foreign_key => { :to_table => :users}
+      t.timestamps
+  end
+end
+```
+
+We also need to let ActiveRecord::Base know to alias relational data by passing a similar hash to the `belongs_to` method.
+
+```ruby
+# /app/models/tracklsit.rb
+class Tracklist < ApplicationRecord
+  belongs_to :creator, class_name: 'User'
+  
+  ...
+  
+end
+```
+
+Another issue presenting itself was that TracklistTracks needed to return from a Tracklist in a specific order, but the structure of SQL does not allow us to keep relational data stored in an ordered way without creating a join table. A solution to this problem was to structure TracklistTracks as a Linked List, creating a column that referenced it's predecessor. I created a column named `predessor_id` that pointed to the `id` of the TracklistTrack that came before it.
+
+```ruby
+class CreateTracklistTracks < ActiveRecord::Migration[6.1]
+  def change
+    create_table :tracklist_tracks do |t|
+      t.references :tracklist, :null => false, foreign_key: true
+      t.references :track, :null => false, foreign_key: true
+      t.time :cue_time
+      t.integer :predessor_id, :unique => true
+      t.references :identifier, references: :users, :null => false, foreign_key: { to_table: :users }
+      t.timestamps
+    end
+  end
+end
+```
+
+Using a loop inside the Tracklist model and overwriting the default `belongs_to` method, we call pull TracklistTracks out in an ordered fashion.
+
+```ruby
+# /app/models/tracklist.rb
+
+class Tracklist < ApplicationRecord
+  ...
+  
+  def tracks
+    tracklist_tracks = self.tracklist_tracks.includes(:track)
+    current_tracklist_track = tracklist_tracks.find { |tracklist_track| tracklist_track.predessor_id == nil}
+      
+    array_of_tracks = []
+    order = 1
+
+    loop do
+      current_track = current_tracklist_track.track
+      current_track.order = order
+      order += 1
+      array_of_tracks << current_track
+      current_tracklist_track = tracklist_tracks.find { |tracklist_track| tracklist_track.predessor_id == current_tracklist_track.id}
+
+      break if current_tracklist_track == nil
+    end
+
+    array_of_tracks
+  end
+ 
+end
+```
+
+## Serializing Data
+
+To serialize data to the front end, I decided to use `active_model_serializers`, since Netflix has discontinued support for `fast_jsonapi`. After adding to the Gemfile, I was able to quickly build out new serializers using `rails g serializer <model_name>` from the console. A great feature of `active_model_serializers` is that controllers will automatically look for a matching serializer with the same name inside the `/serializers` directory and apply serialization using a bit of rails magic. Another great feature of `active_model_serializers` is that you can write `belongs_to` and `has_many` relationships inside the serializers, matching the structure of your models.
+
+Since there are two types of notifications a user needs to receive (BookmarkedTracklist and BookmarkedTracklistTrack), I built out custom data serialization inside the notification serializer. This way, the serializer will show only the `track` attribute for calls to the `BookmarkedTrack` class and will only show the `tracklist` attribute for calls to the `BookmarkedTracklistTrack` class. We can write conditional attributes by passing the `{if: <instance_method>}` hash to an attribute or relationship, as long as the method returns a truthy value.
+
+```ruby
+# /app/serializers/notification_serializer.rb
+
+class NotificationSerializer < ActiveModel::Serializer
+  attributes :id, :updated_at, :has_unseen_updates
+  
+  belongs_to :track, serializer: TrackSerializer, if: :is_track?
+  belongs_to :tracklist, if: :is_tracklist?
+
+  def is_track?
+    object.class == BookmarkedTrack
+  end
+
+  def is_tracklist?
+    object.class == BookmarkedTracklist
+  end
+
+end
+```
+
+# Front End
+
+As I started building out components, I struggled to find a file structure that kept components, containers, reducers, actions, and page views separate. After doing a bit of research, I decided on a file structure that kept all redux js inside a `store` directory and all page views inside a `views` direcotry. I decided to keep layout components inside a `layout` directory, with a `global` sub-directory for small functional components used all over the app.
+
+```bash
+# .
+
+├── README.md
+├── public
+└── src
+    ├── App.js
+    ├── components
+    ├── containers
+    ├── index.js
+    ├── layout
+    │   ├── NavBar
+    │   └── global
+    ├── store
+    │   ├── actions
+    │   └── reducers
+    └── views
+        ├── Artist
+        ├── Home.js
+        ├── NotFound.js
+        ├── Track
+        └── Tracklist
+```
+
+## Implementing React-Router
+
+Since React will continue to add and remove components all in a single page application, there is no way that a user can quickly navigate to a specific page without manually navigating there using the react UI. To create the illusion of a REST-ful URL, I added a package called React-Router by running `npm i react-router-dom` from the shell. I then wrapped my `<App>` component with `<Router>`. From there, I used the `<Switch>` and `<Route>` components to build routes. By using the `render` prop, we can pass the props provided by router. This way, all child components can easily know the current path and identify the `id` of a specific resource.
+ 
+```jsx
+// /src/App.js
+
+...
+
+  <Switch>
+    <Route exact path="/" render={() => <Home />} />
+    <Route exact path="/tracklists" render={(routerProps) => <TracklistIndex {...routerProps} />}/>
+	    
+    ...
+	    
+    <Redirect to="/404" />
+  </Switch>
+
+...
+
+```
+
+By using the `<Redirect>` component at the end of the `<Switch>` component, we can direct a user to a 404 page, letting them know that the route they requested does not exist.
+
+## Adding Redux and Thunk
+
+As I built out the app, state management started becoming an issue. Components needed to know if a user was logged in, what their user ID was, if they have already voted on a specific component, if they created the identification, and what other information was being displayed on the page. Enter Redux.
+
+Redux is a react package built by [Dan Abramov](https://twitter.com/dan_abramov) that allows us to move all component state to one central state, allowing all child components to freely modify state of the entire application.
+
+![An image showing state management with the power of Redux](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ckez5h1a1wjli5t7rica.png)
+
+Using `combine-reducers`, I was able to move various reducers to one central store. Adding on the power of `thunk` we can dispatch fetch calls asynchronously inside of our `dispatch` actions.
+
+```jsx
+// src/store/reducers/index.js
+
+export default combineReducers({
+  indexReducer,
+  tracklistShowReducer,
+  notificationReducer,
+  sessionReducer,
+});
+
+// src/index.js
+
+import reducer from "./store/reducers/index";
+let store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
+
+```
+
+# Screenshots of OnRotation
+#### /
+![/](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/e0xbo5o5ygurnaj9z0z2.png)
+
+#### /tracklists
+![/tracklists/](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/h0hskdqmdkms783v83e5.png)
+
+#### /tracklists/new
+![/tracklists/new](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ylsr5lbkh45fcuoh2oed.png)
+
+#### /tracklists/:id
+![/tracklists/:id](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3ngr50ty5bv5xem2kwmh.png)
+
+#### Notification Dropdown
+![Notification Dropdow](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/i1e9rp985t5kd9eokvux.png)
+
+#### Suggested Track Identification
+![Suggested Track Identification](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/lw9g7yn48slffmhg2lm0.png)
+
+#### Date Picker
+![Date Picker](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4gd6am9if64dn2svxkcq.png)

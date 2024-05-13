@@ -1,0 +1,69 @@
+---
+layout: post
+title:  "My First Ruby CLI Program"
+date:   2020-12-09  12:00:00 -0400
+---
+Now that I'm a little over a month into my journey with Flatiron School, I was asked to make a Ruby application with data from an API or from a web page. After searching for a project to sink my teeth into, I decided to create a program that helps me with one of my pastime interests -- tracking songs (more often called tracks) played by my favorite DJ's.
+
+# Background on Electronic Music
+In the electronic music world, a lot of listeners are interested to know what track a DJ is playing or has played in the past. In fact, the interest is so strong that there are community-sourced websites where users can identify tracks a DJ has played. A lot of times, a DJ will play a track that has not been released on a record label or will even play tracks that users know nothing about (an unknown track).
+
+As an avid track-identifier myself, I wanted to build a Ruby program that would let me add as many or few playlists as I wanted and then be able to search the tracks for ones that are not released or ones that are missing information.
+
+# Program Architecture
+Since [1001 Tracklists](https://www.1001tracklists.com/) does not have an API, I decided to scrape data using [`nokogiri`](https://nokogiri.org/) and `open-uri` gems.
+
+My program, [DJ Booth](https://github.com/karsonkalt/dj_booth) is made up of four basic classes, `Track`, `Playlist`, `Scraper`, and `CLI`. Objects indirectly relate to one another except for `Track` and `Playlist` which have a 'belongs-to, has-many relationship' in that `Track` belongs to a `Playlist` and stores this information as an object in its `@playlist` attribute accessor.
+
+The `CLI` class houses the UI of the program and also decides when new `Scraper` classes are created and a new `Playlist` is added to the program. The `CLI` class also handles a variety of ways to view instances of `Playlist` and `Track` using their `.all` methods.
+
+All classes are contained in their own file in a `lib` directory and are linked together in one `enviornment` file using `require_relative`. The `bin` directory contains only one file with no extension and a shebang line declaring the language as `ruby`.
+
+# Scraper Class
+The `Scraper` class is instantiated every time a user adds a new `Playlist`. The `Scraper` contains several instance methods, `#initialize`, `#get_page`, `#get_tracks`, and `#make_tracks`. Each time a `Scraper` in instantiated it creates a new `Playlist` and stores it in its `@playlist` instance variable.
+
+The scraper first gets a specific website using
+```ruby
+def get_page
+  doc = Nokogiri::HTML(open(@input))
+  @playlist.title = doc.css("#pageTitle").text
+  doc
+end 
+
+def get_tracks
+  self.get_page.css(".tlpItem")
+end 
+```
+The program then enumerates through each track listing on the website using the `#each` method and then calling `Track.new` and assigning its attributes to information on the website.
+
+# CLI Class
+The `CLI` class relies on one major instance method called `input_loop` which is called within itself to go back to the main menu unless the user wishes to exit the program. On the main menu `Track.all.count` and `Playlist.all.count` are called to let the user know how many instances of `Playlist` and `Track` are loaded in the program.
+![Main menu of DJ Booth program](https://dev-to-uploads.s3.amazonaws.com/i/nxhnd77a43fz7p0nq6l4.png)
+
+The user can then view the objects in a variety of ways that use enumerator methods to show the data back to the user. Selecting "UR" will show the user `Track`s that have a `#label` of "Unreleased" and `puts` them out using string interpolation
+```ruby
+id_counter = 0
+unreleased_list.each do |track|
+  if track.title == "ID" && track.artist == "ID"
+    id_counter += 1
+  else
+    puts "#{track.title} -- #{track.artist}"
+  end
+end
+```
+This method also counts tracks that are missing their name and artist and returns it in a string using the `colorize` gem.
+```ruby
+if id_counter > 0 && unreleased_list.length > 0
+  puts ""
+  puts "There are also " + id_counter.to_s.colorize(:blue) + " unreleased tracks in the program with unknown artists and unknown track titles."
+elsif id_counter > 0 && unreleased_list.length == 0
+  puts ""
+  puts "There are " + id_counter.to_s.colorize(:blue) + " unreleased tracks in the program with unknown artists and unknown track titles."
+end
+```
+# Refactoring Code
+As I wrapped up this project, it became apparent there are several opportunities to refactor my code:
+- Several methods in the `CLI` class do not fit the single-responsibility principle (SRP)
+- Classes should manage the instantiation of their own instances. (Currently a `Track` is created and passed in information from the `CLI` class.
+- The `#input_loop` method is 130+ lines of code. Each selection from the menu should be broken into its own method.
+- The program could manage a new object `Artist` to which `Track` belongs-to.

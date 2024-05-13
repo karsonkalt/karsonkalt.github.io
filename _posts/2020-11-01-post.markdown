@@ -1,0 +1,31 @@
+---
+layout: post
+title:  "Why I am Studying Software Engineering"
+date:   2020-11-01  12:00:00 -0400
+---
+# The Way Things Work
+Growing up, one of my favorite books was ["The Way Things Work" by David Macaulay](https://en.wikipedia.org/wiki/The_Way_Things_Work). In the book, a cartoon woolly mammoth takes apart and explores the inner workings of everyday tools and machines. From giant faucets to oversize locks, the charming, slow-moving character explores everything that amazed me as a kid.
+
+Over the years, I've kept a copy of this book on my coffee table -- I still find myself lost in it asking, "How does this thing work!?". Even though years have passed and most of these tools are common everyday objects, at my core I am a curious person who needs to take things apart and see how they work.
+
+I think this is how I ended up casually learning to code. I'm the analytical type -- a problem solver, a builder -- but until now, I was never willing to take the leap and begin to study programming.
+
+# Coding is Problem Solving
+One of my favorite things about software engineering is that it's really just problem solving. Problem solving isn't just a matter of making formulas, or equations, it's thinking creatively about problems in entirely new ways. Sow am I going to accomplish this abstract task?
+
+Sometimes problem solving takes 30 minutes, sometimes it days a day, sometimes it takes an entire month. But no matter the length, it's a rewarding process that challenges the way you think.
+
+# I Love Learning
+When coding, I am constantly learning: learning new languages, learning how to do something better, learning a new database management system, learning new libraries, learning a new architecture. In programming, you never stop growing, changing, and developing. Just as you feel like you've mastered a technology, the language can change or a new technology accomplishes a task in an even better way.
+
+# Impact
+Because of the nature of code, my code could change how hundreds or thousands of people work. My code could be on a limitless number of devices making an impact that informs business decisions, makes people more safe, or helps connect people from around the world.
+
+# I am a Collaborator
+Most importantly, programming lets me collaborate and be a part of something bigger than myself. There are large and vibrant communities dedicated to problem solving and sharing knowledge, building systems and languages that are able to accomplish much more than any one person could create on their own.
+
+I am now in my third week of [Flatiron School](https://flatironschool.com/) and I feel ready to be challenged, rewarded, and finally start calling myself a software engineer.
+
+Find me around the web:
+[Twitter](https://twitter.com/karsonkalt)
+[GitHub](https://github.com/karsonkalt)

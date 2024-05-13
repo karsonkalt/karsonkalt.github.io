@@ -1,0 +1,305 @@
+---
+layout: post
+title:  "Functional Programming in Ruby with Blocks and Procs"
+date:   2022-01-15  12:00:00 -0400
+---
+## Object-Oriented Programming vs Functional Programming
+
+Ruby is a true object-oriented programming language. Generally, we love object-oriented (OOP) programming! Object-oriented programming makes our code readable, reusable, modular, and is generally pretty simple paradigm to get our heads around.
+
+In Ruby, **everything** is an object. We generally divide up our code into Classes and Instances, so this isn't an unfamiliar concept. Really, everything!
+
+Let's try it out!
+
+```ruby
+self
+# => main
+
+self.class
+# => Object
+
+nil.class
+# => NilClass
+
+true.class
+# => TrueClass
+```
+
+Even `nil`? Yes, `nil` is the [singleton](https://www.rubyguides.com/2018/05/singleton-pattern-in-ruby/) instance of `NilClass`.
+
+Okay, what is this `main` thing? Well, `main` is the default [top level context](https://codequizzes.wordpress.com/2014/04/23/rubys-main-object-top-level-context/) provided to us in Ruby. Since everything is an object, we call this the **global object**. But even our global object is an instance of `Object`.
+
+In fact, the class `Object` is an instance of the class `Class`!
+
+```ruby
+self.class.class
+# => Class
+```
+
+We can override the class of Class and confirm for ourselves!
+
+```ruby
+class Class
+  alias prev_new new
+
+  def new(*args)
+    print "Creating a new #{self.name} class. \n"
+    prev_new(*args)
+  end
+end
+
+class Text
+end
+
+t = Text.new
+# => ...
+# => Creating a new Text class.
+```
+
+### What About Methods?
+
+When we this is where things get a little tricky. A Ruby method is just a snippet of code and **not** an object.
+
+In other languages that consider the functional paradigm (in this case TypeScript), we can assign functions to variables and call them.
+
+```typescript
+function ourFunction():void {
+    console.log("hello");
+}
+
+let variable = ourFunction
+variable()
+// "hello"
+// => undefined
+```
+
+Let's try a similar approach in Ruby.
+
+```ruby
+def method
+    puts "hello"
+end
+
+variable = method
+
+variable()
+# NoMethodError (undefined method `variable' for main:Object)
+variable
+# => nil
+```
+
+In Ruby, `variable` is assigned the return value of `method`. As we call `method`, it is implicitly invoked. Calling `method`, the method is invoked, the same as `method()`. In our current paradigm, there is no way we can pass the function itself to another variable.
+
+### Higher-order functions
+In some ways, this limitation impedes our ability to create [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) code.
+
+We also lose the ability to create higher-order functions.
+> **Higher-order function**: a function that takes a function as a parameter or returns a function.
+
+Let's take a look at a simple higher-order function in TypeScript.
+
+```typescript
+function multiplier(number1: number): (number2: number) => number {
+    return function(number2: number): number {
+        return number1 * number2
+    }
+}
+
+let doubler = multiplier(2)
+doubler(6)
+// => 12
+```
+
+In Ruby, we can echo some of the principles of functional programming using the powers of **blocks** and **Procs**! Let's give it a shot!
+
+## Proc 101
+Before we get into the nitty-gritty code, let's pause and better understand `procs`. A `Proc` is a special type of Ruby object that allows us to store a block of code as an object. As we instantiate our `Proc` instance, we can pass a block to the instantiation immediately following any method parameters.
+
+```ruby
+print_greetings = Proc.new() do
+  puts "Welcome!"
+  puts "Bonjour!"
+  puts "¡Bienvenidas!"
+end
+print_greetings
+# => #<Proc:0x00007fe0ff042a08>
+```
+
+We can call out proc in a few different ways:
+- Chaining the method `.call`
+- Chaining method `.yield`
+- Using bracket notation `[]`
+- Invoking `.call` with syntactic sugar `.()`
+
+```ruby
+print_greetings.call
+print_greetings.yield
+print_greetings[]
+print_greetings.()
+
+# Welcome!
+# Bonjour!
+# Bienvenidas!
+# => nil
+```
+
+## Block Parameters
+Similar to regular methods, a blocks can receive a parameter. In fact, they have a few things in common:
+- Block parameters can have default values
+- Block parameters can be set up to accept a keyword
+- We can use the splat operator `*` to allow an undetermined amount of arguments to be captured.
+
+There are a few different rules when it comes to block parameters:
+- If an argument is not provided, `nil` will be assigned to the parameter
+- Arguments are placed inside the pipes following the opening of the block
+
+Let's create a proc that receives an argument as a proc.
+```ruby
+multiply_by_two = Proc.new do |item|
+    item * 2
+end
+```
+
+To transform our `Proc` back into a block, we can use the `&` operator inside of our method calls that expect a block. The two examples below are equivalent.
+
+```ruby
+[1,2,3,4,5].map do |item|
+     item * 2
+end
+
+[1,2,3,4,5].map(&multiply_by_two)
+# => [2, 4, 6, 8, 10]
+```
+
+How cool is that! Let's review a few rules passing blocks to a method:
+- When passing a proc transformation, it must come as the final argument of the method e.g. `.ourFunction(1, 2, &multiply_by_two)`
+- We can only pass one block to a method. Trying to call `[1,2,3,4,5].map(&multiply_by_two, &multiply_by_three)` would produce a SyntaxError.
+
+## Re-creating Higher-order Functions with Procs
+Let's revisit the higher-order function from our example above and re-create it with our newfound knowledge of blocks and Procs.
+
+```ruby
+def multiplier(number1)
+    Proc.new {|number2| number1 * number2}
+end
+
+doubler = multiplier(2)
+# => #<Proc:0x00007fe7719b91b8>
+
+doubler.call(6)
+# => 12
+```
+
+## Understanding `yield`
+If you're familiar with Rails, you have likely seen the `yield` keyword. Allowing you to inject parts of your `.erb` inside of templates. Similarly, in plain old Ruby, the `yield` pauses execution of the current code and yields to the block that was passed.
+
+```ruby
+def our_method
+  puts "top of method"
+  yield
+  puts "bottom of method"
+end
+
+our_method {puts "we are inside the block"}
+# top of method
+# we are inside the block
+# bottom of method
+# => nil
+```
+
+We can pass parameters to the block by passing them following yield.
+
+```ruby
+def our_method_w_parameters
+  puts "top of method"
+  yield("karson", "nyc")
+  puts "bottom of method"
+end
+
+our_method_w_parameters do |name, loc|
+  puts "my name is #{name}, and I live in #{loc}"
+end
+
+# top of method
+# my name is karson, and I live in nyc
+# bottom of method
+# => nil
+```
+
+But how reusable is this code when it's hard coded? Let's pair this newfound power with principles of OOP to use instance attributes with `yield`.
+
+## Proc Scope
+Procs exist in the scope where they are defined, not in the scope where they are called. This can lead to some misleading and confusing references to `self`. Let's take a look at the example below.
+
+```ruby
+class Person
+    attr_accessor :name, :loc
+
+    def initialize(name, loc)
+        @name = name
+        @loc = loc
+    end
+
+    def ex_block
+        yield
+    end
+end
+
+k = Person.new("karson", "nyc")
+# => #<Person:0x00007fded014edb0 @name="karson", @loc="nyc">
+k.ex_block {puts self.name, self.loc}
+# NoMethodError (undefined method `name' for main:Object)
+```
+
+`self` refers to the `main` object which tells us that we are in the global scope. If we want to bind `self` to the instance where the block is called, it must be defined upon instantiation.
+
+```ruby
+class Person
+    attr_accessor :name, :loc, :instance_proc
+
+    def initialize(name, loc)
+        @name = name
+        @loc = loc
+        @instance_proc = Proc.new() do
+                puts self.name, self.loc
+            end
+    end
+
+    def ex_proc(&proc)
+        yield
+    end
+
+end
+k = Person.new("karson", "nyc")
+# => #<Person:0x00007ff6aa94c228 @name="karson", @loc="nyc", @instance_proc=#<Proc:0x00007ff6aa94c1d8>>
+k.ex_proc(&k.instance_proc)
+# karson
+# nyc
+```
+
+## Ending Challenge
+Using what you now know about `Procs` and `blocks`, let's re-create the method `.map` on our custom class `MArray`.
+
+```ruby
+class MArray < Array
+  def initialize(*args)
+    super(args)
+  end
+
+  def map(&block)
+    newMArr = MArray.new()
+    for element in self
+      newMArr << yield(element)
+    end
+    newMArr
+  end
+end
+
+m = MArray.new(1, 2, 3, 4, 5)
+# =>[1, 2, 3, 4, 5]
+m.map { |item| item * 2 }
+# => [2, 4, 6, 8, 10]
+```
+
+## Conclusion
+Procs are a powerful Ruby concept that allow us to keep code DRY and implement features that play of OOP concepts and functional programming. Check out the official [Ruby-Doc](https://ruby-doc.org/core-2.6/Proc.html#method-i-call) documentation on Procs and let me know your thoughts in the comments blow!

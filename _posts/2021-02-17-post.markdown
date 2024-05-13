@@ -1,0 +1,87 @@
+---
+layout: post
+title:  "Building a Web App Using Sinatra and ActiveRecord"
+date:   2021-02-17  12:00:00 -0400
+---
+[Kickflip](https://github.com/karsonkalt/kickflip) is a web app built for for skateboarders to use to track and find local skateparks, show their friends when they get a new trick, and encourage return use with a "checkin" feature. Kickflip is built using Sinatra and AciveRecord.
+
+# Project Architecture
+
+Kickflip is primarily built with the `sinatra` ruby gem and uses the "MVC" app architecture (Model, View, Controller) inside the `app` directory. Kickflip also makes use of the `activerecord` gem to persist data in `sqlite3`.
+
+Most models are connected to their corresponding table using `ActiveRecord::Base`, with the exception of the `Search` class. `Parks` and `Users` have a many-to-many relationship through `SkateSessions`, while `Users` relate to `Tricks` with a has-many relationship through `UserTricks`
+
+![Photo of database schema](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/lyz01qd2r0jg8q3lqo64.png)
+
+## Gems
+Kickflip also takes advantage of the [geocoder gem](https://github.com/alexreisner/geocoder), which extends a Class and returns `latitude` and `longitude` from street addresses. With the `geocoder` gem, a user can find a `Park` near a location without the instance containing the specific string in it's address.
+
+This gem becomes especially useful when searching for parks in a geographical area that would otherwise not return any results. For example, there are no `Parks` that are located in "Bountiful, UT". Instead of returning no results, the query "Bountiful, UT" is transformed into latitude and longitude coordinates (69.0933, -111.8805) and returns results of "Fairmont Skate Park" located in "Salt Lake City, UT"
+![Search results of "Bountiful, UT"](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/cv9cu2ag5ympma48lwku.png)
+
+The application also uses `sinatra-flash` to display error and success messages when the user modifies data or attempts to access pages they are not authorized to use.
+![An error message saying "You must be an admin to access that page"](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/t29barzzjsp4hypq0jdb.png)
+
+## RESTful Conventions
+All controllers adhere to RESTful conventions (Representational state transfer) with a few exceptions:
+* The `get '/signup'` route is used instead of `get '/user/new'`
+* SkateSessions use the `get '/users/:id/skate-sessions'` route route as a `SkateSession` always belongs-to a `User`.
+* `Tricks` are not represented by a route because they can not be modified by a `User`.
+* `UserTricks` do not have a route because they are displayed on on a `User` page.
+
+# Models
+Because `Parks` and `Users` have a many-to-many relationship, both models have similar instance methods to return either the top users or top parks related to each other. An additional method is included in each class, `top_x_users(x)` and `top_x_parks(x)` where the argument of x can be changed to return the desired number of results.
+
+This method is especially useful to front end users in displaying "King of the Park" where the top `User` at a `Park` gains a special badge displayed on their profile and the `Park` page.
+
+The `User` class contains additional instance methods: `most_recent_skate_session`, `minutes_since_most_recent_skate_session`, and `can_record_skate_session`. These methods are used together with the `SkateSession.timeout` to determine if enough time has passed for a `User` to record a new `SkateSession`.
+![A Park page saying "Wait 5 more minutes to check in again"](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/sfokfmis6plwgvl58oeg.png)
+
+If not enough time has passed, the checkin button is removed and replaced with a message saying "Wait 5 minutes before you can checkin again".
+
+# Sessions
+
+Kickflip allows users to log in and out by enabling `sessions` in the `Application Controller`. Together with several helper methods, buttons and content are dynamically generated on a number of variables.
+
+When not logged in or viewing another `User`'s page, there are no edit buttons present.
+![A User page without edit buttons](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/bogb7edxkk12zx20btvx.png)
+
+However, when viewing a user is viewing their own page and the user is logged in, they are presented with both "Edit My Info", and "Edit My Checkins" buttons.
+![A User page with edit buttons](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/si97r1k3ln26q13gsxua.png)
+
+Further, if a user attempts to access a route they are not authorized to, they are rerouted and presented with an error message using `sinatra-flash`.
+
+The `redirect_if_user_not_authorized` method checks if the passed in `user.id` has the same `session[:user_id]`.
+
+```ruby
+def redirect_if_user_not_authorized(user)
+  if user.id != current_user.id
+    flash[:error] = "You can not edit someone else's data."
+    redirect "/"
+  end
+end
+```
+![An error message saying "You can not edit someone else's data".](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/to1x8yikidmreoyq408e.png)
+
+##Security and Password Encryption
+Passwords are salted and hashed through `has_secure_password` and stored in the database in their encrypted form in the `password_digest` column. When logging in, the `password` param is encrypted with the `.authenticate` method and compared against the encrypted password stored in the database. This way, the user's password is never exposed to the browser.
+
+```ruby
+post '/login' do
+  user = User.find_by(email: params["email"])&.authenticate(params['password'])
+  if user != nil
+    session[:user_id] = user.id
+    flash[:success] = "Welcome back to Kickflip, #{user.username}!"
+    redirect "/users/#{user.id}"
+  else
+    flash[:error] = "Invalid login."
+    redirect "login"
+  end
+end
+```
+![Screenshot of encrypted password](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8wskddo8ih9adgz142h3.png)
+
+# Resources
+Feel free to check out [Kickflip on my Github](https://github.com/karsonkalt/kickflip) or [give me a follow on Twitter](http://www.twitter.com/karsonkalt) to continue following my coding journey.
+
+Kickflip is licensed with a BSD 2-Clause License.

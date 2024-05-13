@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "Using Query Parameters in Rails Controllers"
+date:   2021-10-20  12:00:00 -0400
+---
+In my recent project Houseplant Helper, I struggled to find a way to be able to call query params in a scalable way. Using the `request` object provided to us by rails and using the `.send` method, we can build a scalable private method that responds to all query params across the application.
+
+![Photo of URL with query parameters](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/5qmgt83ggzm524owr9cu.png)
+
+Using the `request` ActionDispach::Request object given to us by rails inside of a controller action, we are able to quickly find any query parameters in the URI by calling the `.query_parameters` method which returns a hash with all query parameters.
+
+Using an `||=` inside of the `.each` method, we can conditionally define `@plants` if it has not been defined yet. From there, we can select only the plants from the query parameters using the `.send` method.
+
+`.send` calls allows us to pass a string and call a method with the same name on an object. By calling `.to_s`, we can convert the return back to a string and compare against the value of the hash.
+
+```ruby
+# ./controllers/plants_controller.rb
+
+class PlantsController < ApplicationController
+
+...
+
+private
+
+   def find_and_set_query_parameters(request)
+        if !request.query_parameters.any?
+            request.query_parameters.each do |scope, value|
+                @plants = @plants.presence || @user.plants
+                @plants = @plants.select do |plant|
+                    plant.send("#{scope}").to_s == value
+                end
+            end
+        else
+            @plants = @user.plants
+        end
+    end
+
+end
+```

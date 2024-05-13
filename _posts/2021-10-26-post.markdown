@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "What is a 'Hash' and How to Build one from Scratch in Ruby"
-date:   2021-10-02 10:36:39 -0400
+date:   2021-10-26  12:00:00 -0400
 ---
 Because I am a visual learner, when learning about data structures, I usually find myself looking for or drawing a visual representation of what the structure looks like. But when I took an in-depth look at hashes (similar to dictionaries in other languages), I realized that I didn't have a very deep understanding of what was going on below the surface.
 
