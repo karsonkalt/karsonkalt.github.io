@@ -15,7 +15,7 @@
   &:hover {
     background-color: #787878aa;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     top: 32px;
     right: 32px;
   }
@@ -29,8 +29,29 @@
   padding: 0 68px;
   display: flex;
   flex-direction: column;
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     padding: 0 32px;
+  }
+}
+
+.home-title-large {
+  margin-top: 100px;
+  max-width: 800px;
+  width: 100%;
+  mix-blend-mode: exclusion;
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
+.home-title-medium {
+  display: none;
+  @media (max-width: 600px) {
+    display: inline-block;
+    margin-top: 100px;
+    max-width: 1000px;
+    width: 100%;
+    mix-blend-mode: exclusion;
   }
 }
 
@@ -52,7 +73,7 @@ canvas {
 .subtitle-container {
   display: flex;
   justify-content: flex-end;
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     display: none;
   }
 }
@@ -67,7 +88,7 @@ canvas {
 
 .subtitle-small {
   display: none;
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     border-left: 2px solid red;
     padding-left: 20px;
     margin-top: 40px;
@@ -76,16 +97,9 @@ canvas {
   }
 }
 
-.home-title {
-  margin-top: 100px;
-  max-width: 1000px;
-  width: 100%;
-  mix-blend-mode: exclusion;
-}
-
 .spacer {
   flex-grow: 1;
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     display: none;
   }
 }
@@ -95,8 +109,8 @@ canvas {
   display: flex;
   height: 200px;
   gap: 20px;
-  @media (max-width: 600px) {
-    margin-top: 80px;
+  @media (max-width: 800px) {
+    margin-top: 140px;
     flex-direction: column;
   }
 }
@@ -105,7 +119,7 @@ canvas {
   width: 200px;
   display: flex;
   flex-direction: column;
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     flex-direction: row;
   }
 }
@@ -154,7 +168,7 @@ canvas {
   font-weight: 400;
   width: 100px;
   flex-shrink: 0;
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     font-size: 12px;
     width: 80px;
   }
@@ -174,7 +188,7 @@ canvas {
   margin-bottom: 12px !important;
   // @include relative-font-size(1.5);
   width: 100%;
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     flex-direction: column;
     margin-bottom: 20px !important;
     justify-content: space-between;
