@@ -91,7 +91,7 @@ canvas {
 }
 
 .nav button[role="tab"],
-.nav a {
+.nav > * > a {
   border: unset;
   background-color: unset;
   color: unset;
@@ -134,7 +134,6 @@ canvas {
   font-weight: 400;
   width: 100px;
   flex-shrink: 0;
-  // color: $brand-color;
   @media (max-width: 600px) {
     font-size: 12px;
     width: 80px;
@@ -142,6 +141,7 @@ canvas {
 }
 
 .post-link {
+  padding-left: 0;
   display: inline-flex;
   gap: 12px;
   font-size: 16px !important;
@@ -151,13 +151,14 @@ canvas {
     color: #ffffff !important;
   }
   font-size: $small-font-size;
-  margin-bottom: 10px !important;
+  margin-bottom: 12px !important;
   // @include relative-font-size(1.5);
   width: 100%;
   @media (max-width: 600px) {
+    flex-direction: column;
+    margin-bottom: 20px !important;
     justify-content: space-between;
-    gap: 16px;
-    flex-direction: row-reverse;
+    gap: 0px;
   }
 }
 
