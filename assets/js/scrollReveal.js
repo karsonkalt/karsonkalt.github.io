@@ -1,12 +1,13 @@
 const slideUpOptions = {
   distance: "10%",
   origin: "bottom",
-  delay: 200,
-  viewOffset: {
-    bottom: 100,
-  },
+  delay: 100,
+  reset: true,
 };
 
-ScrollReveal().reveal(".post-link", { reset: true });
-ScrollReveal().reveal("div.highlight", slideUpOptions);
+ScrollReveal().reveal(".post-link", slideUpOptions);
+ScrollReveal().reveal("div.highlight", {
+  ...slideUpOptions,
+  distance: "5%",
+});
 ScrollReveal().reveal("img", slideUpOptions);

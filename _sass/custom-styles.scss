@@ -30,6 +30,7 @@ nav > a {
   font-weight: 400;
   width: 100px;
   flex-shrink: 0;
+  color: #a8a8a8;
   @media (max-width: 800px) {
     font-size: 12px;
     width: 80px;
@@ -42,7 +43,7 @@ nav > a {
   gap: 12px;
   font-size: 16px !important;
   font-weight: 800;
-  color: #e0e0e0 !important;
+  color: #cecece !important;
   &:hover {
     color: #ffffff !important;
   }
