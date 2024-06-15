@@ -4,62 +4,32 @@ layout: base
 
 {% assign posts = site.posts %}
 
-<canvas id="background"></canvas>
 
-<button id="playPauseButton">
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-    <path d="M560-200v-560h160v560H560Zm-320 0v-560h160v560H240Z" />
-  </svg>
-</button>
-<div class="home">
-  <div class="subtitle-container">
-    <div class="subtitle-large">
-      I'm a New York City-based full-stack engineer and designer focused on building exceptional user experiences. 1/2
-      designer and 1/2 developer -- I navigate product, design, and engineering to create impactful
-      interactions and build scalable UI modules that mobilize application development.
-    </div>
-  </div>
-  <div class="spacer"></div>
-  <img class="home-title-large" src="{{ '/assets/svg/karson-kalt-wordmark-vertical-1.svg'}}" alt="Karson Kalt" />
-  <img class="home-title-medium" src="{{ '/assets/svg/karson-kalt-wordmark-vertical-2.svg'}}" alt="Karson Kalt" />
-  <div class="subtitle-small">
-    I'm a New York City-based full-stack engineer and designer focused on building exceptional user experiences. 1/2
-    designer and 1/2 developer -- I navigate product, design, and engineering to create impactful
-    interactions and build scalable UI modules that mobilize application development.
-  </div>
-  <nav class="nav">
-    <div class="tab-container">
-      <a role="tab" aria-selected="true" aria-controls="tab-panel" id="blog-tab">
-        Blog
-      </a>
-      <a id="tab-id" href="http://www.github.com/karsonkalt" target="_blank">
-        GitHub
-      </a>
-      <a id="tab-id" href="https://www.linkedin.com/in/kaltkarson/" target="_blank">
-        LinkedIn
+<h1>Karson Kalt</h1>
+<nav class="nav">
+  <a href="http://www.github.com/karsonkalt" target="_blank">
+    GitHub
+  </a>
+  <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank">
+    LinkedIn
+  </a>
+</nav>
+
+<ul class="post-list">
+  {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+  {%- for post in posts -%}
+  <li>
+    <div>
+      <a class="post-link" href="{{ post.url | relative_url }}">
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+        <span class="post-title-list">
+          {{ post.title | escape }}
+        </span>
       </a>
     </div>
-    <div id="tab-panel" class="tab-panel" role="tabpanel" aria-labelledby="blog-tab">
-      <ul class="post-list">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        {%- for post in posts -%}
-        <li>
-          <div>
-            <a class="post-link" href="{{ post.url | relative_url }}">
-              <span class="post-meta">{{ post.date | date: date_format }}</span>
-              <span>
-                {{ post.title | escape }}
-              </span>
-            </a>
-          </div>
-          {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
-          {%- endif -%}
-        </li>
-        {%- endfor -%}
-      </ul>
-    </div>
-  </nav>
-
-
-</div>
+    {%- if site.show_excerpts -%}
+    {{ post.excerpt }}
+    {%- endif -%}
+  </li>
+  {%- endfor -%}
+</ul>
