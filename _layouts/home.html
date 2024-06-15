@@ -15,18 +15,16 @@ layout: base
   </a>
 </nav>
 
-<ul class="post-list">
+<ul class="blog-list">
   {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
   {%- for post in posts -%}
   <li>
-    <div>
-      <a class="post-link" href="{{ post.url | relative_url }}">
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <span class="post-title-list">
-          {{ post.title | escape }}
-        </span>
-      </a>
-    </div>
+    <a class="post-link" href="{{ post.url | relative_url }}">
+      <span class="post-meta">{{ post.date | date: date_format }}</span>
+      <span class="post-title-list">
+        {{ post.title | escape }}
+      </span>
+    </a>
     {%- if site.show_excerpts -%}
     {{ post.excerpt }}
     {%- endif -%}

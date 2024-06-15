@@ -5,14 +5,8 @@ $color-scheme-dark: true;
 
 @charset "utf-8";
 
-// Default color scheme settings
-// These are overridden in classic.css and dark.scss
-
 $color-scheme-auto: true !default;
 $color-scheme-dark: false !default;
-
-// Light mode
-// ----------
 
 $lm-brand-color: #828282 !default;
 $lm-brand-color-light: lighten($lm-brand-color, 40%) !default;
@@ -24,7 +18,7 @@ $lm-text-color: #111111 !default;
 $lm-background-color: #fdfdfd !default;
 $lm-code-background-color: #eeeeff !default;
 
-$lm-link-base-color: #2a7ae2 !default;
+$lm-link-base-color: #1e90ff !default;
 $lm-link-visited-color: darken($lm-link-base-color, 15%) !default;
 $lm-link-hover-color: $lm-text-color !default;
 
@@ -247,13 +241,13 @@ $dm-brand-color-dark: darken($dm-brand-color, 35%) !default;
 
 $dm-site-title-color: $dm-brand-color-light !default;
 
-$dm-text-color: #bbbbbb !default;
+$dm-text-color: #e0e0e0 !default;
 $dm-background-color: black !default;
 $dm-code-background-color: black !default;
 
-$dm-link-base-color: #48b6d7 !default;
+$dm-link-base-color: #1e90ff !default;
 $dm-link-visited-color: $dm-link-base-color !default;
-$dm-link-hover-color: $dm-text-color !default;
+$dm-link-hover-color: $dm-link-base-color !default;
 
 $dm-border-color-01: $dm-brand-color-dark !default;
 $dm-border-color-02: $dm-brand-color-light !default;
@@ -465,12 +459,6 @@ $dm-table-border-color: $dm-border-color-01 !default;
     } // Literal.Number.Integer.Long
   }
 }
-
-// Mode selection
-// --------------
-
-// Classic skin (always light mode)
-// Assign outside of the if construct to establish global variable scope
 
 $brand-color: $lm-brand-color;
 $brand-color-light: $lm-brand-color-light;

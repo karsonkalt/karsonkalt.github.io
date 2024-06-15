@@ -1,57 +1,3 @@
-.home {
-  width: 100%;
-  position: absolute;
-  height: 100lvh;
-  box-sizing: border-box;
-  padding: 0 68px;
-  display: flex;
-  flex-direction: column;
-  @media (max-width: 800px) {
-    padding: 0 32px;
-  }
-}
-
-.grid__item:hover {
-  opacity: 1;
-  transition: opacity 0.2s ease;
-}
-
-.subtitle-container {
-  display: flex;
-  justify-content: flex-end;
-  @media (max-width: 800px) {
-    display: none;
-  }
-}
-
-.subtitle-large {
-  margin-right: 50px;
-  border-left: 2px solid red;
-  padding-left: 20px;
-  margin-top: 120px;
-  width: 450px;
-}
-
-.subtitle-small {
-  display: none;
-  @media (max-width: 800px) {
-    border-left: 2px solid red;
-    padding-left: 20px;
-    margin-top: 40px;
-    display: inline-block;
-    font-size: 14px;
-  }
-}
-
-.tab-container {
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  @media (max-width: 800px) {
-    flex-direction: row;
-  }
-}
-
 nav {
   padding-bottom: 20px;
   display: flex;
@@ -67,22 +13,16 @@ nav > a {
   background-color: unset;
   display: inline-flex;
   font-size: 16px !important;
-  font-weight: 800;
+  font-weight: 600;
   position: relative;
-  color: #949494 !important;
 }
 
-.tab-panel {
-  // height: 100%;
-  // overflow-y: scroll;
-}
-
-.post-list {
+.blog-list {
   margin-left: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  // gap: $spacing-unit;
+  gap: $spacing-unit * 0.5;
 }
 
 .post-meta {
@@ -102,17 +42,14 @@ nav > a {
   gap: 12px;
   font-size: 16px !important;
   font-weight: 800;
-  color: #949494 !important;
+  color: #e0e0e0 !important;
   &:hover {
     color: #ffffff !important;
   }
   font-size: $small-font-size;
-  margin-bottom: 12px !important;
-  // @include relative-font-size(1.5);
   width: 100%;
   @media (max-width: 800px) {
     flex-direction: column;
-    margin-bottom: 20px !important;
     justify-content: space-between;
     gap: 0px;
   }
@@ -123,17 +60,16 @@ article {
   max-width: 800px;
 }
 
-.post-wordmark {
-  margin-top: 50px;
-  width: 500px;
-  max-width: 100%;
-  margin-bottom: 50px;
-}
-
 .wrapper {
   padding-top: 20px;
 }
 
 img {
   border-radius: 6px;
+
+  // @media (max-width: $on-large) {
+  //   margin-left: -8px;
+  //   margin-right: -8px;
+  //   border-radius: 0;
+  // }
 }
