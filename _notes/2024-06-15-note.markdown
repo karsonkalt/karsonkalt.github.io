@@ -1,0 +1,26 @@
+---
+layout: post
+title:  First Week with Bash
+date:   2024-06-15 10:00:00 -0400
+tags:   [note, bash]
+---
+
+I'm learning bash to help me feel more comfortable in my command line and customizing
+my shell. It's been very helpful and informative so far and I'm feeling much
+more comfortable in the cli.
+
+### Things I don't love
+- It's not strongly typed. Everything is treated as a string by default.
+- Passing in variables will spread?
+- Error handling is difficult with checking error statuses.
+- Only boolean named parameters with flags. You can pass in parameters to a flag but it's pretty cumbersome.
+- Spaces as argument delimiters is a big issue
+- I don't understand differences between `grep` and `awk` very well. `awk` looks like a fleshed out scripting language, while `grep` is simple substring filter.
+
+## Learnings
+- What are the differences between `awk` and `grep`
+- Square brackets are syntactic sugar for the test command
+- Use `getopts` for getting flags
+- Always quote your variable to avoid word splitting
+- Name arguments inside function declarations with local variables
+- Arithmetic is done inside parenthesis
