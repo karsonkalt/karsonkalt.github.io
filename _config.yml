@@ -3,6 +3,10 @@ author:
   name: Karson Kalt
   email: kars.kalt@gmail.com
 
+collections:
+  notes:
+    output: true
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
