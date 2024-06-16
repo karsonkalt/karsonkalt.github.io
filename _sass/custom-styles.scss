@@ -4,8 +4,22 @@
   align-items: center;
   padding-bottom: 20px;
 
-  h1 {
-    margin-bottom: unset;
+  .title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 4px;
+
+    h1 {
+      margin-bottom: unset;
+      line-height: 1;
+    }
+  }
+
+  .domain {
+    color: #b9b9b9;
+    line-height: 1.3;
+    font-family: "Ubuntu Mono";
   }
 
   @media (max-width: 800px) {
@@ -13,6 +27,13 @@
     align-items: flex-start;
     padding-bottom: 40px;
   }
+}
+
+a .domain {
+  color: #b9b9b9;
+  font-size: 16px;
+  line-height: 1;
+  font-family: "Ubuntu Mono";
 }
 
 // TABS
