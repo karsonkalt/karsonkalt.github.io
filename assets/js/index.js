@@ -48,6 +48,18 @@ function applyChanges(tab) {
     document
       .getElementById(item.getAttribute("aria-controls"))
       .setAttribute("aria-hidden", (!isSelected).toString());
+
+    let elements = document.querySelectorAll(".post-link");
+
+    elements.forEach((element) => {
+      element.style.opacity = "1";
+    });
+
+    ScrollReveal().reveal(elements, {
+      distance: "10%",
+      origin: "bottom",
+      reset: true,
+    });
   });
 }
 
@@ -58,11 +70,11 @@ if (location.hash) {
   }
 }
 
-// ScrollReveal().reveal(".post-link", {
-//   distance: "10%",
-//   origin: "bottom",
-//   // reset: true,
-// });
+ScrollReveal().reveal(".post-link", {
+  distance: "10%",
+  origin: "bottom",
+  reset: true,
+});
 
 ScrollReveal().reveal("div.highlight", {
   delay: 100,
@@ -71,7 +83,6 @@ ScrollReveal().reveal("div.highlight", {
   origin: "bottom",
 });
 
-// Function to copy text to clipboard
 function copyToClipboard(text) {
   const textarea = document.createElement("textarea");
   textarea.value = text;
@@ -81,7 +92,6 @@ function copyToClipboard(text) {
   document.body.removeChild(textarea);
 }
 
-// Function to create and mount the copy button
 function createCopyButton(preElement) {
   const button = document.createElement("button");
   button.innerHTML = `
@@ -109,7 +119,6 @@ function createCopyButton(preElement) {
   preElement.appendChild(button);
 }
 
-// Find all <pre> elements with class "highlight" and add the copy button
 document.querySelectorAll("pre.highlight").forEach((preElement) => {
   createCopyButton(preElement);
 });
