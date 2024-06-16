@@ -1,26 +1,82 @@
 ---
 layout: post
-title:  First Week with Bash
+title:  cleanup-node-modules.sh
 date:   2024-06-15 10:00:00 -0400
-tags:   [note, bash]
+tags:   [snippet]
 ---
 
-I'm learning bash to help me feel more comfortable in my command line and customizing
-my shell. It's been very helpful and informative so far and I'm feeling much
-more comfortable in the cli.
+A simple script to cleanup node_modules from a development directory. If no
+development directory is passed it will default to the current directory with
+a depth limit of 15.
 
-### Things I don't love
-- It's not strongly typed. Everything is treated as a string by default.
-- Passing in variables will spread?
-- Error handling is difficult with checking error statuses.
-- Only boolean named parameters with flags. You can pass in parameters to a flag but it's pretty cumbersome.
-- Spaces as argument delimiters is a big issue
-- I don't understand differences between `grep` and `awk` very well. `awk` looks like a fleshed out scripting language, while `grep` is simple substring filter.
+```bash
+#!/bin/bash
 
-## Learnings
-- What are the differences between `awk` and `grep`
-- Square brackets are syntactic sugar for the test command
-- Use `getopts` for getting flags
-- Always quote your variable to avoid word splitting
-- Name arguments inside function declarations with local variables
-- Arithmetic is done inside parenthesis
+DEVELOPMENT_DIRECTORY=${1:-.}
+MAX_DEPTH=${2:-15}
+
+deleted_sizes=()
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+
+get_dir_size() {
+    du -sh "$1" 2>/dev/null | awk '{print $1}'
+}
+
+get_dir_size_kb() {
+    du -sk "$1" 2>/dev/null | awk '{print $1}'
+}
+
+traverse_directories() {
+    local dir=$1
+    local depth=$2
+    local package_found=false
+
+    if [ "$depth" -gt "$MAX_DEPTH" ]; then
+        printf "${WHITE}Max depth            %-50s Depth: %d${NC}\n" "$dir" "$depth"
+        return
+    fi
+
+    # Check if package.json exists in the current directory
+    if [ -f "$dir/package.json" ]; then
+        package_found=true
+
+        if [ -d "$dir/node_modules" ]; then
+            size=$(get_dir_size "$dir/node_modules")
+            size_kb=$(get_dir_size_kb "$dir/node_modules")
+            rm -rf "$dir/node_modules"
+            deleted_sizes+=("$size_kb")
+
+            printf "${RED}Deleted node_modules  %-50s %-10s${NC}\n" "$dir" "$size"
+            return
+        else
+            printf "${YELLOW}Found package.json   %-50s${NC}\n" "$dir"
+            return
+        fi
+    fi
+
+    if ! $package_found; then
+        printf "${WHITE}Checked              %-50s ${NC}\n" "$dir"
+    fi
+
+    for subdir in "$dir"/*/; do
+        subdir=${subdir%/}
+        [ -d "$subdir" ] && traverse_directories "$subdir" $((depth + 1))
+    done
+}
+
+traverse_directories "$DEVELOPMENT_DIRECTORY" 1
+
+total_size_kb=0
+
+for size_kb in "${deleted_sizes[@]}"; do
+    total_size_kb=$((total_size_kb + size_kb))
+done
+
+total_size_human=$(echo "$total_size_kb" | awk '{ byte =$1 /1024/1024; print byte "G" }')
+
+echo -e "${GREEN}Total size of deleted node_modules: $total_size_human${NC}"s
+
+```

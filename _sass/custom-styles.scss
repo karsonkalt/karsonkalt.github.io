@@ -107,6 +107,24 @@ nav > a {
   }
 }
 
+.post-tags {
+  font-size: 12px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-tag {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  color: #a8a8a8;
+  & * {
+    border-radius: 0;
+  }
+}
+
 .post-link {
   padding-left: 0;
   display: inline-flex;
@@ -116,6 +134,7 @@ nav > a {
   color: #cecece !important;
   &:hover {
     color: #ffffff !important;
+    text-decoration: none;
   }
   font-size: $small-font-size;
   flex-direction: column;

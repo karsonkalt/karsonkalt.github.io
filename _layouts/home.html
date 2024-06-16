@@ -4,6 +4,7 @@ layout: base
 
 {% assign posts = site.posts %}
 {% assign notes = site.notes | sort: 'date' | reverse %}
+{% assign tag_icons = site.data.tag_icons %}
 
 <div class="header">
   <h1>Karson Kalt</h1>
@@ -55,7 +56,9 @@ layout: base
           </defs>
           <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="9.13" x2="23.5" y2="9.13"></line>
           <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="14.88" x2="13.92" y2="14.88"></line>
-        </svg>Notes</button>
+        </svg>
+        Notes
+      </button>
     </li>
   </ul>
 
@@ -78,10 +81,26 @@ layout: base
   <div id="panel-2" role="tabpanel" aria-labelledby="notes" aria-hidden="true">
     <ul class="blog-list">
       {%- for note in notes -%}
+      {% assign tags = note.tags %}
       <li>
         <a class="post-link" href="{{ note.url | relative_url }}">
           <span class="post-meta">{{ note.date | date: date_format }}</span>
           <span class="post-title-list">{{ note.title | escape }}</span>
+          {% if tags %}
+          <span class="post-tags">
+            {%- for tag in tags -%}
+            <span class="post-tag">
+              {% if tag %}
+              {% assign icon = tag_icons[tag] %}
+              {% if icon %}
+              <img src="/assets/icons/{{ icon }}" alt="{{ tag }} icon">
+              {% endif %}
+              {{ tag | escape }}
+              {% endif %}
+            </span>
+            {%- endfor -%}
+          </span>
+          {% endif %}
         </a>
       </li>
       {%- endfor -%}
