@@ -147,3 +147,22 @@ img {
   //   border-radius: 0;
   // }
 }
+
+.copy-button {
+  all: unset;
+  // top right of parent
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px;
+  background-color: #363636;
+  color: #e8e8e8;
+  display: flex;
+  border-radius: 6px;
+  &:hover {
+    background-color: #4a4a4a;
+  }
+  @media (max-width: 800px) {
+    border-radius: 0;
+  }
+}

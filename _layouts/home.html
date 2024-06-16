@@ -3,8 +3,7 @@ layout: base
 ---
 
 {% assign posts = site.posts %}
-{% assign notes = site.notes %}
-
+{% assign notes = site.notes | sort: 'date' | reverse %}
 
 <div class="header">
   <h1>Karson Kalt</h1>
