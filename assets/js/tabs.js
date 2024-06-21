@@ -19,8 +19,6 @@ window.onhashchange = function () {
 };
 
 function applyChanges(clickedTab) {
-  console.log("clickedTab", clickedTab);
-
   tabNodes.forEach((tab) => {
     const isSelected = tab === clickedTab;
     tab.setAttribute("aria-selected", isSelected.toString());
@@ -29,11 +27,9 @@ function applyChanges(clickedTab) {
     const tabPanel = document.getElementById(tabPanelId);
 
     if (!tabPanel) {
-      console.error(`Tab panel with id "${tabPanelId}" not found.`);
       return;
     }
 
-    console.log("tabPanel", tabPanel);
     if (isSelected) {
       tabPanel.removeAttribute("hidden");
     } else {
