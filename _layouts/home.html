@@ -21,11 +21,16 @@ layout: base
   </nav>
 </div>
 
-<section class="about">
-  <h3 class="terminal">
-    <span class="prompt">$</span>
-    <span class="emoticon"></span>
-  </h3>
+<pre class="terminal">
+  <span class="system-prompt" aria-hidden="true">$</span>
+  <div class="input-container">
+    <input type="text" class="prompt" value="">
+    <span class="input-mirror"></span>
+    <span class="cursor" aria-hidden="true">_</span>
+  </div>
+</pre>
+
+<section class="about" hidden>
   <p>
     I’m a passionate software engineer dedicated to crafting interfaces that
     delight users and make a difference. Currently, I’m a Senior Software Engineer at <a
@@ -34,97 +39,98 @@ layout: base
   </p>
 </section>
 
-<div class="tab-container">
-  <div role="tablist">
-    <button role="tab" id="blog" aria-controls="tab-panel-1" aria-selected="true" tabindex="0">
-      <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
-        width="12" height="12" fill="currentColor">
-        <defs>
-          <style>
-            .cls-6374f8d9b67f094e4896c640-1 {
-              fill: none;
-              stroke: currentColor;
-              stroke-miterlimit: 10;
-            }
-          </style>
-        </defs>
-        <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="1.46" x2="23.5" y2="1.46"></line>
-        <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="8.17" x2="23.5" y2="8.17"></line>
-        <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="15.83" x2="23.5" y2="15.83"></line>
-        <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="22.54" x2="12.96" y2="22.54"></line>
-      </svg>
-      Blog
-    </button>
-    <button role="tab" id="notes" aria-controls="tab-panel-2" aria-selected="false" tabindex="-1">
-      <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
-        width="12" height="12" fill="currentColor">
-        <defs>
-          <style>
-            .cls-6374f8d9b67f094e4896c66c-1 {
-              fill: none;
-              stroke: currentColor;
-              stroke-miterlimit: 10;
-            }
-          </style>
-        </defs>
-        <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="9.13" x2="23.5" y2="9.13"></line>
-        <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="14.88" x2="13.92" y2="14.88"></line>
-      </svg>
-      Notes
-    </button>
-  </div>
-
-  <div class="tab-panels">
-    <div id="tab-panel-1" role="tabpanel" aria-labelledby="blog">
-      <ul class="tab-panel-content">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        {%- for post in posts -%}
-        <li>
-          <a class="link-item" href="{{ post.url | relative_url }}">
-            <div class="link-item-left">
-              <span class="post-meta">{{ post.date | date: date_format }}</span>
-              <span class="post-title-list">
-                {{ post.title | escape }}
-              </span>
-            </div>
-          </a>
-        </li>
-        {%- endfor -%}
-      </ul>
+<div class="tab-container" hidden>
+  <div>
+    <div role="tablist">
+      <button role="tab" id="blog" aria-controls="tab-panel-1" aria-selected="true" tabindex="0">
+        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
+          width="12" height="12" fill="currentColor">
+          <defs>
+            <style>
+              .cls-6374f8d9b67f094e4896c640-1 {
+                fill: none;
+                stroke: currentColor;
+                stroke-miterlimit: 10;
+              }
+            </style>
+          </defs>
+          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="1.46" x2="23.5" y2="1.46"></line>
+          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="8.17" x2="23.5" y2="8.17"></line>
+          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="15.83" x2="23.5" y2="15.83"></line>
+          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="22.54" x2="12.96" y2="22.54"></line>
+        </svg>
+        Blog
+      </button>
+      <button role="tab" id="notes" aria-controls="tab-panel-2" aria-selected="false" tabindex="-1">
+        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
+          width="12" height="12" fill="currentColor">
+          <defs>
+            <style>
+              .cls-6374f8d9b67f094e4896c66c-1 {
+                fill: none;
+                stroke: currentColor;
+                stroke-miterlimit: 10;
+              }
+            </style>
+          </defs>
+          <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="9.13" x2="23.5" y2="9.13"></line>
+          <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="14.88" x2="13.92" y2="14.88"></line>
+        </svg>
+        Notes
+      </button>
     </div>
 
-    <div id="tab-panel-2" role="tabpanel" aria-labelledby="notes" hidden>
-      <ul class="tab-panel-content">
-        {%- for note in notes -%}
-        {% assign tags = note.tags %}
-        <li>
-          <a class="link-item" href="{{ note.url | relative_url }}">
-            <div class="link-item-left">
-              <span class="post-meta">{{ note.date | date: date_format }}</span>
-              <span class="post-title-list">{{ note.title | escape }}</span>
-              {% if tags %}
-              <span class="post-tags">
-                {%- for tag in tags -%}
-                <span class="post-tag">
-                  {% if tag %}
-                  {% assign icon = tag_icons[tag] %}
-                  {% if icon %}
-                  <img src="/assets/icons/{{ icon }}" alt="{{ tag }} icon">
-                  {% endif %}
-                  {{ tag | escape }}
-                  {% endif %}
+    <div class="tab-panels">
+      <div id="tab-panel-1" role="tabpanel" aria-labelledby="blog">
+        <ul class="tab-panel-content">
+          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+          {%- for post in posts -%}
+          <li>
+            <a class="link-item" href="{{ post.url | relative_url }}">
+              <div class="link-item-left">
+                <span class="post-meta">{{ post.date | date: date_format }}</span>
+                <span class="post-title-list">
+                  {{ post.title | escape }}
                 </span>
-                {%- endfor -%}
-              </span>
-              {% endif %}
-            </div>
-          </a>
-        </li>
-        {%- endfor -%}
-      </ul>
+              </div>
+            </a>
+          </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div id="tab-panel-2" role="tabpanel" aria-labelledby="notes" hidden>
+        <ul class="tab-panel-content">
+          {%- for note in notes -%}
+          {% assign tags = note.tags %}
+          <li>
+            <a class="link-item" href="{{ note.url | relative_url }}">
+              <div class="link-item-left">
+                <span class="post-meta">{{ note.date | date: date_format }}</span>
+                <span class="post-title-list">{{ note.title | escape }}</span>
+                {% if tags %}
+                <span class="post-tags">
+                  {%- for tag in tags -%}
+                  <span class="post-tag">
+                    {% if tag %}
+                    {% assign icon = tag_icons[tag] %}
+                    {% if icon %}
+                    <img src="/assets/icons/{{ icon }}" alt="{{ tag }} icon">
+                    {% endif %}
+                    {{ tag | escape }}
+                    {% endif %}
+                  </span>
+                  {%- endfor -%}
+                </span>
+                {% endif %}
+              </div>
+            </a>
+          </li>
+          {%- endfor -%}
+        </ul>
+      </div>
     </div>
   </div>
-
 </div>
 
 <script src="{{ 'assets/js/emoticon.js' | relative_url }}"></script>

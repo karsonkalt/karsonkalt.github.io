@@ -1,25 +1,83 @@
 .about {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 45px;
+  animation: fadeInUp 1000ms forwards;
 }
 
-.terminal {
+pre.terminal {
+  all: unset; // ignore pre tags
   font-family: "Ubuntu Mono";
+  cursor: text;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin: -8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  caret-color: transparent;
+  border-bottom: 1px solid transparent;
+  font-size: 1.3em;
+  color: white;
+
+  &:hover {
+    background-color: #3535358e;
+  }
+  &:focus-within {
+    background-color: #343434;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  @media screen and (max-width: 800px) {
+    padding-left: 14px;
+    padding-right: 14px;
+    margin-left: -14px;
+    margin-right: -14px;
+    border-radius: 0;
+  }
+}
+
+.system-prompt {
+  margin-right: 16px;
+  user-select: none;
+}
+
+.input-container {
+  display: flex;
+  position: relative;
+}
+
+.prompt {
+  position: absolute;
+  left: -9999px; /* Hide the input off-screen */
+}
+
+.input-mirror {
+  white-space: pre;
+  color: white;
 }
 
 .cursor {
-  color: white;
-  animation: blink 1s step-end infinite;
+  animation: blink 1s steps(1) infinite;
+}
+
+.terminal-output {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  font-family: "Ubuntu Mono";
+  color: #a9a9a9;
+  margin-bottom: 24px;
+  font-size: 0.9em;
+  // &:hover {
+  //   color: #e8e8e8;
+  // }
 }
 
 @keyframes blink {
-  from,
-  to {
-    color: transparent;
-  }
   50% {
-    color: white;
+    opacity: 0;
   }
 }
 
@@ -27,7 +85,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 24px;
 
   .title-container {
     display: flex;
@@ -63,8 +121,11 @@ a .domain {
 
 // TABS
 .tab-container {
-  display: flex;
-  flex-direction: column;
+  animation: fadeInUp 1000ms forwards;
+  & > div {
+    flex-direction: column;
+    display: flex;
+  }
 }
 
 [role="tablist"] {
