@@ -81,7 +81,14 @@ const items = [
       backspace: true,
       wait: 4000,
       type: 200,
-    },
+  },
+  {
+    text: "export PS1=%",
+    execute: false,
+    backspace: true,
+    wait: 4000,
+    type: 200,
+},
     {
       text: "(ﾉ◕ヮ◕)ﾉ*:・ﾟ✧",
       execute: false,
