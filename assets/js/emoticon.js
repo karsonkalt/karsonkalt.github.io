@@ -53,7 +53,7 @@ const items = [
   { text: "(◉‿◉)つ", execute: false, backspace: true, wait: 1000, type: 200 },
 ];
 
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
   const terminal = document.querySelector(".terminal");
   const prompt = document.querySelector(".prompt");
   const mirrorElement = document.querySelector(".input-mirror");
@@ -412,7 +412,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   items.length && setTimeout(startAutoType, INIT_WAIT);
-});
+})();
 
 // TODOS
 // instead of revealing parts of the html, have an add command that creates tabs,
