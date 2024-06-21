@@ -30,19 +30,18 @@ layout: base
   </div>
 </pre>
 
-<section class="about" hidden>
-  <p>
-    I’m a passionate software engineer dedicated to crafting interfaces that
-    delight users and make a difference. Currently, I’m a Software Engineer at <a href="https://www.jupiterone.com/"
-      target="_blank">JupiterOne</a> , where I advocate for
-    user experience and get to build impactful features every day.
-  </p>
-</section>
-
-<div class="tab-container" hidden>
+<!-- <div class="tab-container" hidden> -->
+<div class="tab-container" >
   <div>
     <div role="tablist">
-      <button role="tab" id="blog" aria-controls="tab-panel-1" aria-selected="true" tabindex="0">
+      <button role="tab" id="stdout" aria-controls="tab-panel-1" aria-selected="true" tabindex="0" hidden>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 17L10 11L4 5" stroke="currentColor" fill="none"/>
+          <path d="M12 19H20" stroke="currentColor"fill="none"/>
+        </svg>
+        Stdout
+      </button>
+      <button role="tab" id="blog" aria-controls="tab-panel-2" aria-selected="false" tabindex="-1" hidden>
         <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
           width="12" height="12" fill="currentColor">
           <defs>
@@ -61,7 +60,7 @@ layout: base
         </svg>
         Blog
       </button>
-      <button role="tab" id="notes" aria-controls="tab-panel-2" aria-selected="false" tabindex="-1">
+      <button role="tab" id="notes" aria-controls="tab-panel-3" aria-selected="false" tabindex="-1" hidden>
         <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
           width="12" height="12" fill="currentColor">
           <defs>
@@ -81,7 +80,13 @@ layout: base
     </div>
 
     <div class="tab-panels">
-      <div id="tab-panel-1" role="tabpanel" aria-labelledby="blog">
+      <div id="tab-panel-1" role="tabpanel" aria-labelledby="stdout">
+        <ul class="tab-panel-content">
+        
+        </ul>
+      </div>
+
+      <div id="tab-panel-2" role="tabpanel" aria-labelledby="blog">
         <ul class="tab-panel-content">
           {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
           {%- for post in posts -%}
@@ -99,7 +104,7 @@ layout: base
         </ul>
       </div>
 
-      <div id="tab-panel-2" role="tabpanel" aria-labelledby="notes" hidden>
+      <div id="tab-panel-3" role="tabpanel" aria-labelledby="notes" hidden>
         <ul class="tab-panel-content">
           {%- for note in notes -%}
           {% assign tags = note.tags %}

@@ -2,14 +2,21 @@ const INIT_WAIT = 500;
 
 const items = [
   {
-    text: "add --about",
+    text: "add --tab stdout",
     execute: true,
     backspace: false,
     wait: 1000,
     type: 100,
   },
   {
-    text: "add --blog",
+    text: "add --tab blog",
+    execute: true,
+    backspace: false,
+    wait: 1000,
+    type: 100,
+  },
+  {
+    text: "add --tab notes",
     execute: true,
     backspace: false,
     wait: 1000,
@@ -20,6 +27,34 @@ const items = [
     execute: true,
     backspace: false,
     wait: 6000,
+    type: 120,
+  },
+  {
+    text: 'about',
+    execute: true,
+    backspace: false,
+    wait: 3000,
+    type: 120
+  },
+  {
+    text: 'experience',
+    execute: true,
+    backspace: false,
+    wait: 3000,
+    type: 120,
+  },
+  {
+    text: 'skills --lanugages',
+    execute: true,
+    backspace: false,
+    wait: 3000,
+    type: 120,
+  },
+  {
+    text: 'education',
+    execute: true,
+    backspace: false,
+    wait: 3000,
     type: 120,
   },
   { text: "help", execute: true, backspace: false, wait: 3000, type: 200 },
@@ -59,9 +94,6 @@ let autoTypeActive = true;
   const terminal = document.querySelector(".terminal");
   const prompt = document.querySelector(".prompt");
   const mirrorElement = document.querySelector(".input-mirror");
-  const outputElement = document.createElement("div");
-  outputElement.classList.add("terminal-output");
-  terminal.insertAdjacentElement("afterend", outputElement);
 
   const INTRO_DELAY = 1500;
   const DELETE_SPEED = 100;
@@ -136,19 +168,33 @@ let autoTypeActive = true;
   });
 
   function handleBashCommand(command) {
-    // Parse the command and arguments
     const [cmd, ...args] = command.split(" ");
-
-    // Execute the command
+  
     const result = executeCommand(cmd, args);
-    // Parse the result and add line breaks if multi-line
     const formattedHelpText = result.replace(/\n/g, "<br/>");
-
-    // Display the result in the outputElement
-    outputElement.innerHTML = formattedHelpText;
-
-    // Clear the prompt value
+  
     setPromptValue("");
+      addToStdoutLog(command, formattedHelpText);
+  }
+  
+  function addToStdoutLog(command, output) {
+    const tabPanels = document.querySelector(".tab-panels");
+    const ul = tabPanels.querySelector(".tab-panel-content");
+    const li = document.createElement("li");
+    const timestamp = new Date().toLocaleTimeString();
+  
+    li.innerHTML = `
+      <div class="stdout-entry">
+        <div class="stdout-entry-wrapper">
+        <span class="stdout-timestamp">${timestamp}</span>
+        <span class="stdout-command">${command}</span>
+        <div class="stdout-output">${output}</div>
+        </div>
+      </div>
+    `;
+  
+    // Insert the new stdout entry at the top
+    ul.insertBefore(li, ul.firstChild);
   }
 
   const commandsThatWouldBeSillyToSupport = {
@@ -192,6 +238,11 @@ let autoTypeActive = true;
       description: "Lists all available files",
       flags: {},
     },
+    about: {
+      execute: aboutCommand,
+      description: "Displays about information",
+      flags: {}
+    },
     stop: {
       execute: stopCommand,
       description: "Stops the auto-type",
@@ -221,8 +272,7 @@ let autoTypeActive = true;
       execute: addCommand,
       description: "Adds content to the website",
       flags: {
-        "--blog": "Adds the blog",
-        "--about": "Adds the about section",
+        "--tab": "Adds a tab",
       },
     },
     skills: {
@@ -313,13 +363,28 @@ let autoTypeActive = true;
     return "Karson, Frontend Developer";
   }
 
-  function addCommand(args) {
-    if (args.includes("--blog")) {
-      return privateBlogCommand(args);
-    } else if (args.includes("--about")) {
-      return privateAboutCommand(args);
+  function showTab(tabName) {
+    const tab = document.querySelector(`#${tabName}`);
+    if (tab) {
+      tab.removeAttribute("hidden");
+      return `Tab "${tabName}" is now visible.`;
     } else {
-      return "Usage: add [--blog | --about]";
+      return `Error: Tab "${tabName}" does not exist.`;
+    }
+  }
+  
+  function addCommand(args) {
+    const addIndex = args.indexOf("--tab");
+    if (addIndex !== -1 && args[addIndex + 1]) {
+      const tabName = args[addIndex + 1];
+      console.log(tabName)
+      if (["stdout", "blog", "notes"].includes(tabName)) {
+        return showTab(tabName);
+      } else {
+        return `Error: Tab "${tabName}" cannot be added. Only "stdout", "blog", and "about" can be added.`;
+      }
+    } else {
+      return "Usage: tab --add <name>";
     }
   }
 
@@ -340,17 +405,8 @@ let autoTypeActive = true;
     return `Prompt character changed to ${newPromptCharacter}`;
   }
 
-  function privateAboutCommand(args) {
-    const aboutSection = document.querySelector(".about");
-    aboutSection.removeAttribute("hidden");
-    return ""; // Return an empty string to avoid printing anything in the terminal
-  }
-
-  function privateBlogCommand(args) {
-    const tabContainer = document.querySelector(".tab-container");
-    console.log(tabContainer);
-    tabContainer.removeAttribute("hidden");
-    return "";
+  function aboutCommand(args) {
+    return `I’m a passionate software engineer dedicated to crafting interfaces that delight users and make a difference. Currently, I’m a Software Engineer at <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> , where I advocate for user experience and get to build impactful features every day.`;
   }
 
   function skillsCommand(args) {
