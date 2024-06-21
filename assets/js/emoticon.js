@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     ls: {
       execute: lsCommand,
-      description: "Lists all available commands",
+      description: "Lists all available files",
       flags: {},
     },
     stop: {
@@ -354,44 +354,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function skillsCommand(args) {
     if (args.includes("--languages")) {
-      return "Languages: TypeScript, JavaScript, HTML, CSS, Python";
+      return "Languages: TypeScript, JavaScript, CSS";
     } else if (args.includes("-l")) {
-      return "Skills: Frontend Development, React, UX Design, TypeScript, JavaScript, HTML, CSS, Python, Agile Methodologies, User-Centered Design";
+      return "Skills: Frontend Development, React, UX Design, TypeScript, JavaScript, Node A11y, Agile, User-Centered Design";
     } else {
-      return "Skills: Frontend Development, React, UX Design, TypeScript, JavaScript, HTML, CSS, Python";
+      return "Skills: Frontend Development, React, UX Design, TypeScript, JavaScript";
     }
   }
 
   function projectsCommand(args) {
-    return `
-  Projects:
-  1. **Portfolio Website**: Built a personal portfolio website using React, showcasing my projects and skills.
-  2. **E-commerce Platform**: Developed a fully functional e-commerce platform using MERN stack (MongoDB, Express.js, React, Node.js).
-  3. **Chat Application**: Created a real-time chat application using Socket.io and Node.js, implementing user authentication and chat rooms.
-  4. **Weather App**: Designed a weather forecasting app using React and OpenWeatherMap API, displaying weather data and forecasts.
-  `;
+    return `Projects: `;
   }
 
   function educationCommand(args) {
     return `
   Education:
-  - **B.S. in Computer Science**, XYZ University (2015 - 2019)
-    - Relevant Courses: Data Structures, Algorithms, Web Development, Human-Computer Interaction, Database Systems.
+    - **B.S. Digital Marketing**, Utah Valley University (2010 - 2014)
+    - **Flatiron School**, Software Engineering Immersive (2017)
   `;
   }
 
   function experienceCommand(args) {
     return `
   Experience:
-  1. **Frontend Developer**, ABC Corp (2020 - Present)
-    - Developed and maintained web applications using React and TypeScript.
-    - Collaborated with designers to create user-friendly interfaces.
-    - Implemented responsive designs and optimized application performance.
+  1. **Senior Software Engineer Applications**, JupiterOne (2024 - Present)
+    - TBD
   
-  2. **Software Engineer Intern**, DEF Inc. (2019 - 2020)
-    - Assisted in the development of internal tools using Python and JavaScript.
-    - Participated in code reviews and contributed to the improvement of coding standards.
-    - Worked closely with the QA team to identify and fix bugs.
+  2. **Software Engineer**, JupiterOne (2018 - 2024)
+    - TBD
   `;
   }
 
