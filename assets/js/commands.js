@@ -178,7 +178,6 @@ const snarkyResponses = [
     const addIndex = args.indexOf("--tab");
     if (addIndex !== -1 && args[addIndex + 1]) {
       const tabName = args[addIndex + 1];
-      console.log(tabName)
       if (["stdout", "blog", "notes"].includes(tabName)) {
         return showTab(tabName);
       } else {
