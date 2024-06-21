@@ -226,14 +226,14 @@ const snarkyResponses = [
   
   function educationCommand(args) {
     return `Education:
-    - **B.S. Digital Marketing**, <a href="https://www.uvu.edu/"target="_blank">Utah Valley University</a> (2010 - 2014)
+    - <strong>B.S. Digital Marketing</strong>, <a href="https://www.uvu.edu/"target="_blank">Utah Valley University</a> (2010 - 2014)
     - **Flatiron School**, Software Engineering Immersive (2017)
   `;
   }
   
   function experienceCommand(args) {
     return `Experience:
-  1. **Software Engineer, Applications**, <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> (October 2021 - Present)
+    <strong>Software Engineer, Applications</strong>, <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> (October 2021 - Present)
     Natural Language Querying
     − Designed and developed the integration of generative AI into our search experience, converting natural language to our query language. Resulted in one of our highest adoption rates and helped accelerate platform time-to-value.
     − Implemented a vector database embedding cache, improving query response times and reducing operational costs.
