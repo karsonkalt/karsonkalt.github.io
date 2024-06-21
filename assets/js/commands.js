@@ -225,16 +225,14 @@ const snarkyResponses = [
   }
   
   function educationCommand(args) {
-    return `
-  Education:
+    return `Education:
     - **B.S. Digital Marketing**, Utah Valley University (2010 - 2014)
     - **Flatiron School**, Software Engineering Immersive (2017)
   `;
   }
   
   function experienceCommand(args) {
-    return `
-  Experience:
+    return `Experience:
   1. **Senior Software Engineer Applications**, JupiterOne (2024 - Present)
     - TBD
   
