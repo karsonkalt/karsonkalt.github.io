@@ -53,6 +53,8 @@ const items = [
   { text: "(◉‿◉)つ", execute: false, backspace: true, wait: 1000, type: 200 },
 ];
 
+let autoTypeActive = true;
+
 (function () {
   const terminal = document.querySelector(".terminal");
   const prompt = document.querySelector(".prompt");
@@ -67,7 +69,6 @@ const items = [
 
   let focusTimeoutId;
   let currentItemIndex = 0;
-  let autoTypeActive = false;
 
   const setPromptValue = (value) => {
     prompt.value = String(value);
