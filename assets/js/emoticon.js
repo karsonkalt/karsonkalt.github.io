@@ -16,9 +16,9 @@ const items = [
     type: 100,
   },
   {
-    text: "Hi, I'm Karson ツ ",
-    execute: false,
-    backspace: true,
+    text: "echo Hi, I'm Karson ツ",
+    execute: true,
+    backspace: false,
     wait: 6000,
     type: 120,
   },

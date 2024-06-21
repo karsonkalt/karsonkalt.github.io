@@ -1,9 +1,0 @@
-{
-  "editor.formatOnSave": true,
-  "[liquid]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  }
-}
