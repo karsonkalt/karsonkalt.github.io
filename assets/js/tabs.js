@@ -19,6 +19,8 @@ window.onhashchange = function () {
 };
 
 function applyChanges(clickedTab) {
+  updateBadge(clickedTab.getAttribute('id') === 'stdout')
+
   tabNodes.forEach((tab) => {
     const isSelected = tab === clickedTab;
     tab.setAttribute("aria-selected", isSelected.toString());
@@ -36,6 +38,16 @@ function applyChanges(clickedTab) {
       tabPanel.setAttribute("hidden", "");
     }
   });
+}
+
+// duplicated from other
+function updateBadge(hasUnreadStdout) {
+  const stdoutTab = document.querySelector('#stdout');
+  const badge = stdoutTab.querySelector('.unread-badge');
+
+  if (hasUnreadStdout)  {
+    badge.classList.remove('show');
+  }
 }
 
 if (location.hash) {

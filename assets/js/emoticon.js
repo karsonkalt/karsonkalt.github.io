@@ -105,7 +105,22 @@ const items = [
   },
   ];
   
-  let autoTypeActive = true;
+let autoTypeActive = true;
+  
+function createRipple() {
+  const targetElement = document.querySelector('.ripple-container')
+  const size = Math.max(targetElement.offsetWidth, targetElement.offsetHeight) * 1.1; // Ensure it covers the parent
+  
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.setProperty('--ripple-size', `${size}px`);
+  targetElement.appendChild(ripple);
+
+  // ripple.addEventListener("animationend", () => {
+  //     ripple.remove();
+  // });
+}
+
   
   (function () {
     const terminal = document.querySelector(".terminal");
@@ -178,15 +193,16 @@ const items = [
   
     // Handle the Enter key to submit or do something
     prompt.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
+      if (event.key === "Enter" && !!event.target.value.trim()) {
         event.preventDefault(); // Prevents submitting the form
-        handleBashCommand(event.target.value);
+        handleBashCommand(event.target.value.trim());
         setPromptValue("");
         autoTypeActive = false;
       }
     });
   
     function handleBashCommand(command) {
+      createRipple()
       const [cmd, ...args] = command.split(" ");
     
       const result = executeCommand(cmd, args);
@@ -200,12 +216,12 @@ const items = [
       const tabPanels = document.querySelector(".tab-panels");
       const ul = tabPanels.querySelector(".tab-panel-content");
       const li = document.createElement("li");
-      const timestamp = new Date().toLocaleTimeString();
+      // const timestamp = new Date().toLocaleTimeString();
+      // <span class="stdout-timestamp">${timestamp}</span>
     
       li.innerHTML = `
         <div class="stdout-entry">
           <div class="stdout-entry-wrapper">
-          <span class="stdout-timestamp">${timestamp}</span>
           <span class="stdout-command">${command}</span>
           <div class="stdout-output">${output}</div>
           </div>
@@ -215,10 +231,10 @@ const items = [
       // Insert the new stdout entry at the top
       ul.insertBefore(li, ul.firstChild);
 
-      let currentTab = document.querySelector('button[role="tab"][aria-selected="true"]').id;
+      let currentTab = document.querySelector('button[role="tab"][aria-selected="true"]')?.id;
   
       // Update unread count and show badge if not viewing stdout
-      updateBadge(currentTab !== 'stdout');
+      if (currentTab) updateBadge(currentTab !== 'stdout');
     }
   
     function updateBadge(hasUnreadStdout) {
@@ -227,30 +243,22 @@ const items = [
     
       if (hasUnreadStdout) {
         if (!badge.classList.contains('show')) {
-          // Add the 'show' class if the badge is not already visible
           badge.classList.add('show');
-          // Remove the 'pulse' class if it exists to reset the animation state
-          badge.classList.remove('pulse');
         } else {
-          // If the badge is already visible, add the 'pulse' class to trigger the pulse animation
           badge.classList.add('pulse');
-          // Remove the 'pulse' class after the animation completes
-          setTimeout(() => badge.classList.remove('pulse'), 200);
+          badge.addEventListener('animationend', () => badge.classList.remove('pulse'));
         }
       } else {
-        // Remove the 'show' and 'pulse' classes to hide the badge
         badge.classList.remove('show', 'pulse');
       }
     }
   
-    // Handle tab switching
     function switchTab(tabName) {
       currentTab = tabName;
       if (tabName === 'stdout') {
         unreadCount = 0;
         updateBadge();
       }
-      // Handle showing/hiding tab content here
     }
   
     document.querySelectorAll('.tab').forEach(tab => {
@@ -260,7 +268,6 @@ const items = [
       });
     });
   
-    // Initialize badge
     updateBadge();
   
     function resetFocusTimeout() {
@@ -272,7 +279,6 @@ const items = [
       }, FOCUS_TIMEOUT);
     }
   
-    // Restart auto-type if input is not focused for more than 6 seconds
     prompt.addEventListener("blur", resetFocusTimeout);
   
     prompt.addEventListener("focus", () => {

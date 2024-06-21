@@ -21,7 +21,26 @@ const snarkyResponses = [
     mv: { execute: snarkyResponse },
     chmod: { execute: snarkyResponse },
     chown: { execute: snarkyResponse },
+    mkdir: { execute: snarkyResponse },
+    ls: { execute: snarkyResponse },
+    cat: { execute: snarkyResponse },
+    ps: { execute: snarkyResponse },
+    top: { execute: snarkyResponse },
+    vi: { execute: snarkyResponse },
+    nano: { execute: snarkyResponse },
+    exit: { execute: snarkyResponse },
+    man: { execute: snarkyResponse },
+    grep: { execute: snarkyResponse },
+    find: { execute: snarkyResponse },
+    pwd: { execute: snarkyResponse },
+    df: { execute: snarkyResponse },
+    du: { execute: snarkyResponse },
+    curl: { execute: snarkyResponse },
+    wget: { execute: snarkyResponse },
+    ping: { execute: snarkyResponse },
+    ifconfig: { execute: snarkyResponse }
   };
+  
   
   const commands = {
     clear: {
@@ -211,11 +230,11 @@ const snarkyResponses = [
   
   function skillsCommand(args) {
     if (args.includes("--languages")) {
-      return "Languages: TypeScript, JavaScript, CSS";
+      return "TypeScript, JavaScript, CSS";
     } else if (args.includes("-l")) {
-      return "Skills: Frontend Development, React, UX Design, TypeScript, JavaScript, Node A11y, Agile, User-Centered Design";
+      return "Frontend Development, React, UX Design, TypeScript, JavaScript, Node A11y, Agile, User-Centered Design";
     } else {
-      return "Skills: Frontend Development, React, UX Design, TypeScript, JavaScript";
+      return "Frontend Development, React, UX Design, TypeScript, JavaScript";
     }
   }
   
@@ -224,15 +243,13 @@ const snarkyResponses = [
   }
   
   function educationCommand(args) {
-    return `Education:
-    - <strong>B.S. Digital Marketing</strong>, <a href="https://www.uvu.edu/"target="_blank">Utah Valley University</a> (2010 - 2014)
-    - **Flatiron School**, Software Engineering Immersive (2017)
+    return `<strong>B.S. Digital Marketing</strong>, <a href="https://www.uvu.edu/"target="_blank">Utah Valley University</a> (2010 - 2014)
+    <strong>Software Engineering Immersive</strong> Flatiron School (2017)
   `;
   }
   
   function experienceCommand(args) {
-    return `Experience:
-    <strong>Software Engineer, Applications</strong>, <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> (October 2021 - Present)
+    return `<strong>Software Engineer, Applications</strong>, <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> (October 2021 - Present)
     Natural Language Querying
     − Designed and developed the integration of generative AI into our search experience, converting natural language to our query language. Resulted in one of our highest adoption rates and helped accelerate platform time-to-value.
     − Implemented a vector database embedding cache, improving query response times and reducing operational costs.
