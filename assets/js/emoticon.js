@@ -96,7 +96,13 @@ const items = [
       wait: 4000,
       type: 200,
     },
-    { text: "(◉‿◉)つ", execute: false, backspace: true, wait: 1000, type: 200 },
+  {
+    text: "(◉‿◉)つ",
+    execute: false,
+    backspace: true,
+    wait: 1000,
+    type: 200
+  },
   ];
   
   let autoTypeActive = true;
