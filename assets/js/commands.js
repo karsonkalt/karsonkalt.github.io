@@ -226,19 +226,23 @@ const snarkyResponses = [
   
   function educationCommand(args) {
     return `Education:
-    - **B.S. Digital Marketing**, Utah Valley University (2010 - 2014)
+    - **B.S. Digital Marketing**, <a href="https://www.uvu.edu/"target="_blank">Utah Valley University</a> (2010 - 2014)
     - **Flatiron School**, Software Engineering Immersive (2017)
   `;
   }
   
   function experienceCommand(args) {
     return `Experience:
-  1. **Senior Software Engineer Applications**, JupiterOne (2024 - Present)
-    - TBD
-  
-  2. **Software Engineer**, JupiterOne (2018 - 2024)
-    - TBD
-  `;
+  1. **Software Engineer, Applications**, <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> (October 2021 - Present)
+    Natural Language Querying
+    − Designed and developed the integration of generative AI into our search experience, converting natural language to our query language. Resulted in one of our highest adoption rates and helped accelerate platform time-to-value.
+    − Implemented a vector database embedding cache, improving query response times and reducing operational costs.
+    − Implemented Natural Language Processing (NLP) techniques including fuzzy matching and stop word filtering to enhance search precision.
+
+    Design System Development
+    − Spearheaded the development of JupiterOne’s design system, including creation of a comprehensive component library, design tokens, and theming system. Helping to streamline the development process and enabling engineers to focus on core feature development.
+    − Crafted standardized-yet-customizable component APIs through a mix of composability, customization, and "component slots". Balanced flexibility with ease-of-use, allowing for customization without excessive rigidity. Leveraged standard naming conventions and JSDoc for streamlined development.
+      `;
   }
   
   export {
