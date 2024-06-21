@@ -67,6 +67,16 @@ pre.terminal {
   animation: blink 1s steps(1) infinite;
 }
 
+.unread-badge {
+  background-color: red;
+  border-radius: 100%;
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  top: -4px;
+  right: -10px;
+}
+
 
   .stdout-entry {
     border-bottom: 1px solid #444; /* Dark grey bottom border */
