@@ -210,13 +210,25 @@ const items = [
     }
   
     function updateBadge(hasUnreadStdout) {
-      console.log('hasUnreadStdout', hasUnreadStdout)
+      console.log('hasUnreadStdout', hasUnreadStdout);
       const stdoutTab = document.querySelector('#stdout');
       const badge = stdoutTab.querySelector('.unread-badge');
+    
       if (hasUnreadStdout) {
-        badge.style.opacity = '1';
+        if (!badge.classList.contains('show')) {
+          // Add the 'show' class if the badge is not already visible
+          badge.classList.add('show');
+          // Remove the 'pulse' class if it exists to reset the animation state
+          badge.classList.remove('pulse');
+        } else {
+          // If the badge is already visible, add the 'pulse' class to trigger the pulse animation
+          badge.classList.add('pulse');
+          // Remove the 'pulse' class after the animation completes
+          setTimeout(() => badge.classList.remove('pulse'), 200);
+        }
       } else {
-        badge.style.opacity = '0';
+        // Remove the 'show' and 'pulse' classes to hide the badge
+        badge.classList.remove('show', 'pulse');
       }
     }
   
