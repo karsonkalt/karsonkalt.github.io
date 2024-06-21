@@ -203,14 +203,12 @@ const items = [
       ul.insertBefore(li, ul.firstChild);
 
       let currentTab = document.querySelector('button[role="tab"][aria-selected="true"]').id;
-      console.log(currentTab)
   
       // Update unread count and show badge if not viewing stdout
       updateBadge(currentTab !== 'stdout');
     }
   
     function updateBadge(hasUnreadStdout) {
-      console.log('hasUnreadStdout', hasUnreadStdout);
       const stdoutTab = document.querySelector('#stdout');
       const badge = stdoutTab.querySelector('.unread-badge');
     
