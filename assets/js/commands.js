@@ -63,19 +63,9 @@ const snarkyResponses = [
       description: "Displays about information",
       flags: {}
     },
-    stop: {
-      execute: stopCommand,
-      description: "Stops the auto-type",
-      flags: {},
-    },
     help: {
       execute: helpCommand,
       description: "Shows help information about all commands",
-      flags: {},
-    },
-    compgen: {
-      execute: compgenCommand,
-      description: "Generates auto completions for a word",
       flags: {},
     },
     date: {
@@ -141,17 +131,13 @@ const snarkyResponses = [
     return "";
   }
   
-  function echoCommand(args) {
-    return args.join(" ");
+function echoCommand(args) {
+    createEchoes(args.join(" "))
+    return `Echo effect triggered for ${args.join(" ")}`
   }
   
   function lsCommand(args) {
     return "file1.txt\nfile2.txt\nfile3.txt";
-  }
-  
-  function stopCommand(args) {
-    autoTypeActive = false;
-    return "AutoType stopped";
   }
   
   function helpCommand(args) {
@@ -169,10 +155,6 @@ const snarkyResponses = [
     const formattedHelpText = helpText.replace(/\n/g, "<br/>");
   
     return formattedHelpText;
-  }
-  
-  function compgenCommand(args) {
-    return Object.keys(commands).join("\n");
   }
   
   function dateCommand(args) {
@@ -260,6 +242,35 @@ const snarkyResponses = [
     − Crafted standardized-yet-customizable component APIs through a mix of composability, customization, and "component slots". Balanced flexibility with ease-of-use, allowing for customization without excessive rigidity. Leveraged standard naming conventions and JSDoc for streamlined development.
       `;
   }
+
+  function echo(text) {
+    const oval = document.createElement('div');
+    oval.classList.add('oval');
+    oval.innerText = text;  // Set the inner text of the oval
+    
+    // Position the oval at a random location on the screen
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    oval.style.left = `${x}px`;
+    oval.style.top = `${y}px`;
+    
+    document.body.appendChild(oval);
+    
+    // Remove the oval from the DOM after the animation ends
+    oval.addEventListener('animationend', () => {
+      document.body.removeChild(oval);
+    });
+  }
+  
+  // Function to create multiple ovals with the same text
+  function createEchoes(text) {
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => echo(text), i * 100); // Adjust timing for staggered appearance
+    }
+  }
+  
+  
+  
   
   export {
     executeCommand,

@@ -483,3 +483,32 @@ img {
     opacity: 0; /* Fades out */
   }
 }
+
+
+@keyframes echo {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Style for the ovals */
+.oval {
+  position: absolute;
+  padding: 8px 16px;
+  background-color: rgba(0, 68, 254, 0.902);
+  border-radius: 100px; /* Creates the searcher oval or message bubble shape */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 12px;
+  animation: echo 2s ease-out;
+}
