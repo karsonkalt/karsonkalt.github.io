@@ -1,0 +1,18 @@
+{
+  "name": "karsonkalt.github.io",
+  "version": "1.0.0",
+  "description": "```bash bundle exec jekyll serve ```",
+  "main": "index.js",
+  "scripts": {
+    "build:ts": "tsc",
+    "build:webpack": "webpack --config webpack.config.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.2",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
+  }
+}

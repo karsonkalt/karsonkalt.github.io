@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "./assets/js",  // Output directory for compiled JS
+    "rootDir": "./assets/ts", // Directory containing TS files
+    "target": "es5",          // Targeting ES5 for compatibility
+    "module": "ESNext",           // Change this to ES6
+    "strict": true,         // Enable strict type-checking options
+    "skipLibCheck": true, // Add this line
+
+  },
+  "include": [
+    "assets/ts/**/*.ts"       // Correct path to include all TS files
+
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

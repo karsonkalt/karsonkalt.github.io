@@ -13,3 +13,7 @@ include:
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+
+exclude:
+  - node_modules
+  - assets/ts
