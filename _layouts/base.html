@@ -2,34 +2,37 @@
 
 {%- include head.html -%}
 
-<meta name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+/>
 <html lang='{{ page.lang | default: site.lang | default: " en" }}'>
+  <head>
+    <style>
+      @view-transition {
+        navigation: auto;
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href={{
+    'assets/favicon_io/apple-touch-icon.png' | relative_url }}> <link rel="icon"
+    type="image/png" sizes="32x32" href={{ 'assets/favicon_io/favicon-32x32.png'
+    | relative_url }}> <link rel="icon" type="image/png" sizes="16x16" href={{
+    'assets/favicon_io/favicon-16x16.png' | relative_url }}> <link
+    rel="manifest" {{ 'assets/favicon_io/site.webmanifest' | relative_url }}>
+  </head>
 
-<head>
-  <style>
-    @view-transition {
-      navigation: auto;
-    }
-  </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-    rel="stylesheet">
-    <link rel="apple-touch-icon" sizes="180x180" href={{ 'assets/favicon_io/apple-touch-icon.png' | relative_url }}>
-    <link rel="icon" type="image/png" sizes="32x32" href={{ 'assets/favicon_io/favicon-32x32.png' | relative_url }}>
-    <link rel="icon" type="image/png" sizes="16x16" href={{ 'assets/favicon_io/favicon-16x16.png' | relative_url }}>
-    <link rel="manifest" {{ 'assets/favicon_io/site.webmanifest' | relative_url }}>
-</head>
-
-<body class="wrapper">
-  <main>
-    {{ content }}
-  </main>
-  <script src="{{ 'assets/js/index.js' | relative_url }}"></script>
-  <script src="{{ 'assets/js/tabs.js' | relative_url }}"></script>
-</body>
-
+  <body class="wrapper">
+    <main>{{ content }}</main>
+    <script src="{{ 'assets/js/index.js' | relative_url }}"></script>
+  </body>
 </html>

@@ -2,9 +2,8 @@
 layout: base
 ---
 
-{% assign posts = site.posts %}
-{% assign notes = site.notes | sort: 'date' | reverse %}
-{% assign tag_icons = site.data.tag_icons %}
+{% assign posts = site.posts %} {% assign notes = site.notes | sort: 'date' |
+reverse %} {% assign tag_icons = site.data.tag_icons %}
 
 <div class="header">
   <div class="title-container">
@@ -12,9 +11,7 @@ layout: base
     <span class="domain">.dev</span>
   </div>
   <nav class="nav">
-    <a href="http://www.github.com/karsonkalt" target="_blank">
-      GitHub
-    </a>
+    <a href="http://www.github.com/karsonkalt" target="_blank"> GitHub </a>
     <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank">
       LinkedIn
     </a>
@@ -31,20 +28,26 @@ layout: base
 </pre>
 
 <!-- <div class="tab-container" hidden> -->
-<div class="tab-container" >
+<div class="tab-container">
   <div>
     <div role="tablist">
-      <button role="tab" id="stdout" aria-controls="tab-panel-1" aria-selected="true" tabindex="0" hidden>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2 21L12 12L2 3" stroke="currentColor" fill="none"></path>
-          <path d="M12 21H22" stroke="currentColor" fill="none"></path>
-        </svg>
-        Stdout
-        <span class="unread-badge" ></span>
-      </button>
-      <button role="tab" id="blog" aria-controls="tab-panel-2" aria-selected="false" tabindex="-1" hidden>
-        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
-          width="12" height="12" fill="currentColor">
+      <button
+        role="tab"
+        id="blog"
+        aria-controls="tab-panel-2"
+        aria-selected="true"
+        tabindex="0"
+      >
+        <svg
+          id="Layer_1"
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          width="12"
+          height="12"
+          fill="currentColor"
+        >
           <defs>
             <style>
               .cls-6374f8d9b67f094e4896c640-1 {
@@ -54,16 +57,54 @@ layout: base
               }
             </style>
           </defs>
-          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="1.46" x2="23.5" y2="1.46"></line>
-          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="8.17" x2="23.5" y2="8.17"></line>
-          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="15.83" x2="23.5" y2="15.83"></line>
-          <line class="cls-6374f8d9b67f094e4896c640-1" x1="0.5" y1="22.54" x2="12.96" y2="22.54"></line>
+          <line
+            class="cls-6374f8d9b67f094e4896c640-1"
+            x1="0.5"
+            y1="1.46"
+            x2="23.5"
+            y2="1.46"
+          ></line>
+          <line
+            class="cls-6374f8d9b67f094e4896c640-1"
+            x1="0.5"
+            y1="8.17"
+            x2="23.5"
+            y2="8.17"
+          ></line>
+          <line
+            class="cls-6374f8d9b67f094e4896c640-1"
+            x1="0.5"
+            y1="15.83"
+            x2="23.5"
+            y2="15.83"
+          ></line>
+          <line
+            class="cls-6374f8d9b67f094e4896c640-1"
+            x1="0.5"
+            y1="22.54"
+            x2="12.96"
+            y2="22.54"
+          ></line>
         </svg>
         Blog
       </button>
-      <button role="tab" id="notes" aria-controls="tab-panel-3" aria-selected="false" tabindex="-1" hidden>
-        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
-          width="12" height="12" fill="currentColor">
+      <button
+        role="tab"
+        id="notes"
+        aria-controls="tab-panel-3"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        <svg
+          id="Layer_1"
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          width="12"
+          height="12"
+          fill="currentColor"
+        >
           <defs>
             <style>
               .cls-6374f8d9b67f094e4896c66c-1 {
@@ -73,31 +114,58 @@ layout: base
               }
             </style>
           </defs>
-          <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="9.13" x2="23.5" y2="9.13"></line>
-          <line class="cls-6374f8d9b67f094e4896c66c-1" x1="0.5" y1="14.88" x2="13.92" y2="14.88"></line>
+          <line
+            class="cls-6374f8d9b67f094e4896c66c-1"
+            x1="0.5"
+            y1="9.13"
+            x2="23.5"
+            y2="9.13"
+          ></line>
+          <line
+            class="cls-6374f8d9b67f094e4896c66c-1"
+            x1="0.5"
+            y1="14.88"
+            x2="13.92"
+            y2="14.88"
+          ></line>
         </svg>
         Notes
+      </button>
+      <button
+        role="tab"
+        id="stdout"
+        aria-controls="tab-panel-1"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          stroke-width="1.5"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M2 21L12 12L2 3" stroke="currentColor" fill="none"></path>
+          <path d="M12 21H22" stroke="currentColor" fill="none"></path>
+        </svg>
+        Stdout
+        <span class="unread-badge"></span>
       </button>
     </div>
 
     <div class="tab-panels">
-      <div id="tab-panel-1" role="tabpanel" aria-labelledby="stdout">
+      <div id="tab-panel-2" role="tabpanel" aria-labelledby="blog">
         <ul class="tab-panel-content">
-        
-        </ul>
-      </div>
-
-      <div id="tab-panel-2" role="tabpanel" aria-labelledby="blog" hidden>
-        <ul class="tab-panel-content">
-          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-          {%- for post in posts -%}
+          {%- assign date_format = site.minima.date_format | default: "%b %-d,
+          %Y" -%} {%- for post in posts -%}
           <li>
             <a class="link-item" href="{{ post.url | relative_url }}">
               <div class="link-item-left">
-                <span class="post-meta">{{ post.date | date: date_format }}</span>
-                <span class="post-title-list">
-                  {{ post.title | escape }}
-                </span>
+                <span class="post-meta"
+                  >{{ post.date | date: date_format }}</span
+                >
+                <span class="post-title-list"> {{ post.title | escape }} </span>
               </div>
             </a>
           </li>
@@ -107,24 +175,22 @@ layout: base
 
       <div id="tab-panel-3" role="tabpanel" aria-labelledby="notes" hidden>
         <ul class="tab-panel-content">
-          {%- for note in notes -%}
-          {% assign tags = note.tags %}
+          {%- for note in notes -%} {% assign tags = note.tags %}
           <li>
             <a class="link-item" href="{{ note.url | relative_url }}">
               <div class="link-item-left">
-                <span class="post-meta">{{ note.date | date: date_format }}</span>
+                <span class="post-meta"
+                  >{{ note.date | date: date_format }}</span
+                >
                 <span class="post-title-list">{{ note.title | escape }}</span>
                 {% if tags %}
                 <span class="post-tags">
                   {%- for tag in tags -%}
                   <span class="post-tag">
-                    {% if tag %}
-                    {% assign icon = tag_icons[tag] %}
-                    {% if icon %}
-                    <img src="/assets/icons/{{ icon }}" alt="{{ tag }} icon">
-                    {% endif %}
-                    {{ tag | escape }}
-                    {% endif %}
+                    {% if tag %} {% assign icon = tag_icons[tag] %} {% if icon
+                    %}
+                    <img src="/assets/icons/{{ icon }}" alt="{{ tag }} icon" />
+                    {% endif %} {{ tag | escape }} {% endif %}
                   </span>
                   {%- endfor -%}
                 </span>
@@ -135,8 +201,16 @@ layout: base
           {%- endfor -%}
         </ul>
       </div>
+
+      <div id="tab-panel-1" role="tabpanel" aria-labelledby="stdout" hidden>
+        <ul class="tab-panel-content stdout-log"></ul>
+      </div>
     </div>
   </div>
 </div>
 
-<script src="{{ 'assets/js/emoticon.js' | relative_url }}" type="module"></script>
+<script
+  src="{{ 'assets/js/terminal.js' | relative_url }}"
+  type="module"
+></script>
+<script src="{{ 'assets/js/tabs.js' | relative_url }}" type="module"></script>

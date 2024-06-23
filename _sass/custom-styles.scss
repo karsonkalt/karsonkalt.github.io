@@ -83,14 +83,15 @@ pre.terminal {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.5);
   }
   100% {
-    transform: scale(1)
+    transform: scale(1);
   }
 }
 
@@ -113,59 +114,53 @@ pre.terminal {
 
 .unread-badge.pulse {
   animation: pulse 750ms ease-in-out;
-
 }
 
+.stdout-entry {
+  font-family: "Ubuntu Mono";
 
-  .stdout-entry {
-    border-bottom: 1px solid #444; /* Dark grey bottom border */
-    font-family: "Ubuntu Mono";
-    
-    & .stdout-entry-wrapper {
-      padding: 8px;
-      margin: -8px;
-      padding-bottom: 16px;
-      margin-bottom: 0;
-      display: flex;
-      flex-direction: column;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      border-radius: 6px;
+  & .stdout-entry-wrapper {
+    padding: 8px;
+    margin: -8px;
+    padding-bottom: 16px;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-radius: 6px;
 
-      & .stdout-command {
-        color: #8a8a8a; /* Bright green for commands */
-        font-size: .9em;
-      }
-      
-      & .stdout-timestamp {
-        font-size: .85em;
-        font-weight: 400;
-        width: 100px;
-        flex-shrink: 0;
-        color: #a8a8a8;
-        @media (max-width: 800px) {
-          font-size: 12px;
-          width: 80px;
-        }
-      }
-      
-      & .stdout-output {
-        color: #b1b1b1; /* Light grey for output */
-        margin-top: 4px;
-      }
-  
-      &:hover {
-        background-color: #49494943;
-      }
-  
-      &:hover .stdout-output{
-        color: #e5e5e5
+    & .stdout-command {
+      color: #8a8a8a; /* Bright green for commands */
+      font-size: 0.9em;
+    }
+
+    & .stdout-timestamp {
+      font-size: 0.85em;
+      font-weight: 400;
+      width: 100px;
+      flex-shrink: 0;
+      color: #a8a8a8;
+      @media (max-width: 800px) {
+        font-size: 12px;
+        width: 80px;
       }
     }
 
-  
-  }
+    & .stdout-output {
+      color: #b1b1b1; /* Light grey for output */
+      margin-top: 4px;
+    }
 
+    &:hover {
+      background-color: #49494943;
+    }
+
+    &:hover .stdout-output {
+      color: #e5e5e5;
+    }
+  }
+}
 
 @keyframes blink {
   50% {
@@ -285,7 +280,7 @@ a .domain {
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(20px) scale(.95);
+    transform: translateY(20px) scale(0.95);
   }
   100% {
     opacity: 1;
@@ -460,8 +455,8 @@ img {
     border-radius: 50%;
     pointer-events: none;
     animation: ripple 500ms linear;
-}}
-
+  }
+}
 
 @keyframes ripple {
   0% {
@@ -471,10 +466,10 @@ img {
     opacity: 0;
   }
   25% {
-    opacity: .7;
+    opacity: 0.7;
   }
   50% {
-    opacity: .25
+    opacity: 0.25;
   }
   100% {
     transform: translate(-50%, -50%) scale(1);
@@ -483,7 +478,6 @@ img {
     opacity: 0; /* Fades out */
   }
 }
-
 
 @keyframes echo {
   0% {
