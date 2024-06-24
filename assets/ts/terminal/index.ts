@@ -5,7 +5,7 @@ const prompt = document.querySelector(".prompt") as HTMLInputElement;
 const mirrorElement = document.querySelector(".input-mirror") as HTMLDivElement;
 const terminal = document.querySelector(".terminal") as HTMLDivElement;
 
-const autoTypeManager = new AutoTypeManager(prompt, mirrorElement);
+const autoTypeManager = new AutoTypeManager(prompt, terminal, mirrorElement);
 
 const userInputManager = new UserInputManager(
   prompt,

@@ -9,10 +9,16 @@ class AutoTypeManager {
   private prompt: HTMLInputElement;
   private mirrorElement: HTMLDivElement;
   private deleteSpeed: number = 100;
+  private terminal: HTMLDivElement;
 
-  constructor(prompt: HTMLInputElement, mirrorElement: HTMLDivElement) {
+  constructor(
+    prompt: HTMLInputElement,
+    terminal: HTMLDivElement,
+    mirrorElement: HTMLDivElement
+  ) {
     this.prompt = prompt;
     this.mirrorElement = mirrorElement;
+    this.terminal = terminal;
     this.startAutoType();
   }
 

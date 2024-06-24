@@ -3,11 +3,6 @@ const clearCommand: CommandExecute = (args) => {
   return "";
 };
 
-const echoCommand: CommandExecute = (args) => {
-  createEchoes(args.join(" "));
-  return `Echo effect triggered for ${args.join(" ")}`;
-};
-
 const lsCommand: CommandExecute = (args) => {
   return "file1.txt\nfile2.txt\nfile3.txt";
 };
@@ -120,18 +115,39 @@ function showTab(tabName: string) {
   }
 }
 
-function echo(text: string) {
+const echoCommand: CommandExecute = (args) => {
+  createEchoes(args.join(" "));
+  return `Echo effect triggered for ${args.join(" ")}`;
+};
+
+function echo(text: string, position: "topLeft" | "bottomRight") {
   const oval = document.createElement("div");
   oval.classList.add("oval");
-  oval.innerText = text; // Set the inner text of the oval
+  oval.innerText = text;
 
-  // Position the oval at a random location on the screen
-  const x = Math.random() * window.innerWidth;
-  const y = Math.random() * window.innerHeight;
-  oval.style.left = `${x}px`;
-  oval.style.top = `${y}px`;
+  // Common styles for the oval
+  // oval.style.position = "fixed";
+  oval.style.display = "flex";
+  oval.style.alignItems = "center";
+  oval.style.justifyContent = "center";
+  oval.style.zIndex = "500";
 
+  // Apply the position-specific styles
+  if (position === "topLeft") {
+    oval.style.left = "50px";
+    oval.style.top = "50px";
+  } else {
+    oval.style.right = "50px";
+    oval.style.bottom = "50px";
+    oval.style.backgroundColor = "#001349";
+    oval.style.color = "#9a9a9a";
+  }
+
+  // Append the oval to the body
   document.body.appendChild(oval);
+
+  // Add a class for animation and styles, if needed
+  oval.classList.add("oval-animate");
 
   // Remove the oval from the DOM after the animation ends
   oval.addEventListener("animationend", () => {
@@ -141,8 +157,9 @@ function echo(text: string) {
 
 // Function to create multiple ovals with the same text
 function createEchoes(text: string) {
-  for (let i = 0; i < 20; i++) {
-    setTimeout(() => echo(text), i * 100); // Adjust timing for staggered appearance
+  const positions: ("topLeft" | "bottomRight")[] = ["topLeft", "bottomRight"];
+  for (let i = 0; i < 2; i++) {
+    setTimeout(() => echo(text, positions[i % 2]), i * 2000); // Adjust timing for staggered appearance
   }
 }
 

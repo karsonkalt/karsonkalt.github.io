@@ -79,18 +79,7 @@ class UserInputManager {
     const badge = stdoutTab.querySelector(".unread-badge") as Element;
 
     if (hasUnreadStdout) {
-      if (!badge.classList.contains("show")) {
-        badge.classList.add("show");
-      } else {
-        badge.classList.add("pulse");
-        badge.addEventListener(
-          "animationend",
-          () => badge.classList.remove("pulse"),
-          { once: true }
-        );
-      }
-    } else {
-      badge.classList.remove("show", "pulse");
+      badge.classList.add("show");
     }
   }
 

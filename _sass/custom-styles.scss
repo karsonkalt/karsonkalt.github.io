@@ -71,17 +71,6 @@ pre.terminal {
   animation: blink 1s steps(1) infinite;
 }
 
-@keyframes growFromCenter {
-  from {
-    opacity: 0;
-    transform: scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @keyframes pulse {
   0% {
     transform: scale(0);
@@ -232,6 +221,7 @@ a .domain {
   top: 0;
   background-color: #000000;
   z-index: 100;
+  box-shadow: 0px 10px 20px 8px rgba(0, 0, 0, 0.6);
 }
 
 @keyframes fadeInRight {
@@ -257,7 +247,6 @@ a .domain {
   gap: 10px;
   align-items: center;
   transform: translateY(1px);
-  animation: fadeInRight 0.5s ease-in-out;
 
   &:hover {
     color: #c6c6c6;
@@ -488,14 +477,47 @@ img {
 
 @keyframes echo {
   0% {
-    transform: scale(0);
+    transform: scale(0) rotate(0deg);
     opacity: 0;
   }
-  50% {
+  20% {
+    transform: scale(2) rotate(5deg);
+    opacity: 1;
+  }
+  15% {
+    transform: scale(2) rotate(-5deg);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(2) rotate(5deg);
+    opacity: 1;
+  }
+  35% {
+    transform: scale(2) rotate(-5deg);
+    opacity: 1;
+  }
+  45% {
+    transform: scale(2) rotate(5deg);
+    opacity: 1;
+  }
+  55% {
+    transform: scale(2) rotate(-5deg);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(2) rotate(5deg);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(2) rotate(-5deg);
+    opacity: 1;
+  }
+  90% {
+    transform: scale(2) rotate(5deg);
     opacity: 1;
   }
   100% {
-    transform: scale(3);
+    transform: scale(2.2) rotate(0deg);
     opacity: 0;
   }
 }
@@ -512,4 +534,6 @@ img {
   color: white;
   font-size: 12px;
   animation: echo 2s ease-out;
+  max-width: calc(100vw - 100px); /* Ensure it doesn't overflow the viewport */
+  max-height: calc(100vh - 100px); /* Ensure it doesn't overflow the viewport */
 }

@@ -13,7 +13,7 @@ export const autoTypeOptions: AutoTypeOption[] = [
     execute: true,
     backspace: false,
     typeSpeed: 120,
-    initialDelay: 6000,
+    initialDelay: 3000,
     endActionDelay: 1000,
   },
   {
