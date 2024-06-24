@@ -4,7 +4,7 @@ module.exports = {
   entry: {
     index: "./assets/ts/index.ts",
     tabs: "./assets/ts/tabs.ts", // Add other entry points here
-    entry: "./assets/ts/terminal/index.ts", // Update this path as needed
+    terminal: "./assets/ts/terminal/index.ts", // Update this path as needed
   },
   module: {
     rules: [

@@ -4,8 +4,9 @@
   "description": "```bash bundle exec jekyll serve ```",
   "main": "index.js",
   "scripts": {
-    "build:ts": "tsc",
-    "build:webpack": "webpack --config webpack.config.js"
+    "build:webpack": "webpack --config webpack.config.js",
+    "start:dev": "npm run build:webpack && bundle exec jekyll serve",
+    "start": "bundle exec jekyll serve"
   },
   "author": "",
   "license": "ISC",

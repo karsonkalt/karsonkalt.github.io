@@ -8,17 +8,11 @@ class AutoTypeManager {
     autoTypeOptions[this.currentItemIndex];
   private prompt: HTMLInputElement;
   private mirrorElement: HTMLDivElement;
-  private deleteSpeed: number;
+  private deleteSpeed: number = 100;
 
-  constructor(
-    prompt: HTMLInputElement,
-    mirrorElement: HTMLDivElement,
-    deleteSpeed: number,
-    focusTimeout: number
-  ) {
+  constructor(prompt: HTMLInputElement, mirrorElement: HTMLDivElement) {
     this.prompt = prompt;
     this.mirrorElement = mirrorElement;
-    this.deleteSpeed = deleteSpeed;
     this.startAutoType();
   }
 
@@ -48,7 +42,7 @@ class AutoTypeManager {
       await this.autoType(this.abortController.signal);
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") {
-        console.log("AutoType aborted");
+        // console.log("AutoType aborted");
       }
     }
   }
@@ -70,8 +64,7 @@ class AutoTypeManager {
       await this.sleep(this.currentAutoTypeOption.endActionDelay, signal);
 
       if (this.currentAutoTypeOption.execute) {
-        // This part will be handled by UserInputManager
-        continue;
+        this.executeCommand(this.currentAutoTypeOption.input);
       }
 
       if (this.currentAutoTypeOption.backspace) {
@@ -94,8 +87,14 @@ class AutoTypeManager {
     await this.sleep(this.deleteSpeed, signal);
   }
 
+  private executeCommand(command: string) {
+    const event = new CustomEvent("executeCommand", {
+      detail: { command },
+    });
+    window.dispatchEvent(event);
+  }
+
   public stopAutoType() {
-    // this.setPromptValue("");
     if (this.abortController) {
       this.abortController.abort();
     }

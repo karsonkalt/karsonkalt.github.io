@@ -5,15 +5,18 @@ class UserInputManager {
   private prompt: HTMLInputElement;
   private terminal: HTMLDivElement;
   private autoTypeManager: AutoTypeManager;
+  private mirrorElement: HTMLDivElement;
 
   constructor(
     prompt: HTMLInputElement,
     terminal: HTMLDivElement,
-    autoTypeManager: AutoTypeManager
+    autoTypeManager: AutoTypeManager,
+    mirrorElement: HTMLDivElement
   ) {
     this.prompt = prompt;
     this.terminal = terminal;
     this.autoTypeManager = autoTypeManager;
+    this.mirrorElement = mirrorElement;
     this.initialize();
   }
 
@@ -36,6 +39,7 @@ class UserInputManager {
 
   private setPromptValue(value: string) {
     this.prompt.value = value;
+    this.mirrorElement.textContent = value;
   }
 
   private handleBashCommand(command: string) {
@@ -125,14 +129,18 @@ class UserInputManager {
     });
 
     this.terminal.addEventListener("click", () => {
-      if (!document.activeElement?.isEqualNode(this.prompt)) {
-        this.prompt.focus();
-      }
+      this.prompt.focus();
     });
 
     this.prompt.addEventListener("input", (e: Event) => {
       const target = e.target as HTMLInputElement;
       this.setPromptValue(target.value);
+    });
+
+    window.addEventListener("executeCommand", (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const command = customEvent.detail.command;
+      this.handleBashCommand(command);
     });
   }
 }
