@@ -16,24 +16,26 @@ pre.terminal {
   caret-color: transparent;
   border-bottom: 1px solid transparent;
   font-size: 1.1em;
-  color: rgb(192, 192, 192);
-  background-color: #35353561;
+  background-color: #ffffff30;
+  transition: transform 250ms;
 
   &:hover {
-    background-color: #393939c0;
+    background-color: #ffffff35;
+    transform: scale(1.02);
   }
+
   &:focus-within {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    background-color: #333333;
-    border-bottom: 1px solid #e8e8e8;
+    background-color: #ffffff40;
+    border-bottom: 1px solid #ffffff60;
 
     & .cursor {
       display: inline;
     }
 
     & .input-mirror {
-      color: rgb(237, 237, 237);
+      color: #ffffff;
     }
   }
 
@@ -43,12 +45,17 @@ pre.terminal {
     margin-left: -14px;
     margin-right: -14px;
     border-radius: 0;
+    transition: none;
+    &:hover {
+      transform: none;
+    }
   }
 }
 
 .system-prompt {
   margin-right: 16px;
   user-select: none;
+  color: #ffffffdd;
 }
 
 .input-container {
@@ -63,7 +70,7 @@ pre.terminal {
 
 .input-mirror {
   white-space: pre;
-  color: rgb(191, 191, 191);
+  color: #ffffffdd;
 }
 
 .cursor {
@@ -121,7 +128,7 @@ pre.terminal {
     border-radius: 6px;
 
     & .stdout-command {
-      color: #8a8a8a; /* Bright green for commands */
+      color: #ffffffb3;
       font-size: 0.9em;
     }
 
@@ -138,16 +145,16 @@ pre.terminal {
     }
 
     & .stdout-output {
-      color: #b1b1b1; /* Light grey for output */
+      color: #ffffffdb;
       margin-top: 4px;
     }
 
     &:hover {
-      background-color: #49494943;
+      background-color: #ffffff23;
     }
 
     &:hover .stdout-output {
-      color: #e5e5e5;
+      color: #ffffff;
     }
   }
 }
@@ -162,7 +169,7 @@ pre.terminal {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 24px;
+  padding-bottom: 36px;
 
   .title-container {
     display: flex;
@@ -177,7 +184,7 @@ pre.terminal {
   }
 
   .domain {
-    color: #b9b9b9;
+    color: #ffffff85;
     line-height: 1.3;
     font-family: "Ubuntu Mono";
   }
@@ -215,7 +222,7 @@ a .domain {
   margin: 0;
   list-style: none;
   margin-bottom: 16px;
-  border-bottom: 1px solid #7878784f;
+  border-bottom: 1px solid #ffffff51;
 }
 
 @keyframes fadeInRight {
@@ -241,9 +248,10 @@ a .domain {
   gap: 10px;
   align-items: center;
   transform: translateY(1px);
+  color: #ffffffbd;
 
   &:hover {
-    color: #c6c6c6;
+    color: #ffffffe3;
   }
 
   &[hidden] {
@@ -258,8 +266,8 @@ a .domain {
     font-weight: 600;
     // text-decoration: underline;
     // background-color: #e8e8e837;
-    color: #e8e8e8;
-    border-color: #e8e8e8;
+    color: #fffffff2;
+    border-color: #fffffff2;
 
     & svg {
       stroke-width: 3px;
@@ -321,7 +329,7 @@ nav > a {
   font-weight: 400;
   width: 100px;
   flex-shrink: 0;
-  color: #a8a8a8;
+  color: #ffffffbd;
   @media (max-width: 800px) {
     font-size: 12px;
     width: 80px;
@@ -340,7 +348,7 @@ nav > a {
   align-items: center;
   display: flex;
   gap: 4px;
-  color: #a8a8a8;
+  color: #ffffffbd;
   & * {
     border-radius: 0;
   }
@@ -349,7 +357,7 @@ nav > a {
 .link-item {
   padding-left: 0;
   width: 100%;
-  color: #cecece !important;
+  color: #ffffffdb !important;
   font-size: $small-font-size;
   display: flex;
   justify-content: space-between;
@@ -369,11 +377,11 @@ nav > a {
   &:hover {
     color: #ffffff !important;
     text-decoration: none;
-    background-color: #3f3f3f69;
+    background-color: #ffffff17;
   }
 
   &::after {
-    content: url('data:image/svg+xml;utf8,<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="24" height="24" color="%23808080"><defs><style>.cls-63ce7424ea57ea6c8380058e-1{fill:none;stroke:currentColor;stroke-miterlimit:10;}</style></defs><line class="cls-63ce7424ea57ea6c8380058e-1" x1="21.5" y1="12" x2="0.5" y2="12"></line><polyline class="cls-63ce7424ea57ea6c8380058e-1" points="13.86 4.36 21.5 12 13.86 19.64"></polyline></svg>');
+    content: url('data:image/svg+xml;utf8,<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="24" height="24" color="%23ffffff"><defs><style>.cls-63ce7424ea57ea6c8380058e-1{fill:none;stroke:currentColor;stroke-miterlimit:10;}</style></defs><line class="cls-63ce7424ea57ea6c8380058e-1" x1="21.5" y1="12" x2="0.5" y2="12"></line><polyline class="cls-63ce7424ea57ea6c8380058e-1" points="13.86 4.36 21.5 12 13.86 19.64"></polyline></svg>');
     position: absolute;
     right: 5px;
     top: 55%;
