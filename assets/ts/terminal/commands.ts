@@ -47,20 +47,27 @@ const addCommand: CommandExecute = (args) => {
 };
 
 const exportCommand: CommandExecute = (args) => {
-  if (args.length !== 1 || !args[0].startsWith("PS1=")) {
-    return "Usage: export PS1='<new_prompt_character>'";
+  const arg = args[0];
+
+  // Handle PS1
+  if (arg.startsWith("PS1=")) {
+    const newPromptCharacter = arg.slice(4).trim();
+    const promptElements = document.querySelectorAll(".system-prompt");
+    promptElements.forEach((el) => {
+      el.textContent = newPromptCharacter;
+    });
+    return `Prompt character changed to ${newPromptCharacter}`;
   }
 
-  // Extract the new prompt character
-  const newPromptCharacter = args[0].slice(4).trim();
+  if (arg.startsWith("BG_COLOR=")) {
+    const newColor = args.join(" ").slice(9).trim();
+    const wrapper = document.querySelector(".wrapper");
+    // @ts-ignore
+    if (wrapper) wrapper.style.background = newColor;
+    return `Background changed to ${newColor}`;
+  }
 
-  // Set the new prompt character
-  const promptElements = document.querySelectorAll(".system-prompt");
-  promptElements.forEach((el) => {
-    el.textContent = newPromptCharacter;
-  });
-
-  return `Prompt character changed to ${newPromptCharacter}`;
+  return ""; // No error message if the argument doesn't match any condition
 };
 
 const aboutCommand: CommandExecute = (args) => {
