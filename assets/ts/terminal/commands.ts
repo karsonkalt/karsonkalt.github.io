@@ -1,6 +1,11 @@
 const clearCommand: CommandExecute = (args) => {
-  // TODO
-  return "";
+  const stdoutLog = document.querySelector(".stdout-log");
+
+  while (stdoutLog?.firstChild) {
+    stdoutLog.removeChild(stdoutLog.firstChild);
+  }
+
+  return "Console cleared";
 };
 
 const lsCommand: CommandExecute = (args) => {
