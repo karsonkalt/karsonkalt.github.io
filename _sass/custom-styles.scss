@@ -3,6 +3,17 @@
   animation: fadeInUp 1000ms forwards;
 }
 
+.email {
+  padding: 4px 8px;
+  margin: -4px -8px;
+  border-radius: 6px;
+  &:hover {
+    background-color: #ffffff2a;
+    color: #ffffff;
+    text-decoration: none;
+  }
+}
+
 pre.terminal {
   border: none;
   font-family: "Ubuntu Mono";
