@@ -175,7 +175,7 @@ function createEchoes(text: string) {
   }
 }
 
-export type Command = {
+export type CommandOption = {
   execute: CommandExecute;
   flags?: { [flag: string]: string };
   description?: string;
@@ -186,7 +186,7 @@ interface CommandExecute {
 }
 
 export type Commands = {
-  [command: string]: Command;
+  [command: string]: CommandOption;
 };
 
 const supportedCommands = {
@@ -307,7 +307,7 @@ const snarkyResponses = [
   "That command is about as useful here as a chocolate teapot.",
 ];
 
-const executeCommand = (cmd: string, args: string[]) => {
+const executeCommand = (cmd: string, args: string[]): string => {
   if (cmd in invalidCommands) {
     return invalidCommands[cmd as InvalidCommandOptions].execute(args);
   }
