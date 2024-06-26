@@ -49,8 +49,7 @@ export const autoTypeOptions: AutoTypeOption[] = [
     endActionDelay: 1000,
   },
   {
-    input:
-      "export BG_COLOR=linear-gradient(30deg, #000 0%, #0c0c2c 70%, #1c4590 100%)",
+    input: "export BG_COLOR=#1c4590",
     execute: true,
     backspace: false,
     typeSpeed: 120,

@@ -66,9 +66,63 @@ const exportCommand: CommandExecute = (args) => {
 
   if (arg.startsWith("BG_COLOR=")) {
     const newColor = args.join(" ").slice(9).trim();
+    // Validate the hex color
+    const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(newColor);
+    if (!isValidHex) {
+      return "Invalid hex color format";
+    }
+
+    const ensureContrast = (hex: string): string => {
+      // Convert hex to RGB
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+
+      // Calculate luminance
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      if (luminance <= 0.5) {
+        // If luminance is already low enough for good contrast with white text, return the color as is
+        return hex;
+      } else {
+        // If not, darken the color to ensure contrast
+        // This is a simple approach; for more accuracy, consider a more sophisticated algorithm
+        return `#${Math.max(0, r - 100)
+          .toString(16)
+          .padStart(2, "0")}${Math.max(0, g - 100)
+          .toString(16)
+          .padStart(2, "0")}${Math.max(0, b - 100)
+          .toString(16)
+          .padStart(2, "0")}`;
+      }
+    };
+
+    const darkenColor = (hex: string, factor: number): string => {
+      // Parse the hex color to get RGB components
+      const red = parseInt(hex.slice(1, 3), 16);
+      const green = parseInt(hex.slice(3, 5), 16);
+      const blue = parseInt(hex.slice(5, 7), 16);
+
+      // Darken each component by the factor
+      const darkenedRed = Math.round(red * factor);
+      const darkenedGreen = Math.round(green * factor);
+      const darkenedBlue = Math.round(blue * factor);
+
+      // Convert each component back to hex and return the formatted color
+      return `#${darkenedRed.toString(16).padStart(2, "0")}${darkenedGreen
+        .toString(16)
+        .padStart(2, "0")}${darkenedBlue.toString(16).padStart(2, "0")}`;
+    };
+
+    // Ensure the final color has enough contrast for white text
+    const finalColor = ensureContrast(newColor);
+
     const wrapper = document.querySelector(".wrapper");
-    // @ts-ignore
-    if (wrapper) wrapper.style.background = newColor;
+    const linearGradient = `linear-gradient(30deg, #000 0%, ${darkenColor(
+      finalColor,
+      0.7
+    )} 70%, ${finalColor} 100%)`;
+    //@ts-ignore
+    if (wrapper) wrapper.style.background = linearGradient;
     return `Background changed to ${newColor}`;
   }
 

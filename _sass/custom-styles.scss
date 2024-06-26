@@ -280,9 +280,18 @@ a .domain {
   align-items: center;
   transform: translateY(1px);
   color: #ffffffbd;
+  min-width: 60px;
+  display: flex;
+  justify-content: center;
 
   &:hover {
-    color: #ffffffe3;
+    color: #ffffffed;
+    border-color: #ffffff75;
+    font-weight: 400;
+
+    & svg {
+      stroke-width: 2px;
+    }
   }
 
   &[hidden] {
