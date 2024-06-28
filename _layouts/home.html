@@ -184,6 +184,11 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
                   >{{ post.date | date: date_format }}</span
                 >
                 <span class="post-title-list"> {{ post.title | escape }} </span>
+                {% if post.description %}
+                <span class="post-description">
+                  {{ post.description | escape }}
+                </span>
+                {% endif %}
               </div>
             </a>
           </li>
@@ -197,10 +202,6 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
           <li>
             <a class="link-item" href="{{ note.url | relative_url }}">
               <div class="link-item-left">
-                <span class="post-meta"
-                  >{{ note.date | date: date_format }}</span
-                >
-                <span class="post-title-list">{{ note.title | escape }}</span>
                 {% if tags %}
                 <span class="post-tags">
                   {%- for tag in tags -%}
@@ -211,6 +212,12 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
                     {% endif %} {{ tag | escape }} {% endif %}
                   </span>
                   {%- endfor -%}
+                </span>
+                {% endif %}
+                <span class="post-title-list">{{ note.title | escape }}</span>
+                {% if note.description %}
+                <span class="post-description">
+                  {{ note.description | escape }}
                 </span>
                 {% endif %}
               </div>

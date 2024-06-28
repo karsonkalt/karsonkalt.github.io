@@ -161,7 +161,7 @@ pre.terminal {
     border-radius: 6px;
 
     & .stdout-command {
-      color: #ffffffb3;
+      color: #ffffff7d;
       font-size: 0.9em;
     }
 
@@ -369,7 +369,7 @@ nav > a {
 .post-meta {
   font-size: 0.85em;
   font-weight: 400;
-  color: #a8a8a8;
+  color: #ffffff7d;
   width: 100px;
   flex-shrink: 0;
   @media (max-width: 800px) {
@@ -384,13 +384,26 @@ nav > a {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 4px;
+}
+
+.post-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.8em;
+  color: #fafafaad;
+  font-weight: 400;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  margin-top: 4px;
 }
 
 .post-tag {
   align-items: center;
   display: flex;
   gap: 4px;
-  color: #ffffffbd;
+  color: #ffffff7d;
   & * {
     border-radius: 0;
   }
