@@ -7,15 +7,13 @@ export type AutoTypeOption = {
   endActionDelay: number;
 };
 
-const BG_COLORS = ["#1C4590", "#940440", "#196E02"];
-
 const getRandomBGColor = () => {
+  const BG_COLORS = ["#1C4590", "#163E70", "#0F5C8C", "#134F5C", "#0D4B4E"];
   return BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)];
 };
 
-const PROMPT_CHARACTERS = ["$", "%", "🐸", "💥"];
-
 const getRandomPromptCharacter = () => {
+  const PROMPT_CHARACTERS = ["$", "%", "🐸", "💥"];
   return PROMPT_CHARACTERS[
     Math.floor(Math.random() * PROMPT_CHARACTERS.length)
   ];
