@@ -2,6 +2,7 @@
 layout: post
 title:  "Using Query Parameters in Rails Controllers"
 date:   2021-10-20  12:00:00 -0400
+description: Sharing learnings from my personal project, Houseplant Helper, on efficiently handling query parameters in Rails. I go over a scalable approach using the request object and the .send method within controllers, demonstrating how to dynamically respond to query parameters across an application..
 ---
 In my recent project Houseplant Helper, I struggled to find a way to be able to call query params in a scalable way. Using the `request` object provided to us by rails and using the `.send` method, we can build a scalable private method that responds to all query params across the application.
 

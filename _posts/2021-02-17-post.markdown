@@ -2,6 +2,7 @@
 layout: post
 title:  "Building a Web App Using Sinatra and ActiveRecord"
 date:   2021-02-17  12:00:00 -0400
+description: A walkthrough of my personal proejct, Kickflip, a web application designed for skateboarders to track local skateparks, share new tricks, and encourage engagement through a check-in feature. The application uses Sinatra and ActiveRecord for a Model-View-Controller (MVC) setup, and discusses the integration of the geocoder gem to enhance park search functionality by converting addresses into geographical coordinates.
 ---
 [Kickflip](https://github.com/karsonkalt/kickflip) is a web app built for for skateboarders to use to track and find local skateparks, show their friends when they get a new trick, and encourage return use with a "checkin" feature. Kickflip is built using Sinatra and AciveRecord.
 

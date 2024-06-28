@@ -2,6 +2,7 @@
 layout: post
 title:  "My First Ruby CLI Program"
 date:   2020-12-09  12:00:00 -0400
+description: Sharing my journey as I continue the Flatiron School curriculum. I share learnings from a personal CLI project, DJ Booth, designed to track songs played by DJ. I also discusses nokogiri and open-uri gems due to the lack of an API from 1001 Tracklists. 
 ---
 Now that I'm a little over a month into my journey with Flatiron School, I was asked to make a Ruby application with data from an API or from a web page. After searching for a project to sink my teeth into, I decided to create a program that helps me with one of my pastime interests -- tracking songs (more often called tracks) played by my favorite DJ's.
 

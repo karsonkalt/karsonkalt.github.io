@@ -2,6 +2,7 @@
 layout: post
 title:  "Using React and Rails to build a SPA"
 date:   2021-10-13  12:00:00 -0400
+description: Demonstrating learnings from my personal project, OnRotation, a web app aimed at helping electronic music fans identify tracks played by DJs. I highlight the challenges and solutions in developing a user-friendly platform for music identification and go over the project architecture and how I designed the application.
 ---
 After a year of studying software engineering at [Flatiron School](https://flatironschool.com/), it's finally time for my final project. This project is supposed to highlight everything we have learned throughout the course using a Rails back end and a React front end. And, because this project is the capstone of my bootcamp, I wanted to create something that not only showcases who I am as a person, but also solves a real-world problem.
 

@@ -3,6 +3,7 @@ layout: post
 title:  First Week with Bash
 date:   2024-06-14 10:00:00 -0400
 tags:   [note]
+description: I’m learning bash to help me feel more comfortable in my command line and customizing my shell. It’s been very helpful and informative so far and I’m feeling much more comfortable in the cli.
 ---
 
 I'm learning bash to help me feel more comfortable in my command line and customizing

@@ -2,6 +2,7 @@
 layout: post
 title:  "Building a Web App with Rails"
 date:   2021-04-16  12:00:00 -0400
+description: A guide to building a web app with Rails for my personal project, Houseplant Helper, an application designed to assist users in tracking their plant watering schedules. The article talks about MVC architecture, ActiveRecord, and the strategic implementation of partials to manage views.
 ---
 [Houseplant Helper](https://github.com/karsonkalt/houseplant_helper) is a web app built with Rails that helps `Users` track how recently they have watered their `Plants` and lets them know when a `Plant` needs to be watered.
 

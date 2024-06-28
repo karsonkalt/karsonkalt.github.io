@@ -2,6 +2,7 @@
 layout: post
 title:  "Why I am Studying Software Engineering"
 date:   2020-11-01  12:00:00 -0400
+description: Growing up, one of my favorite books was "The Way Things Work". In the book, a cartoon woolly mammoth takes apart and explores the inner workings of everyday tools and machines. From giant faucets to oversize locks, the charming, slow-moving character explores everything that amazed me as a kid.
 ---
 # The Way Things Work
 Growing up, one of my favorite books was ["The Way Things Work" by David Macaulay](https://en.wikipedia.org/wiki/The_Way_Things_Work). In the book, a cartoon woolly mammoth takes apart and explores the inner workings of everyday tools and machines. From giant faucets to oversize locks, the charming, slow-moving character explores everything that amazed me as a kid.

@@ -2,7 +2,9 @@
 layout: post
 title:  "Understanding 'this' in JavaScript"
 date:   2021-10-29 10:36:39 -0400
+description: Navigating the concept of this in JavaScript can be a tricky, especially for those accustomed to the straightforward self in object-oriented languages like Ruby or Python. I contrast this with self, and dive into JavaScript's prototypal inheritance to explain why this behaves the way it does.
 ---
+
 If you're coming to JavaScript from an Object-Oriented language like Ruby or Python, the concept of `this` in JavaScript might give you a little bit of trouble. It turns out, `this` in JavaScript is a little more complex than we might think assuming it to work similar to `self`.
 
 Let's take a step back and think about `self` in an OO language. We know `self` will always to the current instance of a class, and that when defining a class method, `this` refers to the class itself.

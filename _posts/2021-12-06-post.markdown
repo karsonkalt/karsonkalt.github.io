@@ -2,6 +2,7 @@
 layout: post
 title:  "Recursive Thinking"
 date:   2021-12-06  12:00:00 -0400
+description: Using recursion in algorithmic challenges. Talking about transitioning from iterative to recursive thinking, identifying base cases and the recognition of patterns.
 ---
 Like most new programmers, as I began to study data structures and algorithms, I struggled to grasp recursive approaches to solving algo challenges. When I saw the recursive functions, I could easily understand how they worked, but when asked to write them myself, I struggled to break down problems with a recursive approach.
 

@@ -2,6 +2,7 @@
 layout: post
 title:  "Building a Turn-based Game Using JS and Rails"
 date:   2021-06-24  12:00:00 -0400
+description: I share learnings from building my personal project, GamePage, a web application that allows two players to engage in the classic board game "Reversi" (also known as "Othello"). I detail the project's architecture, including a Rails API backend and a JavaScript-manipulated front end, highlighting the seamless integration between the two technologies to offer a dynamic single-page application experience.
 ---
 # Overview
 [GamePage](github.com/karsonkalt/gamepage_front_end) is a web app built in Rails and JavaScript that lets two players play the classic board game "Reversi" aka "Othello". The basic premise of the game is to place tokens on the board. When placing a token, you attempt to also swap any opponent's tokens that lay between your placed token and your other tokens with your own.

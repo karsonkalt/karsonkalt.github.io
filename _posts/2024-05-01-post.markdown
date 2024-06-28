@@ -2,6 +2,7 @@
 layout: post
 title:  "Managing View State and Client-side Routing in SPAs"
 date:   2024-05-01 17:57:00 -0400
+description: A scalable routing approach to address routing challenges and illustrates a common pattern involving a collection rendering and routing in React.
 ---
 At my company, we've made a significant transition from a monolithic frontend to a distributed frontend architecture using microfrontends, powered by [single-spa-react](https://single-spa.js.org/). This architectural shift has brought many benefits, such as lazy loading sections of the app and accelerating our development cycle. However, like any significant change, it has also come with its set of challenges.
 

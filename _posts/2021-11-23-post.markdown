@@ -2,6 +2,7 @@
 layout: post
 title:  "Building Efficient Algorithms Using Memoization and Closures in Javascript"
 date:   2021-11-23 10:36:39 -0400
+description: Looking at the essentials of memoization and closures in JavaScript, exploring how these techniques can significantly optimize algorithms. Through a simple example of multiplying numbers, I look at the concept of caching solutions to enhance efficiency and speed in programming tasks.
 ---
 ## What Is Memoization?
 
