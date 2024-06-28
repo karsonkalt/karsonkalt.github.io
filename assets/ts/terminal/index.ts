@@ -13,3 +13,7 @@ const userInputManager = new UserInputManager(
   autoTypeManager,
   mirrorElement
 );
+
+document.addEventListener("DOMContentLoaded", () => {
+  userInputManager.handleBashCommand("restore", false);
+});

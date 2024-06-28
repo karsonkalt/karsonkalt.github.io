@@ -1,3 +1,11 @@
+const restoreCommand: CommandExecute = (args) => {
+  const promptCharacter = localStorage.getItem("PS1");
+  if (promptCharacter) exportCommand(["PS1=" + promptCharacter]);
+  const bgColor = localStorage.getItem("BG_COLOR");
+  if (bgColor) exportCommand(["BG_COLOR=" + bgColor]);
+  return "Restored terminal settings";
+};
+
 const clearCommand: CommandExecute = (args) => {
   const stdoutLog = document.querySelector(".stdout-log");
 
@@ -54,6 +62,10 @@ const addCommand: CommandExecute = (args) => {
 const exportCommand: CommandExecute = (args) => {
   const arg = args[0];
 
+  const addToLocalStorage = (key: string, value: string) => {
+    localStorage.setItem(key, value);
+  };
+
   // Handle PS1
   if (arg.startsWith("PS1=")) {
     const newPromptCharacter = arg.slice(4).trim();
@@ -61,11 +73,13 @@ const exportCommand: CommandExecute = (args) => {
     promptElements.forEach((el) => {
       el.textContent = newPromptCharacter;
     });
+    addToLocalStorage("PS1", newPromptCharacter);
     return `Prompt character changed to ${newPromptCharacter}`;
   }
 
   if (arg.startsWith("BG_COLOR=")) {
     const newColor = args.join(" ").slice(9).trim();
+    addToLocalStorage("BG_COLOR", newColor);
     // Validate the hex color
     const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(newColor);
     if (!isValidHex) {
@@ -223,10 +237,7 @@ function echo(text: string, position: "topLeft" | "bottomRight") {
 
 // Function to create multiple ovals with the same text
 function createEchoes(text: string) {
-  const positions: ("topLeft" | "bottomRight")[] = ["topLeft", "bottomRight"];
-  for (let i = 0; i < 2; i++) {
-    setTimeout(() => echo(text, positions[i % 2]), i * 2000); // Adjust timing for staggered appearance
-  }
+  echo(text, "topLeft");
 }
 
 export type Command = {
@@ -312,6 +323,11 @@ const supportedCommands = {
   export: {
     execute: exportCommand,
     description: "Exports a variable",
+    flags: {},
+  },
+  restore: {
+    execute: restoreCommand,
+    description: "Restores terminal settings",
     flags: {},
   },
 } satisfies Commands;

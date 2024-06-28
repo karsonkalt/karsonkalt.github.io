@@ -42,14 +42,14 @@ class UserInputManager {
     this.mirrorElement.textContent = value;
   }
 
-  private handleBashCommand(command: string) {
-    this.createRipple();
+  handleBashCommand(command: string, display: boolean = true) {
+    display && this.createRipple();
     const [cmd, ...args] = command.split(" ");
     const result = executeCommand(cmd as any, args);
     const formattedHelpText = result.replace(/\n/g, "<br/>");
 
     this.setPromptValue("");
-    this.addToStdoutLog(command, formattedHelpText);
+    display && this.addToStdoutLog(command, formattedHelpText);
   }
 
   private addToStdoutLog(command: string, output: string) {

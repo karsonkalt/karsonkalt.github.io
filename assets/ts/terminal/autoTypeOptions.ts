@@ -7,6 +7,20 @@ export type AutoTypeOption = {
   endActionDelay: number;
 };
 
+const BG_COLORS = ["#1C4590", "#940440", "#196E02"];
+
+const getRandomBGColor = () => {
+  return BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)];
+};
+
+const PROMPT_CHARACTERS = ["$", "%", "🐸", "💥"];
+
+const getRandomPromptCharacter = () => {
+  return PROMPT_CHARACTERS[
+    Math.floor(Math.random() * PROMPT_CHARACTERS.length)
+  ];
+};
+
 export const autoTypeOptions: AutoTypeOption[] = [
   {
     input: "echo Hi, I'm Karson ツ",
@@ -49,7 +63,7 @@ export const autoTypeOptions: AutoTypeOption[] = [
     endActionDelay: 1000,
   },
   {
-    input: "export BG_COLOR=#1c4590",
+    input: `export BG_COLOR=${getRandomBGColor()}`,
     execute: true,
     backspace: false,
     typeSpeed: 120,
@@ -65,6 +79,14 @@ export const autoTypeOptions: AutoTypeOption[] = [
     endActionDelay: 1000,
   },
   {
+    input: "(✿◠‿◠)",
+    execute: false,
+    backspace: true,
+    typeSpeed: 200,
+    initialDelay: 4000,
+    endActionDelay: 2000,
+  },
+  {
     input: "education",
     execute: true,
     backspace: false,
@@ -73,21 +95,13 @@ export const autoTypeOptions: AutoTypeOption[] = [
     endActionDelay: 1000,
   },
   {
-    input: "export PS1=🐸",
+    input: `export PS1=${getRandomPromptCharacter()}`,
     execute: true,
     backspace: false,
     typeSpeed: 200,
     initialDelay: 4000,
     endActionDelay: 1000,
   },
-  // {
-  //   input: "(✿◠‿◠)",
-  //   execute: false,
-  //   backspace: true,
-  //   typeSpeed: 200,
-  //   initialDelay: 4000,
-  //   endActionDelay: 2000,
-  // },
   {
     input: "(^-^)/",
     execute: false,
@@ -104,14 +118,14 @@ export const autoTypeOptions: AutoTypeOption[] = [
   //   initialDelay: 4000,
   //   endActionDelay: 2000,
   // },
-  {
-    input: "(づ｡◕‿‿◕｡)づ",
-    execute: false,
-    backspace: true,
-    typeSpeed: 200,
-    initialDelay: 4000,
-    endActionDelay: 2000,
-  },
+  // {
+  //   input: "(づ｡◕‿‿◕｡)づ",
+  //   execute: false,
+  //   backspace: true,
+  //   typeSpeed: 200,
+  //   initialDelay: 4000,
+  //   endActionDelay: 2000,
+  // },
   {
     input: "(ﾉ◕ヮ◕)ﾉ*:・ﾟ✧",
     execute: false,
