@@ -175,11 +175,6 @@ pre.terminal {
   }
 
   @media screen and (max-width: 800px) {
-    padding-left: 14px;
-    padding-right: 14px;
-    margin-left: -14px;
-    margin-right: -14px;
-    border-radius: 0;
     transition: none;
     &:hover {
       transform: none;
