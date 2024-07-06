@@ -15,7 +15,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
     <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank">
       LinkedIn
     </a>
-    <a href="https://twitter.com/karsonkalt" target="_blank"> Twitter </a>
+    <a href="https://twitter.com/karsonkalt" target="_blank">X</a>
     <a href="mailto:kars.kalt@gmail.com" class="email">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,9 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
     alt="karsonkalt's avatar"
   />
   <div class="gravatar-status">
-    <div class="gravatar-status-meta">Currently</div>
+    <div class="gravatar-status-meta">
+      {{ site.status_updated | date: "%B %d" }}
+    </div>
     <div class="gravatar-status-status">{{ site.status }}</div>
   </div>
 </div>
