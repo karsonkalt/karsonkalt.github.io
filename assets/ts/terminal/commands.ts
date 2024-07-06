@@ -1,8 +1,8 @@
 const restoreCommand: CommandExecute = (args) => {
   const promptCharacter = localStorage.getItem("PS1");
   if (promptCharacter) exportCommand(["PS1=" + promptCharacter]);
-  const bgColor = localStorage.getItem("BG_COLOR");
-  if (bgColor) exportCommand(["BG_COLOR=" + bgColor]);
+  const bgColor = localStorage.getItem("ACCENT_COLOR");
+  if (bgColor) exportCommand(["ACCENT_COLOR=" + bgColor]);
   return "Restored terminal settings";
 };
 
@@ -77,8 +77,8 @@ const exportCommand: CommandExecute = (args) => {
     return `Prompt character changed to ${newPromptCharacter}`;
   }
 
-  if (arg.startsWith("BG_COLOR=")) {
-    const newColor = args.join(" ").slice(9).trim();
+  if (arg.startsWith("ACCENT_COLOR=")) {
+    const newColor = args.join(" ").slice(13).trim();
 
     const rgbColor = (colorString: string): string => {
       const tempElement = document.createElement("div");
@@ -95,7 +95,7 @@ const exportCommand: CommandExecute = (args) => {
       return "Invalid color format";
     }
 
-    addToLocalStorage("BG_COLOR", rgbNewColor);
+    addToLocalStorage("ACCENT_COLOR", rgbNewColor);
 
     const ensureContrast = (rgbColor: string): string => {
       const [r, g, b] = rgbColor.match(/\d+/g)!.map(Number);
@@ -111,30 +111,14 @@ const exportCommand: CommandExecute = (args) => {
       }
     };
 
-    const darkenColor = (rgbColor: string, factor: number): string => {
-      const [red, green, blue] = rgbColor.match(/\d+/g)!.map(Number);
-
-      const darkenedRed = Math.round(red * factor);
-      const darkenedGreen = Math.round(green * factor);
-      const darkenedBlue = Math.round(blue * factor);
-
-      return `rgb(${darkenedRed}, ${darkenedGreen}, ${darkenedBlue})`;
-    };
-
     const finalColor = ensureContrast(rgbNewColor);
 
-    const wrapper = document.querySelector(".wrapper");
-    const linearGradient = `linear-gradient(30deg, #000 0%, ${darkenColor(
-      finalColor,
-      0.7
-    )} 70%, ${finalColor} 100%)`;
+    document.documentElement.style.setProperty("--accent-color", finalColor);
 
-    //@ts-ignore
-    if (wrapper) wrapper.style.background = linearGradient;
-    return `Background changed to ${newColor}`;
+    return `Accent changed to ${newColor}`;
   }
 
-  return "Invalid color format";
+  return "Invalid export command. Usage: export PS1=$, export ACCENT_COLOR=#";
 };
 
 const aboutCommand: CommandExecute = (args) => {

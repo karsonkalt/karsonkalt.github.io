@@ -13,7 +13,7 @@ const getRandomBGColor = () => {
 };
 
 const getRandomPromptCharacter = () => {
-  const PROMPT_CHARACTERS = ["$", "%", "🐸", "💥"];
+  const PROMPT_CHARACTERS = ["$", "%", "💥"];
   return PROMPT_CHARACTERS[
     Math.floor(Math.random() * PROMPT_CHARACTERS.length)
   ];
@@ -61,7 +61,7 @@ export const autoTypeOptions: AutoTypeOption[] = [
     endActionDelay: 1000,
   },
   {
-    input: `export BG_COLOR=${getRandomBGColor()}`,
+    input: `export ACCENT_COLOR=${getRandomBGColor()}`,
     execute: true,
     backspace: false,
     typeSpeed: 120,
