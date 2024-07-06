@@ -1,49 +1,63 @@
 .gravatar {
   display: flex;
-  margin-bottom: 36px;
   align-items: center;
   gap: 14px;
   width: 100%;
+  margin: 16px 0 46px 0;
 }
 
 .gravatar-avatar {
   border-radius: 1000px;
-  border: 4px solid #aeaeae6d;
+  border: 5px solid #0000007a;
   height: 68px;
   width: 68px;
+  flex-shrink: 0;
+}
+
+@keyframes fadeInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .gravatar-status {
   position: relative;
-  text-wrap: nowrap;
   flex-shrink: 1;
   font-family: "Inter";
-  font-size: 12px;
-  background-color: #00000063;
-  color: #ffffffc1;
-  border-radius: 4px;
+  background-color: #0000007a;
+  border-radius: 6px;
   padding: 8px 12px;
+  opacity: 0;
+  animation: fadeInFromLeft 750ms forwards cubic-bezier(0, 0, 0.21, 0.89);
   &:after {
+    --tip-height: 26px;
+    --tip-width: 8px;
     content: "";
-    right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    border: solid transparent;
-    height: 0;
-    width: 0;
     position: absolute;
-    pointer-events: none;
-    border-color: transparent #00000063 transparent transparent;
-    border-width: 8px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%) translateX(-100%);
+    width: 0;
+    height: 0;
+    border-top: calc(var(--tip-height) / 2) solid transparent;
+    border-bottom: calc(var(--tip-height) / 2) solid transparent;
+    border-right: var(--tip-width) solid #0000007a;
   }
   & .gravatar-status-meta {
-    font-size: 12px;
+    font-weight: 500;
+    font-size: 11px;
     color: #fcfcfc8f;
   }
   & .gravatar-status-status {
-    white-space: nowrap;
+    font-size: 13px;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: #ffffffd7;
   }
 }
 
@@ -273,7 +287,7 @@ pre.terminal {
   @media (max-width: 800px) {
     flex-direction: column;
     align-items: flex-start;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
   }
 }
 
