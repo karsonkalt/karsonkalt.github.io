@@ -44,7 +44,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
   />
   <div class="gravatar-status">
     <div class="gravatar-status-meta">
-      {{ site.status_updated | date: "%B %d" }}
+      {{ site.status_updated | date: "%B %-d" }}
     </div>
     <div class="gravatar-status-status">{{ site.status }}</div>
   </div>
