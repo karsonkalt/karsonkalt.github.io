@@ -583,6 +583,7 @@ article {
   overflow-y: scroll;
   overflow-x: hidden;
   min-height: 100vh;
+  box-sizing: border-box;
   &:before {
     content: "";
     position: absolute;
