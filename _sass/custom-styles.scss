@@ -592,9 +592,21 @@ article {
     right: 0;
     height: 100vh;
     width: 100vw;
-    background: linear-gradient(170deg, rgba(0, 0, 0, 0) 55%, rgb(0, 0, 0) 100%),
-      linear-gradient(30deg, rgb(0, 0, 0) 0%, var(--accent-color) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgb(0, 0, 0) 100%),
+      linear-gradient(30deg, rgb(0, 0, 0) 20%, var(--accent-color) 100%);
     z-index: -100;
+    animation: fadeIn 2000ms forwards;
+    animation-delay: 250ms;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
