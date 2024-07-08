@@ -64,9 +64,9 @@
 .gravatar-status {
   display: flex;
   flex-direction: column;
-  animation: fadeInFromLeft 750ms forwards cubic-bezier(0, 0, 0.21, 0.89);
-  animation-delay: 500ms;
-  opacity: 0;
+  // animation: fadeInFromLeft 750ms forwards cubic-bezier(0, 0, 0.21, 0.89);
+  // animation-delay: 500ms;
+  // opacity: 0;
 }
 
 .gravatar-status-meta {
@@ -719,4 +719,14 @@ img {
   animation: echo 2s ease-out;
   max-width: calc(100vw - 100px);
   max-height: calc(100vh - 100px);
+}
+
+.window-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background: linear-gradient(to top, black, rgba(0, 0, 0, 0) 100px);
 }
