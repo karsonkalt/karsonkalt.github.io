@@ -38,14 +38,56 @@
   gap: 16px;
   width: 100%;
   margin: 0px 0 32px 0;
+  color: var(--black-80);
+}
+.flip-card {
+  background-color: transparent;
+  width: 52px;
+  height: 52px;
+  perspective: 1000px;
 }
 
-.gravatar-avatar {
-  border-radius: 1000px;
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 50%;
   border: 3px solid var(--white-10);
-  height: 52px;
-  width: 52px;
-  flex-shrink: 0;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 50%; /* Ensures both sides are circular */
+}
+
+.flip-card-front {
+  background-color: #bbb;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.flip-card-back {
+  background-color: #2980b9;
+  color: white;
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 @keyframes fadeInFromLeft {
