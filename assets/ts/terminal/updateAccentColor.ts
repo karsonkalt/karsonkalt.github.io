@@ -1,41 +1,110 @@
-const calculateRGBColor = (colorString: string): string => {
-  const tempElement = document.createElement("div");
-  document.body.appendChild(tempElement);
-  tempElement.style.backgroundColor = colorString;
-  const rgbColor = window.getComputedStyle(tempElement).backgroundColor;
-  document.body.removeChild(tempElement);
-  return rgbColor;
-};
+import chroma from "chroma-js";
 
-export const updateAccentColor = (newColor: string) => {
-  const rgbNewColor = calculateRGBColor(newColor);
+export const updateAccentColor = (inputColor: string): boolean => {
+  try {
+    if (!isValidColor(inputColor)) {
+      return false;
+    }
 
-  if (rgbNewColor === "") {
+    const accentColor = getAdjustedAccentColor(chroma(inputColor));
+    const accentColorContrast = getContrastColor(accentColor);
+    const accentDecoration = isLightColor(accentColorContrast)
+      ? "underline"
+      : "none";
+
+    setColorsInLocalStorage(accentColor, accentColorContrast);
+    setColorsInCSS(accentColor, accentColorContrast, accentDecoration);
+
+    return true;
+  } catch (error) {
+    console.error(error);
     return false;
   }
+};
 
-  localStorage.setItem("ACCENT_COLOR", rgbNewColor);
+const isValidColor = (color: string): boolean => {
+  return chroma.valid(color);
+};
 
-  const ensureContrastAndMinimumBrightness = (rgbColor: string): string => {
-    const [r, g, b] = rgbColor.match(/\d+/g)!.map(Number);
+const getAdjustedAccentColor = (color: chroma.Color): chroma.Color => {
+  // Adjust luminance to avoid too black or too white
+  const luminance = color.luminance();
+  if (luminance < 0.25) {
+    color = color.luminance(0.25);
+  } else if (luminance > 0.75) {
+    color = color.luminance(0.75);
+  }
 
-    const MIN_BRIGHTNESS = 50;
+  // Ensure color is vibrant but not fully saturated
+  const saturation = color.get("hsl.s");
+  return color.set("hsl.s", Math.min(saturation, 0.65));
+};
 
-    const adjustedR = Math.max(MIN_BRIGHTNESS, r - 100);
-    const adjustedG = Math.max(MIN_BRIGHTNESS, g - 100);
-    const adjustedB = Math.max(MIN_BRIGHTNESS, b - 100);
+const getContrastColor = (accentColor: chroma.Color): chroma.Color => {
+  // Generate a fully vibrant version of the accent color
+  let vibrantColor = accentColor.set("hsl.s", 1);
 
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    if (luminance > 0.5) {
-      return `rgb(${adjustedR}, ${adjustedG}, ${adjustedB})`;
-    } else {
-      return `rgb(${Math.max(50, r)}, ${Math.max(50, g)}, ${Math.max(50, b)})`;
+  const MIN_CONTRAST = 1.75;
+
+  // Ensure the vibrant color meets the 3 contrast ratio against the accent color
+  if (
+    chroma.contrast(vibrantColor, accentColor) >= MIN_CONTRAST
+    // && chroma.contrast(vibrantColor, "black") >= 4.5
+  ) {
+    return vibrantColor;
+  }
+
+  // Adjust the lightness to find a suitable contrast color
+  const lightnessSteps = 10;
+  const lightnessIncrement = 1 / lightnessSteps;
+
+  for (let i = 1; i <= lightnessSteps; i++) {
+    const lightenedColor = vibrantColor.set(
+      "hsl.l",
+      vibrantColor.get("hsl.l") + lightnessIncrement * i
+    );
+    if (
+      chroma.contrast(lightenedColor, accentColor) >= MIN_CONTRAST
+      // && chroma.contrast(lightenedColor, "black") >= 4.5
+    ) {
+      return lightenedColor;
     }
-  };
+  }
 
-  const finalColor = ensureContrastAndMinimumBrightness(rgbNewColor);
+  // If no suitable color is found, return the original vibrant color
+  return vibrantColor;
+};
 
-  document.documentElement.style.setProperty("--accent-color", finalColor);
+const isLightColor = (color: chroma.Color): boolean => {
+  return color.luminance() > 0.75;
+};
 
-  return true;
+const setColorsInLocalStorage = (
+  accentColor: chroma.Color,
+  accentColorContrast: chroma.Color
+): void => {
+  const cssAccentColor = accentColor.hex();
+  const cssAccentContrastColor = accentColorContrast.hex();
+
+  localStorage.setItem("ACCENT_COLOR", cssAccentColor);
+  localStorage.setItem("LINK_COLOR", cssAccentContrastColor);
+};
+
+const setColorsInCSS = (
+  accentColor: chroma.Color,
+  accentColorContrast: chroma.Color,
+  accentDecoration: string
+): void => {
+  const cssAccentColor = accentColor.hex();
+  const cssAccentContrastColor = accentColorContrast.hex();
+
+  document.documentElement.style.setProperty("--accent-color", cssAccentColor);
+  document.documentElement.style.setProperty(
+    "--accent-color-contrast",
+    cssAccentContrastColor
+  );
+  document.documentElement.style.setProperty(
+    "--accent-decoration",
+    accentDecoration
+  );
 };

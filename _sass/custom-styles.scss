@@ -24,6 +24,8 @@
 
   --accent-color-default: #1c4590;
   --accent-color: var(--accent-color-default); // configurable
+  --accent-color-contrast: #1e90ff; // TODO configurable
+  --accent-decoration: none; // configurable
 
   // TODO make tokens consuming palette
   --text-primary: var(--white-90);
@@ -196,11 +198,12 @@
   padding: 2px 8px;
   margin: -2px 0px;
   border-radius: var(--border-radius);
-  border: 1px solid #1e90ff;
+  border: 1px solid var(--accent-color-contrast);
   transition: transform 100ms, color 100ms, border 100ms;
   display: flex;
   align-items: center;
   gap: 6px;
+  text-decoration: none;
   &:hover {
     background-color: #ffffff2a;
     color: #ffffff;
@@ -212,16 +215,15 @@
     & svg {
       display: none;
     }
-    color: #1e90ff;
+    color: var(--accent-color-contrast);
     border: none;
     margin: 0;
     padding: 0;
+    text-decoration: var(--accent-decoration);
     &:hover {
-      color: #1e90ff;
       border: none;
       background-color: unset;
       transform: none;
-      text-decoration: underline;
     }
   }
 }
@@ -579,6 +581,11 @@ nav > a {
   font-size: 16px !important;
   font-weight: 400;
   position: relative;
+  text-decoration: var(--accent-decoration);
+  color: var(--accent-color-contrast);
+  &:visited {
+    color: var(--accent-color-contrast);
+  }
 }
 
 .year-divider {
