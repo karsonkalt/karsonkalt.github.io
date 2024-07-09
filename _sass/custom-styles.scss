@@ -31,6 +31,35 @@
 
   --border-radius: 6px;
 }
+#theme-button-wrapper {
+  position: fixed;
+  --size: 24px;
+  border-radius: 50%;
+  border: 3px solid var(--black-40);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: var(--size);
+  width: var(--size);
+  --offset: 20px;
+  left: var(--offset);
+  bottom: var(--offset);
+  & > #theme-button {
+    opacity: 0;
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    border: none;
+  }
+}
+
+#theme-button {
+  opacity: 0;
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border: none;
+}
 
 .gravatar {
   display: flex;
@@ -40,6 +69,7 @@
   margin: 0px 0 32px 0;
   color: var(--black-80);
 }
+
 .flip-card {
   flex-shrink: 0;
   background-color: transparent;
