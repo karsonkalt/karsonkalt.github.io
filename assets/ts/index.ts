@@ -1,3 +1,5 @@
+import { insertThemeButton } from "./terminal/themeButton";
+
 console.log(`
 ▄▄▄   ▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ 
 █   █ █ █       █   ▄  █ █       █       █  █  █ █
@@ -64,3 +66,5 @@ document
   .forEach((preElement) => {
     createCopyButton(preElement);
   });
+
+insertThemeButton();
