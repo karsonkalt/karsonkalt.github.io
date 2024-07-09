@@ -1,6 +1,7 @@
 const TAB_QUERY_SELECTOR = "[role='tab']";
 
 const tabNodes = Array.from(document.querySelectorAll(TAB_QUERY_SELECTOR));
+const bottomDrawerNode = document.querySelector(".bottom-drawer");
 
 tabNodes.forEach((tab) => {
   tab.addEventListener("click", () => {
@@ -17,7 +18,7 @@ window.onhashchange = function () {
 };
 
 function applyChanges(clickedTab: Element) {
-  updateBadge(clickedTab.getAttribute("id") === "stdout");
+  updateBadge(clickedTab.getAttribute("id") === "console");
 
   tabNodes.forEach((tab) => {
     const isSelected = tab === clickedTab;
@@ -36,12 +37,18 @@ function applyChanges(clickedTab: Element) {
       tabPanel.setAttribute("hidden", "");
     }
   });
+
+  if (clickedTab.getAttribute("id") === "console") {
+    bottomDrawerNode?.setAttribute("open", "");
+  } else {
+    bottomDrawerNode?.removeAttribute("open");
+  }
 }
 
 // duplicated from other
 function updateBadge(hasUnreadStdout: boolean) {
-  const stdoutTab = document.querySelector("#stdout");
-  const badge = stdoutTab?.querySelector(".unread-badge");
+  const consoleTab = document.querySelector("#console");
+  const badge = consoleTab?.querySelector(".unread-badge");
 
   if (hasUnreadStdout) {
     badge?.classList.remove("show");
