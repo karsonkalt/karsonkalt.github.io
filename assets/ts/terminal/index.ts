@@ -15,5 +15,5 @@ const userInputManager = new UserInputManager(
 );
 
 document.addEventListener("DOMContentLoaded", () => {
-  userInputManager.handleBashCommand("restore", false);
+  userInputManager.handleBashCommand("restore", false); // TODO I dont like this
 });
