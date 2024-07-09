@@ -37,7 +37,7 @@ const getAdjustedAccentColor = (color: chroma.Color): chroma.Color => {
 
   // Ensure color is vibrant but not fully saturated
   const saturation = color.get("hsl.s");
-  return color.set("hsl.s", Math.min(saturation, 0.65));
+  return color.set("hsl.s", Math.min(saturation, 0.85));
 };
 
 const getContrastColor = (accentColor: chroma.Color): chroma.Color => {
