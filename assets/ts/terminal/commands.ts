@@ -1,3 +1,5 @@
+import { updateAccentColor } from "./updateAccentColor";
+
 const restoreCommand: CommandExecute = (args) => {
   const promptCharacter = localStorage.getItem("PS1");
   if (promptCharacter) exportCommand(["PS1=" + promptCharacter]);
@@ -25,7 +27,6 @@ const helpCommand: CommandExecute = (args) => {
 
   for (const [commandName, command] of Object.entries(supportedCommands)) {
     helpText += `- ${commandName}: ${command.description}\n`;
-
     for (const [flagName, flagDescription] of Object.entries(command.flags)) {
       helpText += `  - ${flagName}: ${flagDescription}\n`;
     }
@@ -80,42 +81,13 @@ const exportCommand: CommandExecute = (args) => {
   if (arg.startsWith("ACCENT_COLOR=")) {
     const newColor = args.join(" ").slice(13).trim();
 
-    const rgbColor = (colorString: string): string => {
-      const tempElement = document.createElement("div");
-      document.body.appendChild(tempElement);
-      tempElement.style.backgroundColor = colorString;
-      const rgbColor = window.getComputedStyle(tempElement).backgroundColor;
-      document.body.removeChild(tempElement);
-      return rgbColor;
-    };
+    const updateSuccessful = updateAccentColor(newColor);
 
-    const rgbNewColor = rgbColor(newColor);
-
-    if (rgbNewColor === "") {
-      return "Invalid color format";
+    if (updateSuccessful) {
+      return `Accent changed to ${newColor}`;
     }
 
-    addToLocalStorage("ACCENT_COLOR", rgbNewColor);
-
-    const ensureContrast = (rgbColor: string): string => {
-      const [r, g, b] = rgbColor.match(/\d+/g)!.map(Number);
-
-      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-      if (luminance <= 0.5) {
-        return `rgb(${r}, ${g}, ${b})`;
-      } else {
-        return `rgb(${Math.max(0, r - 100)}, ${Math.max(
-          0,
-          g - 100
-        )}, ${Math.max(0, b - 100)})`;
-      }
-    };
-
-    const finalColor = ensureContrast(rgbNewColor);
-
-    document.documentElement.style.setProperty("--accent-color", finalColor);
-
-    return `Accent changed to ${newColor}`;
+    return "Invalid color. Please provide: #000000, rgb(0, 0, 0) or any valid css color.";
   }
 
   return "Invalid export command. Usage: export PS1=$, export ACCENT_COLOR=#";
