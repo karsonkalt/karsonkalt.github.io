@@ -3,6 +3,8 @@ const TAB_QUERY_SELECTOR = "[role='tab']";
 const tabNodes = Array.from(document.querySelectorAll(TAB_QUERY_SELECTOR));
 const bottomDrawerNode = document.querySelector(".bottom-drawer");
 
+const promptElement = document.querySelector(".prompt") as HTMLInputElement;
+
 tabNodes.forEach((tab) => {
   tab.addEventListener("click", () => {
     history.replaceState(null, "", "#" + tab.id);
@@ -40,8 +42,10 @@ function applyChanges(clickedTab: Element) {
 
   if (clickedTab.getAttribute("id") === "console") {
     bottomDrawerNode?.setAttribute("open", "");
+    promptElement.focus();
   } else {
     bottomDrawerNode?.removeAttribute("open");
+    promptElement.blur();
   }
 }
 

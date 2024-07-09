@@ -46,20 +46,6 @@ const whoamiCommand: CommandExecute = (args) => {
   return "Karson, Frontend Developer";
 };
 
-const addCommand: CommandExecute = (args) => {
-  const addIndex = args.indexOf("--tab");
-  if (addIndex !== -1 && args[addIndex + 1]) {
-    const tabName = args[addIndex + 1];
-    if (["stdout", "blog", "notes"].includes(tabName)) {
-      return showTab(tabName);
-    } else {
-      return `Error: Tab "${tabName}" cannot be added. Only "stdout", "blog", and "about" can be added.`;
-    }
-  } else {
-    return "Usage: tab --add <name>";
-  }
-};
-
 const exportCommand: CommandExecute = (args) => {
   const arg = args[0];
 
@@ -239,13 +225,6 @@ const supportedCommands = {
     execute: whoamiCommand,
     description: "Displays user information",
     flags: {},
-  },
-  add: {
-    execute: addCommand,
-    description: "Adds content to the website",
-    flags: {
-      "--tab": "Adds a tab",
-    },
   },
   skills: {
     execute: skillsCommand,

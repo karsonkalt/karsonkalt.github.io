@@ -1,21 +1,17 @@
-import { AutoTypeManager } from "./AutoTypeManager";
 import { executeCommand } from "./commands";
 
 class UserInputManager {
   private prompt: HTMLInputElement;
   private terminal: HTMLDivElement;
-  private autoTypeManager: AutoTypeManager;
   private mirrorElement: HTMLDivElement;
 
   constructor(
     prompt: HTMLInputElement,
     terminal: HTMLDivElement,
-    autoTypeManager: AutoTypeManager,
     mirrorElement: HTMLDivElement
   ) {
     this.prompt = prompt;
     this.terminal = terminal;
-    this.autoTypeManager = autoTypeManager;
     this.mirrorElement = mirrorElement;
     this.initialize();
   }
@@ -71,7 +67,7 @@ class UserInputManager {
     const currentTab = document.querySelector(
       'button[role="tab"][aria-selected="true"]'
     )?.id;
-    if (currentTab) this.updateBadge(currentTab !== "stdout");
+    if (currentTab) this.updateBadge(currentTab !== "console");
   }
 
   private updateBadge(hasUnreadStdout: boolean) {
@@ -98,7 +94,6 @@ class UserInputManager {
         event.preventDefault();
         this.handleBashCommand(this.prompt.value.trim());
         this.setPromptValue("");
-        this.autoTypeManager.stopAutoType();
       }
     });
 
@@ -107,14 +102,6 @@ class UserInputManager {
         const tabName = (event.target as HTMLElement)?.getAttribute("data-tab");
         if (tabName) this.switchTab(tabName);
       });
-    });
-
-    this.prompt.addEventListener("focus", () => {
-      this.autoTypeManager.stopAutoType();
-    });
-
-    this.prompt.addEventListener("blur", () => {
-      this.autoTypeManager.startAutoType();
     });
 
     this.terminal.addEventListener("click", () => {
