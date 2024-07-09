@@ -9,16 +9,10 @@ export const insertThemeButton = () => {
   document.querySelector("main")?.appendChild(themeButtonWrapper);
   themeButtonWrapper.appendChild(themeButton);
 
-  const accentColor =
-    localStorage.getItem("ACCENT_COLOR") ||
-    getComputedStyle(document.documentElement).getPropertyValue(
-      "--accent-color"
-    );
-
-  themeButtonWrapper.style.backgroundColor = accentColor; // initialize
+  themeButtonWrapper.style.backgroundColor = "var(--accent-color)";
 
   themeButton.onchange = () => {
-    themeButtonWrapper.style.backgroundColor = themeButton.value;
+    themeButtonWrapper.style.backgroundColor = "var(--accent-color)";
     updateAccentColor(themeButton.value);
   };
 };
