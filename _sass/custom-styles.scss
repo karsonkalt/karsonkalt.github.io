@@ -41,6 +41,7 @@
   color: var(--black-80);
 }
 .flip-card {
+  flex-shrink: 0;
   background-color: transparent;
   width: 52px;
   height: 52px;
@@ -55,7 +56,6 @@
   transition: transform 0.6s;
   transform-style: preserve-3d;
   border-radius: 50%;
-  border: 3px solid var(--white-10);
 }
 
 .flip-card:hover .flip-card-inner {
@@ -192,6 +192,12 @@
   z-index: 100;
   display: flex;
   align-items: flex-end;
+
+  transform: translateY(100px);
+  transition: transform 400ms; // TODO
+  &[open] {
+    transform: translateY(0);
+  }
 
   & .bottom-drawer-content {
     width: calc(#{$content-width} - (#{$spacing-unit}));
