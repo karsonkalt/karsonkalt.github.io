@@ -553,7 +553,7 @@ a .domain {
   > * {
     opacity: 0;
     animation: fadeInUp 500ms forwards;
-    animation-delay: calc(0.075s * var(--i));
+    animation-delay: calc(0.065s * var(--i));
   }
 
   @for $i from 1 through 100 {
@@ -719,18 +719,19 @@ article {
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgb(0, 0, 0) 100%),
       linear-gradient(30deg, rgb(0, 0, 0) 20%, var(--accent-color) 100%);
     z-index: -100;
-    animation: fadeIn 2000ms forwards;
-    animation-delay: 250ms;
+    animation: fadeIn 1000ms forwards;
     opacity: 0;
   }
 }
 
 @keyframes fadeIn {
   0% {
-    opacity: 0;
+    opacity: 0.5;
+    transform: translateY(-50%);
   }
   100% {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
