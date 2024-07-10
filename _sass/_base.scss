@@ -175,7 +175,6 @@ code {
   font-family: $code-font-family;
   font-size: 0.9375em;
   border: 1px solid $border-color-01;
-  background-color: $code-background-color;
 }
 
 code {
@@ -195,7 +194,8 @@ pre {
 
 .highlight {
   border: none;
-  background: $code-background-color;
+  background: var(--white-02);
+  backdrop-filter: blur(10px);
   border-radius: 6px;
 
   @media (max-width: $on-large) {
@@ -205,10 +205,10 @@ pre {
   }
 
   @extend %vertical-rhythm;
+}
 
-  .highlighter-rouge & {
-    background: $code-background-color;
-  }
+pre.highlight {
+  border: 1px solid var(--white-10) !important;
 }
 
 /**

@@ -21,6 +21,7 @@
   --white-20: #ffffff33;
   --white-10: #ffffff1a;
   --white-05: #ffffff0d;
+  --white-02: #ffffff05;
 
   --accent-color-default: #1c4590;
   --accent-color: var(--accent-color-default); // configurable
@@ -238,7 +239,7 @@
   background-image: linear-gradient(to top, black 0%, rgba(0, 0, 0, 0) 100%);
   z-index: 100;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 
   transform: translateY(100px);
   transition: transform 400ms; // TODO
@@ -277,6 +278,7 @@ pre.terminal {
   background-color: #46464699;
   transition: transform 100ms;
   backdrop-filter: blur(6px);
+  margin-bottom: unset;
   &:hover {
     background-color: var(--white-30);
     transform: scale(1.02);
@@ -745,12 +747,12 @@ img {
   top: 8px;
   right: 8px;
   padding: 6px;
-  background-color: #363636;
+  background-color: var(--white-10);
   color: #e8e8e8;
   display: flex;
   border-radius: var(--border-radius);
   &:hover {
-    background-color: #4a4a4a;
+    background-color: var(--white-20);
   }
   @media (max-width: 800px) {
     border-radius: 0;
