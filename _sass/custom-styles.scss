@@ -24,8 +24,9 @@
 
   --accent-color-default: #1c4590;
   --accent-color: var(--accent-color-default); // configurable
-  --accent-color-contrast: #1e90ff; // TODO configurable
-  --accent-decoration: none; // configurable
+  --accent-color-link: #1e90ff; // TODO configurable
+  --accent-color-link-hover: #1560ab; // TODO configurable
+  --link-decoration: none; // configurable
 
   // TODO make tokens consuming palette
   --text-primary: var(--white-90);
@@ -33,6 +34,7 @@
 
   --border-radius: 6px;
 }
+
 #theme-button-wrapper {
   position: fixed;
   --size: 28px;
@@ -198,16 +200,15 @@
   padding: 2px 8px;
   margin: -2px 0px;
   border-radius: var(--border-radius);
-  border: 1px solid var(--accent-color-contrast);
+  border: 1px solid var(--accent-color-link);
   transition: transform 100ms, color 100ms, border 100ms;
   display: flex;
   align-items: center;
   gap: 6px;
   text-decoration: none;
   &:hover {
-    background-color: #ffffff2a;
-    color: #ffffff;
-    border: 1px solid #ffffff;
+    color: var(--accent-color-link-hover);
+    border: 1px solid var(--accent-color-link-hover);
     text-decoration: none;
     transform: scale(1.03);
   }
@@ -215,11 +216,11 @@
     & svg {
       display: none;
     }
-    color: var(--accent-color-contrast);
+    color: var(--accent-color-link);
     border: none;
     margin: 0;
     padding: 0;
-    text-decoration: var(--accent-decoration);
+    text-decoration: var(--link-decoration);
     &:hover {
       border: none;
       background-color: unset;
@@ -434,7 +435,7 @@ pre.terminal {
   }
 
   .domain {
-    color: #ffffff85;
+    color: var(--white-50);
     line-height: 1.3;
     font-family: "Ubuntu Mono";
   }
@@ -447,7 +448,6 @@ pre.terminal {
 }
 
 a .domain {
-  color: #b9b9b9;
   font-size: 16px;
   line-height: 1;
   font-family: "Ubuntu Mono";
@@ -581,10 +581,10 @@ nav > a {
   font-size: 16px !important;
   font-weight: 400;
   position: relative;
-  text-decoration: var(--accent-decoration);
-  color: var(--accent-color-contrast);
-  &:visited {
-    color: var(--accent-color-contrast);
+  text-decoration: var(--link-decoration);
+  color: var(--accent-color-link);
+  &:hover {
+    color: var(--accent-color-link-hover);
   }
 }
 
@@ -640,7 +640,7 @@ nav > a {
   font-size: 0.8em;
   color: var(--text--secondary);
   font-weight: 400;
-  -webkit-line-clamp: 2;
+  line-clamp: 2;
   text-overflow: ellipsis;
   margin-top: 4px;
 }

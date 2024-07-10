@@ -126,15 +126,15 @@ h6 {
  * Links
  */
 a {
-  color: $link-base-color;
-  text-decoration: none;
+  color: var(--accent-color-link);
+  text-decoration: var(--accent-decoration);
 
   &:visited {
-    color: $link-visited-color;
+    color: var(--accent-color-link);
   }
 
   &:hover {
-    color: $link-hover-color;
+    color: var(----accent-color-link-hover);
     text-decoration: underline;
   }
 

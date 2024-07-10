@@ -7,13 +7,17 @@ export const updateAccentColor = (inputColor: string): boolean => {
     }
 
     const accentColor = getAdjustedAccentColor(chroma(inputColor));
-    const accentColorContrast = getContrastColor(accentColor);
-    const accentDecoration = hasLowSaturation(accentColorContrast)
-      ? "underline"
-      : "none";
+    const linkColor = getContrastColor(accentColor);
+    const linkHoverColor = getHoverColor(accentColor);
+    const linkDecoration = hasLowSaturation(linkColor) ? "underline" : "none";
 
-    setColorsInLocalStorage(accentColor, accentColorContrast);
-    setColorsInCSS(accentColor, accentColorContrast, accentDecoration);
+    setColorsInLocalStorage(
+      accentColor,
+      linkColor,
+      linkHoverColor,
+      linkDecoration
+    );
+    setColorsInCSS(accentColor, linkColor, linkHoverColor, linkDecoration);
 
     return true;
   } catch (error) {
@@ -22,17 +26,27 @@ export const updateAccentColor = (inputColor: string): boolean => {
   }
 };
 
+const getHoverColor = (color: chroma.Color): chroma.Color => {
+  if (color.luminance() < 0.95) {
+    return color.brighten(0.5);
+  } else {
+    return color.darken(0.05);
+  }
+};
+
 const isValidColor = (color: string): boolean => {
   return chroma.valid(color);
 };
 
 const getAdjustedAccentColor = (color: chroma.Color): chroma.Color => {
-  // Adjust luminance to avoid too black or too white
+  const minLuminance = 0.15;
+  const maxLuminance = 0.85;
+
   const luminance = color.luminance();
-  if (luminance < 0.25) {
-    color = color.luminance(0.25);
-  } else if (luminance > 0.5) {
-    color = color.luminance(0.5);
+  if (luminance < minLuminance) {
+    color = color.luminance(minLuminance);
+  } else if (luminance > maxLuminance) {
+    color = color.luminance(maxLuminance);
   }
 
   // Ensure color is vibrant but not fully saturated
@@ -45,13 +59,14 @@ const getContrastColor = (accentColor: chroma.Color): chroma.Color => {
   if (accentColor.get("hsl.s") === 0) {
     // Return a vibrant link-friendly color like teal blue
     const colorOptions = ["#00796b", "#00acc1", "#1976d2", "#2196f3"];
-    accentColor = chroma(
+    const chromaColor = chroma(
       colorOptions[Math.floor(Math.random() * colorOptions.length)]
     );
+    return chromaColor.set("hsl.s", 1);
   }
 
   const vibrantColor = accentColor.set("hsl.s", 1);
-  vibrantColor.set("hsl.l", 0.75);
+  vibrantColor.set("hsl.l", 0.5);
 
   const MIN_CONTRAST = 1.75;
 
@@ -86,30 +101,36 @@ const hasLowSaturation = (color: chroma.Color): boolean => {
 
 const setColorsInLocalStorage = (
   accentColor: chroma.Color,
-  accentColorContrast: chroma.Color
+  linkColor: chroma.Color,
+  linkHoverColor: chroma.Color,
+  linkDecoration: string
 ): void => {
-  const cssAccentColor = accentColor.hex();
-  const cssAccentContrastColor = accentColorContrast.hex();
-
-  localStorage.setItem("ACCENT_COLOR", cssAccentColor);
-  localStorage.setItem("LINK_COLOR", cssAccentContrastColor);
+  localStorage.setItem("ACCENT_COLOR", accentColor.hex());
+  localStorage.setItem("LINK_COLOR", linkColor.hex());
+  localStorage.setItem("LINK_COLOR_HOVER", linkHoverColor.hex());
+  localStorage.setItem("LINK_DECORATION", linkDecoration);
 };
 
 const setColorsInCSS = (
   accentColor: chroma.Color,
-  accentColorContrast: chroma.Color,
-  accentDecoration: string
+  linkColor: chroma.Color,
+  linkHoverColor: chroma.Color,
+  linkDecoration: string
 ): void => {
-  const cssAccentColor = accentColor.hex();
-  const cssAccentContrastColor = accentColorContrast.hex();
-
-  document.documentElement.style.setProperty("--accent-color", cssAccentColor);
   document.documentElement.style.setProperty(
-    "--accent-color-contrast",
-    cssAccentContrastColor
+    "--accent-color",
+    accentColor.hex()
   );
   document.documentElement.style.setProperty(
-    "--accent-decoration",
-    accentDecoration
+    "--accent-color-link",
+    linkColor.hex()
+  );
+  document.documentElement.style.setProperty(
+    "--accent-color-link-hover",
+    linkHoverColor.hex()
+  );
+  document.documentElement.style.setProperty(
+    "--link-decoration",
+    linkDecoration
   );
 };
