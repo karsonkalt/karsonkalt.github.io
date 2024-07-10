@@ -8,7 +8,8 @@ description: Exploring method chaining in JavaScript and how it can be used to t
 
 Method chaining is an easy way to transform data in a more-readable way. It allows us to be more concise and expressive in our code. I have seen this pattern in libraries like D3.js, jQuery, Express/Koa, and testing libraries and I wanted to explore how I could use it in my own code.
 
-I started with a simple calculator
+I started with a simple calculator.
+
 ```ts
 class Calculator {
   public value: number;
@@ -46,6 +47,39 @@ calculator.divide(2); // 56
 ```
 
 A more expressive approach is to use method chaining and return the instance from each method.
+
+```ts
+class Calculator {
+  public value: number;
+
+  constructor(value?: number) {
+    this.value = value || 0;
+    return this;
+  }
+
+  public add = (num: number): Calculator => {
+    this.value += num;
+    return this;
+  };
+
+  public subtract = (num: number): Calculator => {
+    this.value -= num;
+    return this;
+  };
+
+  public multiply = (num: number): Calculator => {
+    this.value *= num;
+    return this;
+  };
+
+  public divide = (num: number): Calculator => {
+    this.value /= num;
+    return this;
+  };
+}
+```
+
+This allows us to chain methods together.
 
 ```ts
 const calculator = new Calculator(42).add(8).subtract(22).multiply(4).divide(2); // 56
