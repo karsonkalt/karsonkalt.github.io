@@ -88,3 +88,5 @@ class Calculator {
   });
 }
 ```
+
+You can view for of this quick exploration on my [GitHub](https://github.com/karsonkalt/ts-playground/tree/main/src/chainable-calculator)
