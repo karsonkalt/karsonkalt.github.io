@@ -155,9 +155,6 @@
 .gravatar-status {
   display: flex;
   flex-direction: column;
-  // animation: fadeInFromLeft 750ms forwards cubic-bezier(0, 0, 0.21, 0.89);
-  // animation-delay: 500ms;
-  // opacity: 0;
 }
 
 .gravatar-status-meta {
@@ -549,7 +546,7 @@ a .domain {
 .tab-panel-content {
   display: flex;
   flex-direction: column;
-  gap: $spacing-unit;
+  gap: 38px;
   list-style: none;
   margin: 0;
 
@@ -642,7 +639,7 @@ nav > a {
   font-size: 0.8em;
   color: var(--text--secondary);
   font-weight: 400;
-  line-clamp: 2;
+  -webkit-line-clamp: 2;
   text-overflow: ellipsis;
   margin-top: 4px;
 }
