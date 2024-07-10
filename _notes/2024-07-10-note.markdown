@@ -1,0 +1,90 @@
+---
+layout: post
+title:  Method Chaining
+date:   2024-06-15 10:00:00 -0400
+tags:   [exploration]
+description: Exploring method chaining in JavaScript and how it can be used to transform data in a more readable way.
+---
+
+Method chaining is an easy way to transform data in a more-readable way. It allows us to be more concise and expressive in our code. I have seen this pattern in libraries like D3.js, jQuery, Express/Koa, and testing libraries and I wanted to explore how I could use it in my own code.
+
+I started with a simple calculator
+```ts
+class Calculator {
+  public value: number;
+
+  constructor(value?: number) {
+    this.value = value || 0;
+  }
+
+  public add = (num: number) => {
+    this.value += num;
+  };
+
+  public subtract = (num: number) => {
+    this.value -= num;
+  };
+
+  public multiply = (num: number) => {
+    this.value *= num;
+  };
+
+  public divide = (num: number) => {
+    this.value /= num;
+  };
+}
+```
+
+Using this class feels very verbose.
+
+```ts
+const calculator = new Calculator(42);
+calculator.add(8); // 50
+calculator.subtract(22); // 28
+calculator.multiply(4); // 112
+calculator.divide(2); // 56
+```
+
+A more expressive approach is to use method chaining and return the instance from each method.
+
+```ts
+const calculator = new Calculator(42).add(8).subtract(22).multiply(4).divide(2); // 56
+```
+
+We can use a HOF to wrap each method and return the instance.
+
+```ts
+class Calculator {
+  public value: number;
+
+  constructor(value?: number) {
+    this.value = value || 0;
+    return this;
+  }
+
+  private chainable = <T extends any[]>(
+    operation: (...args: T) => void
+  ): ((...args: T) => Calculator) => {
+    return (...args: T): Calculator => {
+      operation.apply(this, args);
+      return this;
+    };
+  };
+
+  public add = this.chainable((num: number) => {
+    this.value += num;
+  });
+
+  public subtract = this.chainable((num: number) => {
+    this.value -= num;
+  });
+
+  public multiply = this.chainable((num: number) => {
+    this.value *= num;
+  });
+
+  public divide = this.chainable((num: number) => {
+    this.value /= num;
+  });
+}
+```
