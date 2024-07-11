@@ -23,10 +23,21 @@
   --white-05: #ffffff0d;
   --white-02: #ffffff05;
 
-  --accent-color-default: #1c4590;
-  --accent-color: var(--accent-color-default); // configurable
-  --accent-color-link: #1e90ff; // TODO configurable
-  --accent-color-link-hover: #1560ab; // TODO configurable
+  --accent-color-base: 28, 69, 144;
+  --accent-color: rgba(var(--accent-color-base), 1);
+  --accent-color-90: rgba(var(--accent-color-base), 0.9);
+  --accent-color-80: rgba(var(--accent-color-base), 0.8);
+  --accent-color-70: rgba(var(--accent-color-base), 0.7);
+  --accent-color-60: rgba(var(--accent-color-base), 0.6);
+  --accent-color-50: rgba(var(--accent-color-base), 0.5);
+  --accent-color-40: rgba(var(--accent-color-base), 0.4);
+  --accent-color-30: rgba(var(--accent-color-base), 0.3);
+  --accent-color-20: rgba(var(--accent-color-base), 0.2);
+  --accent-color-10: rgba(var(--accent-color-base), 0.1);
+  --accent-color-05: rgba(var(--accent-color-base), 0.05);
+  --accent-color-02: rgba(var(--accent-color-base), 0.02);
+  --accent-color-link: rgb(30 144 255); // TODO configurable
+  --accent-color-link-hover: rgb(21 96 171); // TODO configurable
   --link-decoration: none; // configurable
 
   // TODO make tokens consuming palette

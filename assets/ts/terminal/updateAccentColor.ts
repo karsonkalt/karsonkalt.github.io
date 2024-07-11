@@ -105,9 +105,9 @@ const setColorsInLocalStorage = (
   linkHoverColor: chroma.Color,
   linkDecoration: string
 ): void => {
-  localStorage.setItem("ACCENT_COLOR", accentColor.hex());
-  localStorage.setItem("LINK_COLOR", linkColor.hex());
-  localStorage.setItem("LINK_COLOR_HOVER", linkHoverColor.hex());
+  localStorage.setItem("ACCENT_COLOR", rgbString(accentColor));
+  localStorage.setItem("LINK_COLOR", rgbString(linkColor));
+  localStorage.setItem("LINK_COLOR_HOVER", rgbString(linkHoverColor));
   localStorage.setItem("LINK_DECORATION", linkDecoration);
 };
 
@@ -118,19 +118,27 @@ const setColorsInCSS = (
   linkDecoration: string
 ): void => {
   document.documentElement.style.setProperty(
-    "--accent-color",
-    accentColor.hex()
+    "--accent-color-base",
+    formatAccentColor(accentColor)
   );
   document.documentElement.style.setProperty(
     "--accent-color-link",
-    linkColor.hex()
+    rgbString(linkColor)
   );
   document.documentElement.style.setProperty(
     "--accent-color-link-hover",
-    linkHoverColor.hex()
+    rgbString(linkHoverColor)
   );
   document.documentElement.style.setProperty(
     "--link-decoration",
     linkDecoration
   );
+};
+
+const formatAccentColor = (color: chroma.Color): string => {
+  return color.rgb().join(", ");
+};
+
+const rgbString = (color: chroma.Color): string => {
+  return "rgb(" + color.rgb().join(", ") + ")";
 };

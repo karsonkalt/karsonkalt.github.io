@@ -194,7 +194,12 @@ pre {
 
 .highlight {
   border: none;
-  background: var(--white-02);
+  background-image: linear-gradient(
+    45deg,
+    var(--white-02) 33%,
+    var(--accent-color-05) 75%,
+    var(--accent-color-10)
+  );
   backdrop-filter: blur(10px);
   border-radius: 6px;
 
