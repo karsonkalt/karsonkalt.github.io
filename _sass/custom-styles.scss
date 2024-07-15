@@ -763,9 +763,6 @@ img {
   &:hover {
     background-color: var(--white-20);
   }
-  @media (max-width: 800px) {
-    border-radius: 0;
-  }
 }
 
 .ripple-container {

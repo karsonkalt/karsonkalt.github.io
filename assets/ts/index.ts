@@ -34,7 +34,7 @@ function copyToClipboard(text: string) {
   document.body.removeChild(textarea);
 }
 
-function createCopyButton(preElement: HTMLPreElement) {
+function createCopyButton(divElement: HTMLDivElement) {
   const button = document.createElement("button");
   button.innerHTML = `
   <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="16" height="16" fill="currentColor">
@@ -45,7 +45,7 @@ function createCopyButton(preElement: HTMLPreElement) {
   button.classList.add("copy-button");
 
   button.addEventListener("click", () => {
-    const codeElement = preElement.querySelector("code");
+    const codeElement = divElement.querySelector("code");
     if (codeElement) {
       copyToClipboard(codeElement.innerText);
       button.innerHTML = `
@@ -57,14 +57,14 @@ function createCopyButton(preElement: HTMLPreElement) {
     }
   });
 
-  preElement.style.position = "relative";
-  preElement.appendChild(button);
+  divElement.style.position = "relative";
+  divElement.appendChild(button);
 }
 
 document
-  .querySelectorAll<HTMLPreElement>("pre.highlight")
-  .forEach((preElement) => {
-    createCopyButton(preElement);
+  .querySelectorAll<HTMLDivElement>("div.highlight")
+  .forEach((divElement) => {
+    createCopyButton(divElement);
   });
 
 insertThemeButton();
