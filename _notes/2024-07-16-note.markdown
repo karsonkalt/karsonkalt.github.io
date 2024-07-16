@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  localBunyanLogger.ts
-date:   2024-06-15 10:00:00 -0400
+date:   2024-07-16 15:22:00 -0400
 tags:   [snippet]
 description: Wrapper for bunyan logs that write log messages to a log file instead of stdout.
 ---
