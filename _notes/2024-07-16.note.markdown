@@ -1,10 +1,13 @@
 ---
 layout: post
-title:  Local Development Logger
+title:  localBunyanLogger.ts
 date:   2024-06-15 10:00:00 -0400
 tags:   [snippet]
 description: Wrapper for bunyan logs that write log messages to a log file instead of stdout.
 ---
+
+This is a wrapper for a bunyan logger that writes log messages to a log file instead of stdout. It is useful for local development when you want to see log messages in the console but also want to save them to an easier-to-read file.
+
 ```ts
 import bunyan from 'bunyan';
 import fs from 'fs';
