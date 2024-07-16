@@ -1,0 +1,67 @@
+---
+layout: post
+title:  Local Development Logger
+date:   2024-06-15 10:00:00 -0400
+tags:   [snippet]
+description: Wrapper for bunyan logs that write log messages to a log file instead of stdout.
+---
+```ts
+import bunyan from 'bunyan';
+import fs from 'fs';
+import path from 'path';
+import { Writable } from 'stream';
+
+const logFilePath = path.join(__dirname, 'logs', 'app.log');
+
+class MsgOnlyStream extends Writable {
+  _write(chunk: any, _: string, callback: (error?: Error) => void) {
+    let logRecord: any;
+    try {
+      logRecord = JSON.parse(chunk.toString());
+    } catch (error) {
+      callback(error);
+      return;
+    }
+
+    if (logRecord.msg) {
+      console.log(logRecord.msg);
+      fs.appendFileSync(logFilePath, logRecord.msg + '\n');
+    }
+    callback();
+  }
+}
+
+export function createLocalLogger() {
+  const logDir = path.dirname(logFilePath);
+
+  if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir, { recursive: true });
+  }
+
+  fs.writeFileSync(logFilePath, '');
+
+  const logger = bunyan.createLogger({
+    name: 'asset-inventory-service',
+    streams: [
+      {
+        level: 'trace',
+        stream: new MsgOnlyStream(),
+      },
+      {
+        level: 'trace',
+        stream: process.stdout,
+      },
+    ],
+  });
+
+  // use the same streams for child loggers
+  const originalChildMethod = logger.child.bind(logger);
+  logger.child = (options, simple) => {
+    const childLogger = originalChildMethod(options, simple);
+    childLogger.streams = (logger as any).streams; // not exposed but writable
+    return childLogger;
+  };
+
+  return logger;
+}
+```
