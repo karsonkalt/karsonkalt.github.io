@@ -44,11 +44,10 @@ export const addGithubStatus = () => {
             month: "long",
             day: "numeric",
             hour: "numeric",
-            minute: "numeric",
             hour12: true,
           }
         );
-        githubStatusElement.innerHTML = `Last GitHub Activity: ${formattedDate}`;
+        githubStatusElement.innerHTML = `Last seen on GitHub: ${formattedDate}`;
       }
     })
     .catch((error) => {

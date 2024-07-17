@@ -96,7 +96,7 @@
   align-items: center;
   gap: 16px;
   width: 100%;
-  margin: 0px 0 32px 0;
+  margin-bottom: 16px;
   color: var(--black-80);
 }
 
@@ -430,7 +430,7 @@ pre.terminal {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 18px;
+  padding-bottom: 8px;
 
   .title-container {
     display: flex;
@@ -496,8 +496,24 @@ a .domain {
   }
 }
 
+.github-status-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.github-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+  background-color: var(--white-20);
+}
+
 #github-status {
-  margin-top: 10px;
+  line-height: normal;
   font-size: 11px;
   color: var(--text--secondary);
 }

@@ -36,13 +36,17 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
   </nav>
 </div>
 
+<div class="github-status-container">
+  <div class="github-dot"></div>
+  <div id="github-status"></div>
+</div>
+
 <div class="gravatar">
   <div class="gravatar-status">
     <div class="gravatar-status-meta">
       {{ site.status_updated | date: "%B %-d" }}
     </div>
     <div class="gravatar-status-status">{{ site.status }}</div>
-    <div id="github-status"></div>
   </div>
 </div>
 
