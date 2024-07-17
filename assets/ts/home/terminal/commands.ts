@@ -1,4 +1,14 @@
 import { updateAccentColor } from "./updateAccentColor";
+import { sendPing } from "../sendPing";
+
+const pingCommand: CommandExecute = (args) => {
+  try {
+    sendPing(args.join(" "));
+    return "Message sent to my phone";
+  } catch (error) {
+    return "Error sending message";
+  }
+};
 
 const restoreCommand: CommandExecute = (args) => {
   const promptCharacter = localStorage.getItem("PS1");
@@ -191,6 +201,11 @@ export type Commands = {
 };
 
 const supportedCommands = {
+  ping: {
+    execute: pingCommand,
+    description: "Sends a message to the me",
+    flags: {},
+  },
   clear: {
     execute: clearCommand,
     description: "Clears the terminal screen",
@@ -284,7 +299,6 @@ const invalidCommands = {
   du: { execute: snarkyResponse },
   curl: { execute: snarkyResponse },
   wget: { execute: snarkyResponse },
-  ping: { execute: snarkyResponse },
   ifconfig: { execute: snarkyResponse },
 };
 

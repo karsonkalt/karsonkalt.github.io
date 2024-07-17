@@ -18,7 +18,8 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
       LinkedIn
     </a>
     <a href="https://twitter.com/karsonkalt" target="_blank">X</a>
-    <a href="mailto:kars.kalt@gmail.com" class="email">
+    <a href="mailto:kars.kalt@gmail.com">Email</a>
+    <a class="email" id="ping">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -28,10 +29,14 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
         stroke="currentColor"
         fill="none"
       >
-        <rect x="1.5" y="4.36" width="21" height="15.27" fill="none"></rect>
-        <polyline points="1.5 4.36 12 14.86 22.5 4.36" fill="none"></polyline>
+        <path
+          d="M21.5,12A9.5,9.5,0,1,0,12,21.5h9.5l-2.66-2.92A9.43,9.43,0,0,0,21.5,12Z"
+        ></path>
+        <line x1="14.85" y1="12" x2="16.75" y2="12"></line>
+        <line x1="11.05" y1="12" x2="12.95" y2="12"></line>
+        <line x1="7.25" y1="12" x2="9.15" y2="12"></line>
       </svg>
-      Email
+      Ping
     </a>
   </nav>
 </div>

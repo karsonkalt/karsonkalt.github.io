@@ -33,7 +33,7 @@ class UserInputManager {
     });
   }
 
-  private setPromptValue(value: string) {
+  public setPromptValue(value: string) {
     this.prompt.value = value;
     this.mirrorElement.textContent = value;
   }
