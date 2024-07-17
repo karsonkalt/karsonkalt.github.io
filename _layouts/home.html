@@ -29,11 +29,9 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
         fill="none"
       >
         <rect x="1.5" y="4.36" width="21" height="15.27" fill="none"></rect>
-        <polyline
-          points="1.5 4.36 12 14.86 22.5 4.36"
-          fill="none"
-        ></polyline></svg
-      >Email
+        <polyline points="1.5 4.36 12 14.86 22.5 4.36" fill="none"></polyline>
+      </svg>
+      Email
     </a>
   </nav>
 </div>
@@ -44,6 +42,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
       {{ site.status_updated | date: "%B %-d" }}
     </div>
     <div class="gravatar-status-status">{{ site.status }}</div>
+    <div id="github-status"></div>
   </div>
 </div>
 
@@ -60,10 +59,31 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
   </div>
 </div>
 
-<!-- <div class="tab-container" hidden> -->
 <div class="tab-container">
   <div>
     <div role="tablist">
+      <button
+        role="tab"
+        id="about"
+        aria-controls="tab-panel-4"
+        aria-selected="false"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          width="12"
+          height="12"
+          fill="none"
+        >
+          <circle cx="12" cy="7.25" r="5.73" stroke="currentColor"></circle>
+          <path
+            stroke="currentColor"
+            d="M1.5,23.48l.37-2.05A10.3,10.3,0,0,1,12,13h0a10.3,10.3,0,0,1,10.13,8.45l.37,2.05"
+          ></path>
+        </svg>
+        About
+      </button>
       <button
         role="tab"
         id="blog"
@@ -124,9 +144,8 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
       <button
         role="tab"
         id="notes"
-        aria-controls="tab-panel-3"
+        aria-controls="tab-panel-1"
         aria-selected="false"
-        tabindex="-1"
       >
         <svg
           id="Layer_1"
@@ -167,9 +186,8 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
       <button
         role="tab"
         id="console"
-        aria-controls="tab-panel-1"
+        aria-controls="tab-panel-3"
         aria-selected="false"
-        tabindex="-1"
       >
         <svg
           width="12"
@@ -215,7 +233,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
         </ul>
       </div>
 
-      <div id="tab-panel-3" role="tabpanel" aria-labelledby="notes" hidden>
+      <div id="tab-panel-1" role="tabpanel" aria-labelledby="notes" hidden>
         <ul class="tab-panel-content">
           {%- for note in notes -%} {% assign tags = note.tags %}
           <li>
@@ -246,15 +264,57 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
         </ul>
       </div>
 
-      <div id="tab-panel-1" role="tabpanel" aria-labelledby="stdout" hidden>
+      <div id="tab-panel-3" role="tabpanel" aria-labelledby="stdout" hidden>
         <ul class="tab-panel-content stdout-log"></ul>
+      </div>
+
+      <div id="tab-panel-4" role="tabpanel" aria-labelledby="stdout" hidden>
+        <ul class="tab-panel-content">
+          <section>
+            <h2>About</h2>
+            <p>
+              I'm a software engineer with a passion for building things that
+              live on the internet. I develop exceptional websites and web apps
+              that provide intuitive, pixel-perfect user interfaces with
+              efficient and modern backends.
+            </p>
+            <p>
+              Growing up, I was always interested in design and technology. My
+              favorite book was <a>The Way Things Work by David Macaulay</a>. I
+              loved the illustrations and the way it explained how things worked
+              in a simple and fun way. I was also fascinated by the internet and
+              how it connected people from all over the world.
+            </p>
+          </section>
+          <section>
+            <h2>Work History</h2>
+            <p>
+              I began my professional career in 2014 working as a store manager
+              for <a>Target</a>. After a few very challenging, but very
+              rewarding roles, I re-evaluated my career path and gave myself
+              permission to pursue my passion of tech and building things.
+            </p>
+            <p>
+              I started my journey by attending a coding bootcamp at
+              <a>Flatiron School</a> in 2019. I learned the fundamentals of
+              software engineering and web development. I've been building
+              websites and web apps ever since.
+            </p>
+            <p>
+              In 2020 I joined <a>JupiterOne</a> as a Software Engineer. Since
+              then, I've been committed to advancing my technical capabilities,
+              learning new technologies, and building projects that I'm proud
+              of.
+            </p>
+            <p>
+              In 2024 I became a Senior Software Engineer at JupiterOne. I
+              continue to grow and learn every day.
+            </p>
+          </section>
+        </ul>
       </div>
     </div>
   </div>
 </div>
 
-<script
-  src="{{ 'assets/js/terminal.js' | relative_url }}"
-  type="module"
-></script>
-<script src="{{ 'assets/js/tabs.js' | relative_url }}" type="module"></script>
+<script src="{{ 'assets/js/home.js' | relative_url }}" type="module"></script>

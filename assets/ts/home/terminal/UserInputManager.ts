@@ -63,28 +63,11 @@ class UserInputManager {
     `;
 
     ul.insertBefore(li, ul.firstChild);
-
-    const currentTab = document.querySelector(
-      'button[role="tab"][aria-selected="true"]'
-    )?.id;
-    if (currentTab) this.updateBadge(currentTab !== "console");
-  }
-
-  private updateBadge(hasUnreadStdout: boolean) {
-    const stdoutTab = document.querySelector("#stdout") as Element;
-    const badge = stdoutTab.querySelector(".unread-badge") as Element;
-
-    if (hasUnreadStdout) {
-      badge.classList.add("show");
-    }
   }
 
   private switchTab(tabName: string) {
     if (tabName === "stdout") {
-      const currentTab = document.querySelector(
-        'button[role="tab"][aria-selected="true"]'
-      )?.id;
-      if (currentTab) this.updateBadge(currentTab !== "stdout");
+      document.querySelector('button[role="tab"][aria-selected="true"]')?.id;
     }
   }
 

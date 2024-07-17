@@ -496,6 +496,12 @@ a .domain {
   }
 }
 
+#github-status {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text--secondary);
+}
+
 [role="tab"] {
   all: unset;
   bottom: -1px;
