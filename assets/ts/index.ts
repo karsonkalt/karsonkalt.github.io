@@ -1,4 +1,4 @@
-import { insertThemeButton } from "./terminal/themeButton";
+import { insertThemeButton } from "./home/terminal/themeButton";
 
 console.log(`
 ▄▄▄   ▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ 

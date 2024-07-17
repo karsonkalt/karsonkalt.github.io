@@ -3,8 +3,7 @@ const path = require("path");
 module.exports = {
   entry: {
     index: "./assets/ts/index.ts",
-    tabs: "./assets/ts/tabs.ts", // Add other entry points here
-    terminal: "./assets/ts/terminal/index.ts", // Update this path as needed
+    home: "./assets/ts/home/index.ts",
   },
   module: {
     rules: [

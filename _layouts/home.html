@@ -42,6 +42,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
       {{ site.status_updated | date: "%B %-d" }}
     </div>
     <div class="gravatar-status-status">{{ site.status }}</div>
+    <div id="github-status"></div>
   </div>
 </div>
 
@@ -316,8 +317,4 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
   </div>
 </div>
 
-<script
-  src="{{ 'assets/js/terminal.js' | relative_url }}"
-  type="module"
-></script>
-<script src="{{ 'assets/js/tabs.js' | relative_url }}" type="module"></script>
+<script src="{{ 'assets/js/home.js' | relative_url }}" type="module"></script>
