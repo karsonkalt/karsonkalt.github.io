@@ -409,14 +409,6 @@
     & .stdout-output {
       color: #ffffffdb;
     }
-
-    &:hover {
-      background-color: var(--white-05);
-    }
-
-    &:hover .stdout-output {
-      color: #ffffff;
-    }
   }
 }
 
