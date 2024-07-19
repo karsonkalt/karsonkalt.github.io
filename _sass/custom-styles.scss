@@ -216,7 +216,7 @@ main {
 .dropdown-menu {
   position: relative;
 
-  & button {
+  button {
     all: unset;
     cursor: pointer;
     padding: 2px 8px;
@@ -229,15 +229,22 @@ main {
     align-items: center;
     gap: 6px;
     text-decoration: none;
-    &:hover {
+
+    &:focus,
+    &:active {
       color: var(--accent-color-link-hover);
       border: 1px solid var(--accent-color-link-hover);
       text-decoration: none;
       transform: scale(1.03);
     }
+
+    &:focus + .dropdown-content,
+    &:active + .dropdown-content {
+      display: block;
+    }
   }
 
-  & .dropdown-content {
+  .dropdown-content {
     display: none;
     position: absolute;
     background-color: var(--black-30);
@@ -249,6 +256,11 @@ main {
     z-index: 1;
     overflow: hidden;
 
+    &:focus-within,
+    &:active {
+      display: block;
+    }
+
     &[data-position="bottom-right"] {
       right: 0;
       animation: growFromTopRight 200ms;
@@ -259,7 +271,7 @@ main {
       left: 0;
     }
 
-    & a {
+    a {
       width: 100%;
       padding: 8px 16px;
       text-decoration: none;
@@ -273,17 +285,6 @@ main {
     }
   }
 }
-
-.dropdown-menu button:focus + .dropdown-content,
-.dropdown-content:hover {
-  display: block;
-}
-
-.dropdown-content:focus-within {
-  display: block;
-}
-
-////
 
 .bottom-drawer {
   position: fixed;
