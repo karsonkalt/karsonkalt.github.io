@@ -202,7 +202,7 @@ main {
   animation: fadeInUp 1000ms forwards;
 }
 
-@keyframes growFromTopRight {
+@keyframes grow {
   from {
     transform: scale(0.5);
     opacity: 0;
@@ -241,7 +241,7 @@ main {
   }
 
   &:focus-within .dropdown-content {
-    display: block;
+    display: flex;
   }
 
   &:focus-within button {
@@ -253,8 +253,9 @@ main {
 
   .dropdown-content {
     display: none;
+    flex-direction: column;
     position: absolute;
-    background-color: var(--black-30);
+    background-color: var(--black-40);
     backdrop-filter: blur(18px);
     border-radius: var(--border-radius);
     color: var(--text-primary);
@@ -262,24 +263,32 @@ main {
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     overflow: hidden;
+    animation: grow 200ms;
+
+    --offset: 4px;
 
     &[data-position="bottom-right"] {
+      top: calc(100% + var(--offset));
       right: 0;
-      animation: growFromTopRight 200ms;
       transform-origin: top right;
     }
 
     &[data-position="bottom-left"] {
+      top: calc(100% + var(--offset));
       left: 0;
+      transform-origin: top left;
     }
 
     a {
-      width: 100%;
       padding: 8px 16px;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 12px;
+      border-bottom: 1px solid var(--accent-color-30);
+      &:last-of-type {
+        border-bottom: none;
+      }
 
       &:hover {
         background-color: var(--black-40);
