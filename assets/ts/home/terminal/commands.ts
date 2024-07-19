@@ -3,10 +3,10 @@ import { sendPing } from "../sendPing";
 
 const messageCommand: CommandExecute = (args) => {
   try {
-    sendPing(args.join(" "));
+    sendPing(args.join(" ").trim());
     return "Message sent to my phone";
   } catch (error) {
-    return "Error sending message";
+    return "Invalid message command. Usage: message <message>";
   }
 };
 
