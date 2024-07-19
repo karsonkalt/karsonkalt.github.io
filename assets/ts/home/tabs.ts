@@ -1,9 +1,10 @@
+import { closeDrawer, openDrawer } from "./openDrawer";
+
 export const addTabs = () => {
   const TAB_QUERY_SELECTOR = "[role='tab']";
 
   const tabNodes = Array.from(document.querySelectorAll(TAB_QUERY_SELECTOR));
-  const bottomDrawerNode = document.querySelector(".bottom-drawer");
-
+  const consoleDrawer = document.querySelector("#console-drawer") as Element;
   const promptElement = document.querySelector(".prompt") as HTMLInputElement;
 
   tabNodes.forEach((tab) => {
@@ -42,10 +43,10 @@ export const addTabs = () => {
     });
 
     if (clickedTab.getAttribute("id") === "console") {
-      bottomDrawerNode?.setAttribute("open", "");
+      openDrawer(consoleDrawer);
       promptElement.focus();
     } else {
-      bottomDrawerNode?.removeAttribute("open");
+      closeDrawer(consoleDrawer);
       promptElement.blur();
     }
   }

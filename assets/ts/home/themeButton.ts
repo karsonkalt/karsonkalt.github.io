@@ -1,4 +1,4 @@
-import { updateAccentColor } from "./updateAccentColor";
+import { updateAccentColor } from "./terminal/updateAccentColor";
 
 export const insertThemeButton = () => {
   const themeButton = document.createElement("input");
@@ -6,7 +6,9 @@ export const insertThemeButton = () => {
   themeButton.type = "color";
   const themeButtonWrapper = document.createElement("div");
   themeButtonWrapper.id = "theme-button-wrapper";
-  document.querySelector("main")?.appendChild(themeButtonWrapper);
+  document
+    .querySelector("main")
+    ?.insertAdjacentElement("afterend", themeButtonWrapper);
   themeButtonWrapper.appendChild(themeButton);
 
   themeButtonWrapper.style.backgroundColor = "var(--accent-color)";

@@ -1,19 +1,40 @@
-import { executeCommand } from "./commands";
-
 class UserInputManager {
   private prompt: HTMLInputElement;
   private terminal: HTMLDivElement;
   private mirrorElement: HTMLDivElement;
+  private handleCommand: (command: string) => void;
 
   constructor(
-    prompt: HTMLInputElement,
     terminal: HTMLDivElement,
-    mirrorElement: HTMLDivElement
+    handleCommand: (command: string) => void
   ) {
-    this.prompt = prompt;
     this.terminal = terminal;
-    this.mirrorElement = mirrorElement;
+    this.prompt = terminal.querySelector(".prompt") as HTMLInputElement;
+    this.mirrorElement = terminal.querySelector(
+      ".input-mirror"
+    ) as HTMLDivElement;
+    this.handleCommand = handleCommand;
     this.initialize();
+  }
+
+  private initialize() {
+    this.prompt.addEventListener("keydown", (event: KeyboardEvent) => {
+      if (event.key === "Enter" && !!this.prompt.value.trim()) {
+        event.preventDefault();
+        this.handleCommand(this.prompt.value.trim());
+        this.createRipple();
+        this.setPromptValue("");
+      }
+    });
+
+    this.terminal.addEventListener("click", () => {
+      this.prompt.focus();
+    });
+
+    this.prompt.addEventListener("input", (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      this.setPromptValue(target.value);
+    });
   }
 
   private createRipple() {
@@ -38,69 +59,8 @@ class UserInputManager {
     this.mirrorElement.textContent = value;
   }
 
-  handleBashCommand(command: string, display: boolean = true) {
-    display && this.createRipple();
-    const [cmd, ...args] = command.split(" ");
-    const result = executeCommand(cmd as any, args);
-    const formattedHelpText = result.replace(/\n/g, "<br/>");
-
-    this.setPromptValue("");
-    display && this.addToStdoutLog(command, formattedHelpText);
-  }
-
-  private addToStdoutLog(command: string, output: string) {
-    const tabPanels = document.querySelector(".tab-panels") as Element;
-    const ul = tabPanels.querySelector(".stdout-log") as Element;
-    const li = document.createElement("li") as Element;
-
-    li.innerHTML = `
-      <div class="stdout-entry">
-        <div class="stdout-entry-wrapper">
-          <span class="stdout-command">${command}</span>
-          <div class="stdout-output">${output}</div>
-        </div>
-      </div>
-    `;
-
-    ul.insertBefore(li, ul.firstChild);
-  }
-
-  private switchTab(tabName: string) {
-    if (tabName === "stdout") {
-      document.querySelector('button[role="tab"][aria-selected="true"]')?.id;
-    }
-  }
-
-  private initialize() {
-    this.prompt.addEventListener("keydown", (event: KeyboardEvent) => {
-      if (event.key === "Enter" && !!this.prompt.value.trim()) {
-        event.preventDefault();
-        this.handleBashCommand(this.prompt.value.trim());
-        this.setPromptValue("");
-      }
-    });
-
-    document.querySelectorAll(".tab").forEach((tab) => {
-      tab.addEventListener("click", (event: Event) => {
-        const tabName = (event.target as HTMLElement)?.getAttribute("data-tab");
-        if (tabName) this.switchTab(tabName);
-      });
-    });
-
-    this.terminal.addEventListener("click", () => {
-      this.prompt.focus();
-    });
-
-    this.prompt.addEventListener("input", (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      this.setPromptValue(target.value);
-    });
-
-    window.addEventListener("executeCommand", (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const command = customEvent.detail.command;
-      this.handleBashCommand(command);
-    });
+  public focus() {
+    this.prompt.focus();
   }
 }
 
