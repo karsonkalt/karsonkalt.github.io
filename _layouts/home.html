@@ -63,7 +63,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
           role="tab"
           id="about"
           aria-controls="tab-panel-4"
-          aria-selected="false"
+          aria-selected="true"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
           role="tab"
           id="blog"
           aria-controls="tab-panel-2"
-          aria-selected="true"
+          aria-selected="false"
           tabindex="0"
         >
           <svg
@@ -203,7 +203,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
       </div>
 
       <div class="tab-panels">
-        <div id="tab-panel-2" role="tabpanel" aria-labelledby="blog">
+        <div id="tab-panel-2" role="tabpanel" aria-labelledby="blog" hidden>
           <ul class="tab-panel-content">
             {%- assign current_year = '' -%} {%- assign date_format = "%b %-d,
             %Y" -%} {%- for post in posts -%} {%- assign post_year = post.date |
@@ -268,7 +268,7 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
           <ul class="tab-panel-content stdout-log"></ul>
         </div>
 
-        <div id="tab-panel-4" role="tabpanel" aria-labelledby="stdout" hidden>
+        <div id="tab-panel-4" role="tabpanel" aria-labelledby="stdout">
           <ul class="tab-panel-content">
             <section>
               <h2>About</h2>

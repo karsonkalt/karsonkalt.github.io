@@ -9,7 +9,7 @@ export const addTabs = () => {
 
   tabNodes.forEach((tab) => {
     tab.addEventListener("click", () => {
-      history.pushState(null, "", tab.id);
+      history.replaceState(null, "", tab.id);
       applyChanges(tab);
     });
   });
