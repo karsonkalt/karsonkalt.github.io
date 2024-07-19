@@ -52,6 +52,7 @@ main {
 }
 
 #theme-button-wrapper {
+  background-color: var(--accent-color-50);
   position: fixed;
   --size: 28px;
   border-radius: 50%;
@@ -85,14 +86,6 @@ main {
     width: 18px;
     height: 18px;
   }
-}
-
-#theme-button {
-  opacity: 0;
-  display: block;
-  width: var(--size);
-  height: var(--size);
-  border: none;
 }
 
 .gravatar {

@@ -9,7 +9,7 @@ export const addTabs = () => {
 
   tabNodes.forEach((tab) => {
     tab.addEventListener("click", () => {
-      location.hash = tab.id;
+      history.pushState(null, "", tab.id);
       applyChanges(tab);
     });
   });
@@ -61,6 +61,6 @@ export const addTabs = () => {
 document.addEventListener("keydown", function (event) {
   if (event.key === "/") {
     event.preventDefault();
-    this.location.hash = "console";
+    history.pushState(null, "", "console");
   }
 });

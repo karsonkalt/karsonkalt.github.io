@@ -11,10 +11,7 @@ export const insertThemeButton = () => {
     ?.insertAdjacentElement("afterend", themeButtonWrapper);
   themeButtonWrapper.appendChild(themeButton);
 
-  themeButtonWrapper.style.backgroundColor = "var(--accent-color)";
-
   themeButton.onchange = () => {
-    themeButtonWrapper.style.backgroundColor = "var(--accent-color)";
     updateAccentColor(themeButton.value);
   };
 };
