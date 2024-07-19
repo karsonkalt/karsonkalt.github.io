@@ -9,21 +9,20 @@ export const addTabs = () => {
 
   tabNodes.forEach((tab) => {
     tab.addEventListener("click", () => {
-      history.replaceState(null, "", "#" + tab.id);
+      location.hash = tab.id;
       applyChanges(tab);
     });
   });
-
   window.onhashchange = function () {
-    const tab = document.querySelector(location.hash);
-    if (tab) {
-      applyChanges(tab);
+    if (location.hash) {
+      const tab = document.querySelector(location.hash);
+      if (tab) {
+        applyChanges(tab);
+      }
     }
   };
 
   function applyChanges(clickedTab: Element) {
-    updateBadge(clickedTab.getAttribute("id") === "console");
-
     tabNodes.forEach((tab) => {
       const isSelected = tab === clickedTab;
       tab.setAttribute("aria-selected", isSelected.toString());
@@ -51,16 +50,6 @@ export const addTabs = () => {
     }
   }
 
-  // duplicated from other
-  function updateBadge(hasUnreadStdout: boolean) {
-    const consoleTab = document.querySelector("#console");
-    const badge = consoleTab?.querySelector(".unread-badge");
-
-    if (hasUnreadStdout) {
-      badge?.classList.remove("show");
-    }
-  }
-
   if (location.hash) {
     const tab = document.querySelector(location.hash);
     if (tab) {
@@ -68,3 +57,10 @@ export const addTabs = () => {
     }
   }
 };
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "/") {
+    event.preventDefault();
+    this.location.hash = "console";
+  }
+});
