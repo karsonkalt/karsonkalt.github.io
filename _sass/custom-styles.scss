@@ -943,7 +943,8 @@ body.modal-open {
 }
 
 .recede {
-  transform: scale(0.9) translateY(4%);
+  transform: scale(0.9) translateY(50px);
+  transform-origin: center 300px;
   opacity: 0.65;
   filter: blur(8px);
 }
