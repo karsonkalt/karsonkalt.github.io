@@ -202,39 +202,88 @@ main {
   animation: fadeInUp 1000ms forwards;
 }
 
-.email {
-  cursor: pointer;
-  padding: 2px 8px;
-  margin: -2px 0px;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--accent-color-link);
-  transition: transform 100ms, color 100ms, border 100ms;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-  &:hover {
-    color: var(--accent-color-link-hover);
-    border: 1px solid var(--accent-color-link-hover);
-    text-decoration: none;
-    transform: scale(1.03);
+@keyframes growFromTopRight {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
   }
-  @media (max-width: 800px) {
-    & svg {
-      display: none;
-    }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.dropdown-menu {
+  position: relative;
+
+  & button {
+    all: unset;
+    cursor: pointer;
+    padding: 2px 8px;
+    margin: -2px 0px;
+    border-radius: var(--border-radius);
     color: var(--accent-color-link);
-    border: none;
-    margin: 0;
-    padding: 0;
-    text-decoration: var(--link-decoration);
+    border: 1px solid var(--accent-color-link);
+    transition: transform 100ms, color 100ms, border 100ms;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
     &:hover {
-      border: none;
-      background-color: unset;
-      transform: none;
+      color: var(--accent-color-link-hover);
+      border: 1px solid var(--accent-color-link-hover);
+      text-decoration: none;
+      transform: scale(1.03);
+    }
+  }
+
+  & .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--black-30);
+    backdrop-filter: blur(18px);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    overflow: hidden;
+
+    &[data-position="bottom-right"] {
+      right: 0;
+      animation: growFromTopRight 200ms;
+      transform-origin: top right;
+    }
+
+    &[data-position="bottom-left"] {
+      left: 0;
+    }
+
+    & a {
+      width: 100%;
+      padding: 8px 16px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+
+      &:hover {
+        background-color: var(--black-40);
+      }
     }
   }
 }
+
+.dropdown-menu button:focus + .dropdown-content,
+.dropdown-content:hover {
+  display: block;
+}
+
+.dropdown-content:focus-within {
+  display: block;
+}
+
+////
 
 .bottom-drawer {
   position: fixed;

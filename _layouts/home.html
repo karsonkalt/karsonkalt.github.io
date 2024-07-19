@@ -19,26 +19,191 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
         LinkedIn
       </a>
       <a href="https://twitter.com/karsonkalt" target="_blank">X</a>
-      <a href="mailto:kars.kalt@gmail.com">Email</a>
-      <a class="email" id="ping">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          width="14"
-          height="14"
-          stroke="currentColor"
-          fill="none"
+      <div class="dropdown-menu">
+        <button
+          id="contact-button"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="contact-menu"
         >
-          <path
-            d="M21.5,12A9.5,9.5,0,1,0,12,21.5h9.5l-2.66-2.92A9.43,9.43,0,0,0,21.5,12Z"
-          ></path>
-          <line x1="14.85" y1="12" x2="16.75" y2="12"></line>
-          <line x1="11.05" y1="12" x2="12.95" y2="12"></line>
-          <line x1="7.25" y1="12" x2="9.15" y2="12"></line>
-        </svg>
-        Message
-      </a>
+          Contact
+        </button>
+        <div
+          id="contact-menu"
+          class="dropdown-content"
+          aria-labelledby="contact-button"
+          role="menu"
+          data-position="bottom-right"
+        >
+          <a href="#" role="menuitem" id="ping">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              width="14"
+              height="14"
+              stroke="currentColor"
+              fill="none"
+            >
+              <path
+                d="M21.5,12A9.5,9.5,0,1,0,12,21.5h9.5l-2.66-2.92A9.43,9.43,0,0,0,21.5,12Z"
+              ></path>
+              <line x1="14.85" y1="12" x2="16.75" y2="12"></line>
+              <line x1="11.05" y1="12" x2="12.95" y2="12"></line>
+              <line x1="7.25" y1="12" x2="9.15" y2="12"></line>
+            </svg>
+            Message</a
+          >
+          <a href="mailto:kars.kalt@gmail.com" role="menuitem"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              width="14"
+              height="14"
+              stroke="currentColor"
+              fill="none"
+            >
+              <defs>
+                <style>
+                  .cls-6374f8d9b67f094e4896c64c-1 {
+                    fill: none;
+                    stroke: currentColor;
+                    stroke-miterlimit: 10;
+                  }
+                </style>
+              </defs>
+              <rect
+                class="cls-6374f8d9b67f094e4896c64c-1"
+                x="1.5"
+                y="4.36"
+                width="21"
+                height="15.27"
+              ></rect>
+              <polyline
+                class="cls-6374f8d9b67f094e4896c64c-1"
+                points="1.5 4.36 12 14.86 22.5 4.36"
+              ></polyline></svg
+            >Email</a
+          >
+          <a
+            href="https://cal.com/karsonkalt/15min?date=2024-07-31&month=2024-07"
+            target="_blank"
+            role="menuitem"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              width="14"
+              height="14"
+              stroke="currentColor"
+              fill="none"
+            >
+              <defs>
+                <style>
+                  .cls-6374f8d9b67f094e4896c61a-1 {
+                    fill: none;
+                    stroke: currentColor;
+                    stroke-miterlimit: 10;
+                  }
+                </style>
+              </defs>
+              <rect
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x="1.48"
+                y="3.37"
+                width="21.04"
+                height="4.78"
+              ></rect>
+              <rect
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x="1.48"
+                y="8.15"
+                width="21.04"
+                height="14.35"
+              ></rect>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="5.3"
+                y1="12.93"
+                x2="7.22"
+                y2="12.93"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="9.13"
+                y1="12.93"
+                x2="11.04"
+                y2="12.93"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="12.96"
+                y1="12.93"
+                x2="14.87"
+                y2="12.93"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="16.78"
+                y1="12.93"
+                x2="18.7"
+                y2="12.93"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="16.78"
+                y1="17.72"
+                x2="18.7"
+                y2="17.72"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="5.3"
+                y1="17.72"
+                x2="7.22"
+                y2="17.72"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="9.13"
+                y1="17.72"
+                x2="11.04"
+                y2="17.72"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="12.96"
+                y1="17.72"
+                x2="14.87"
+                y2="17.72"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="6.26"
+                y1="0.5"
+                x2="6.26"
+                y2="5.28"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="12"
+                y1="0.5"
+                x2="12"
+                y2="5.28"
+              ></line>
+              <line
+                class="cls-6374f8d9b67f094e4896c61a-1"
+                x1="17.74"
+                y1="0.5"
+                x2="17.74"
+                y2="5.28"
+              ></line></svg
+            >Set up a chat</a
+          >
+        </div>
+      </div>
     </nav>
   </div>
 
