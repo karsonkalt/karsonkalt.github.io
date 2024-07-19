@@ -3,6 +3,8 @@ class UserInputManager {
   private terminal: HTMLDivElement;
   private mirrorElement: HTMLDivElement;
   private handleCommand: (command: string) => void;
+  private commandHistory: string[] = [];
+  private historyIndex: number = -1;
 
   constructor(
     terminal: HTMLDivElement,
@@ -21,9 +23,26 @@ class UserInputManager {
     this.prompt.addEventListener("keydown", (event: KeyboardEvent) => {
       if (event.key === "Enter" && !!this.prompt.value.trim()) {
         event.preventDefault();
+        this.commandHistory.push(this.prompt.value.trim());
+        this.historyIndex = this.commandHistory.length; // Reset history index
         this.handleCommand(this.prompt.value.trim());
         this.createRipple();
         this.setPromptValue("");
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (this.historyIndex > 0) {
+          this.historyIndex--;
+          this.setPromptValue(this.commandHistory[this.historyIndex]);
+        }
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (this.historyIndex < this.commandHistory.length - 1) {
+          this.historyIndex++;
+          this.setPromptValue(this.commandHistory[this.historyIndex]);
+        } else {
+          this.historyIndex = this.commandHistory.length;
+          this.setPromptValue("");
+        }
       }
     });
 
