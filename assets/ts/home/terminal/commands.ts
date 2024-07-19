@@ -1,7 +1,7 @@
-import { updateAccentColor } from "./updateAccentColor";
+import { updateAccentColor } from "../updateAccentColor";
 import { sendPing } from "../sendPing";
 
-const pingCommand: CommandExecute = (args) => {
+const messageCommand: CommandExecute = (args) => {
   try {
     sendPing(args.join(" "));
     return "Message sent to my phone";
@@ -14,7 +14,7 @@ const restoreCommand: CommandExecute = (args) => {
   const promptCharacter = localStorage.getItem("PS1");
   if (promptCharacter) exportCommand(["PS1=" + promptCharacter]);
   const bgColor = localStorage.getItem("ACCENT_COLOR");
-  if (bgColor) exportCommand(["ACCENT_COLOR=" + bgColor]);
+  if (bgColor) bgcolorCommand([bgColor]);
   return "Restored terminal settings";
 };
 
@@ -26,10 +26,6 @@ const clearCommand: CommandExecute = (args) => {
   }
 
   return "Console cleared";
-};
-
-const lsCommand: CommandExecute = (args) => {
-  return "file1.txt\nfile2.txt\nfile3.txt";
 };
 
 const helpCommand: CommandExecute = (args) => {
@@ -46,14 +42,6 @@ const helpCommand: CommandExecute = (args) => {
   const formattedHelpText = helpText.replace(/\n/g, "<br/>");
 
   return formattedHelpText;
-};
-
-const dateCommand: CommandExecute = (args) => {
-  return new Date().toString();
-};
-
-const whoamiCommand: CommandExecute = (args) => {
-  return "Karson, Frontend Developer";
 };
 
 const exportCommand: CommandExecute = (args) => {
@@ -74,56 +62,18 @@ const exportCommand: CommandExecute = (args) => {
     return `Prompt character changed to ${newPromptCharacter}`;
   }
 
-  if (arg.startsWith("ACCENT_COLOR=")) {
-    const newColor = args.join(" ").slice(13).trim();
+  return "Invalid export command. Usage: export PS1=$";
+};
 
-    const updateSuccessful = updateAccentColor(newColor);
+const bgcolorCommand: CommandExecute = (args) => {
+  const newColor = args.join(" ").trim();
+  const updateSuccessful = updateAccentColor(newColor);
 
-    if (updateSuccessful) {
-      return `Accent changed to ${newColor}`;
-    }
-
-    return "Invalid color. Please provide: #000000, rgb(0, 0, 0) or any valid css color.";
+  if (updateSuccessful) {
+    return `Accent changed to ${newColor}`;
   }
 
-  return "Invalid export command. Usage: export PS1=$, export ACCENT_COLOR=#";
-};
-
-const aboutCommand: CommandExecute = (args) => {
-  return `I’m a passionate software engineer dedicated to crafting interfaces that delight users and make a difference. Currently, I’m a Software Engineer at <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> , where I advocate for user experience and get to build impactful features every day.`;
-};
-
-const skillsCommand: CommandExecute = (args) => {
-  if (args.includes("--languages")) {
-    return "TypeScript, JavaScript, CSS";
-  } else if (args.includes("-l")) {
-    return "Frontend Development, React, UX Design, TypeScript, JavaScript, Node A11y, Agile, User-Centered Design";
-  } else {
-    return "Frontend Development, React, UX Design, TypeScript, JavaScript";
-  }
-};
-
-const projectsCommand: CommandExecute = (args) => {
-  return `Projects: `;
-};
-
-const educationCommand: CommandExecute = (args) => {
-  return `<strong>B.S. Digital Marketing</strong>, <a href="https://www.uvu.edu/"target="_blank">Utah Valley University</a> (2010 - 2014)
-    <strong>Software Engineering Immersive</strong> Flatiron School (2017)
-  `;
-};
-
-const experienceCommand: CommandExecute = (args) => {
-  return `<strong>Software Engineer, Applications</strong>, <a href="https://www.jupiterone.com/"target="_blank">JupiterOne</a> (October 2021 - Present)
-    Natural Language Querying
-    − Designed and developed the integration of generative AI into our search experience, converting natural language to our query language. Resulted in one of our highest adoption rates and helped accelerate platform time-to-value.
-    − Implemented a vector database embedding cache, improving query response times and reducing operational costs.
-    − Implemented Natural Language Processing (NLP) techniques including fuzzy matching and stop word filtering to enhance search precision.
-
-    Design System Development
-    − Spearheaded the development of JupiterOne’s design system, including creation of a comprehensive component library, design tokens, and theming system. Helping to streamline the development process and enabling engineers to focus on core feature development.
-    − Crafted standardized-yet-customizable component APIs through a mix of composability, customization, and "component slots". Balanced flexibility with ease-of-use, allowing for customization without excessive rigidity. Leveraged standard naming conventions and JSDoc for streamlined development.
-      `;
+  return "Invalid color. Please provide: #000000, rgb(0, 0, 0) or any valid css color.";
 };
 
 const snarkyResponse: CommandExecute = () => {
@@ -201,8 +151,8 @@ export type Commands = {
 };
 
 const supportedCommands = {
-  ping: {
-    execute: pingCommand,
+  message: {
+    execute: messageCommand,
     description: "Sends a message to the me",
     flags: {},
   },
@@ -216,52 +166,15 @@ const supportedCommands = {
     description: "Prints back the input received",
     flags: {},
   },
-  ls: {
-    execute: lsCommand,
-    description: "Lists all available files",
-    flags: {},
-  },
-  about: {
-    execute: aboutCommand,
-    description: "Displays about information",
-    flags: {},
-  },
+
   help: {
     execute: helpCommand,
     description: "Shows help information about all commands",
     flags: {},
   },
-  date: {
-    execute: dateCommand,
-    description: "Displays the current date and time",
-    flags: {},
-  },
-  whoami: {
-    execute: whoamiCommand,
-    description: "Displays user information",
-    flags: {},
-  },
-  skills: {
-    execute: skillsCommand,
-    description: "Lists all my skills",
-    flags: {
-      "--languages": "Lists programming languages I know",
-      "-l": "Lists all my skills",
-    },
-  },
-  projects: {
-    execute: projectsCommand,
-    description: "Lists all my projects",
-    flags: {},
-  },
-  education: {
-    execute: educationCommand,
-    description: "Displays my educational background",
-    flags: {},
-  },
-  experience: {
-    execute: experienceCommand,
-    description: "Displays my work experience",
+  bgcolor: {
+    execute: bgcolorCommand,
+    description: "Changes the background color",
     flags: {},
   },
   export: {
@@ -294,6 +207,7 @@ const invalidCommands = {
   man: { execute: snarkyResponse },
   grep: { execute: snarkyResponse },
   find: { execute: snarkyResponse },
+  ping: { execute: snarkyResponse },
   pwd: { execute: snarkyResponse },
   df: { execute: snarkyResponse },
   du: { execute: snarkyResponse },
@@ -311,13 +225,9 @@ export type CommandOptions =
 
 const snarkyResponses = [
   "Nice try, but this isn't a real terminal!",
-  "You're not fooling anyone.",
   "Did you really think that would work?",
   "You must think you're pretty clever, huh?",
-  "You must be new here.",
   "I'm sorry, Dave. I'm afraid I can't do that.",
-  "You must be mistaken, this isn't a real terminal.",
-  "That command is about as useful here as a chocolate teapot.",
 ];
 
 const executeCommand = (cmd: string, args: string[]) => {

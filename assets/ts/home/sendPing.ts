@@ -1,4 +1,7 @@
 export const sendPing = (message: string) => {
+  if (!message) {
+    throw new Error("Message is required");
+  }
   fetch("https://api.pushover.net/1/messages.json", {
     method: "POST",
     headers: {

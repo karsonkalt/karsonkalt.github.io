@@ -4,6 +4,7 @@ module.exports = {
   entry: {
     index: "./assets/ts/index.ts",
     home: "./assets/ts/home/index.ts",
+    post: "./assets/ts/post/index.ts",
   },
   module: {
     rules: [

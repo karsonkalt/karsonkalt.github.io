@@ -1,4 +1,4 @@
-import { updateAccentColor } from "./terminal/updateAccentColor";
+import { updateAccentColor } from "./updateAccentColor";
 
 export const insertThemeButton = () => {
   const themeButton = document.createElement("input");
