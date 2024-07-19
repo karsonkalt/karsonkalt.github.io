@@ -230,23 +230,25 @@ main {
     align-items: center;
     gap: 6px;
     text-decoration: none;
+    user-select: none;
 
-    &:focus,
-    &:active {
+    &:hover {
       color: var(--accent-color-link-hover);
       border: 1px solid var(--accent-color-link-hover);
       text-decoration: none;
       transform: scale(1.03);
     }
-
-    &:focus + .dropdown-content,
-    &:active + .dropdown-content {
-      display: block;
-    }
   }
 
   &:focus-within .dropdown-content {
     display: block;
+  }
+
+  &:focus-within button {
+    color: var(--accent-color-link-hover);
+    border: 1px solid var(--accent-color-link-hover);
+    text-decoration: none;
+    transform: scale(1.03);
   }
 
   .dropdown-content {
