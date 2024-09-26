@@ -47,6 +47,10 @@
   --border-radius: 6px;
 }
 
+::selection {
+  background: var(--accent-color-40);
+}
+
 main {
   transition: all 500ms;
 }
