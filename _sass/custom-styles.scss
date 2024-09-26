@@ -239,29 +239,51 @@ main {
     p {
       margin-bottom: unset;
     }
-
-    a {
-      all: unset;
-      cursor: pointer;
-      padding: 6px 12px;
-      background-color: var(--accent-color-20);
-      border-radius: 200px; // pill
-      width: fit-content;
-      color: var(--text-primary);
-      transition: transform 100ms, color 100ms, border 100ms;
-      display: inline-flex;
-      align-items: center;
-      text-decoration: none;
-      user-select: none;
-      font-size: 12px;
-      gap: 6px;
-
-      &:hover {
-        text-decoration: none;
-        transform: scale(1.07);
-      }
-    }
   }
+}
+
+.button-round {
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+  padding: 6px 12px;
+  background-color: var(--accent-color-20);
+  border-radius: 200px; // pill
+  width: fit-content;
+  color: var(--text-primary);
+  transition: transform 100ms, color 100ms, border 100ms;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  user-select: none;
+  font-size: 12px;
+  gap: 6px;
+
+  &:hover {
+    text-decoration: none;
+    transform: scale(1.07);
+  }
+}
+
+.stack {
+  list-style: disc;
+  margin-left: 0;
+
+  li {
+    margin-bottom: 16px;
+  }
+}
+
+.primary-action {
+  background-color: var(--accent-color-50);
+  color: var(--text-primary) !important;
+}
+
+.secondary-action {
+  margin-left: 8px;
+  background-color: unset;
+  border: 1px solid var(--accent-color-50);
+  color: var(--text-primary) !important;
 }
 
 @keyframes fadeInFromLeft {
