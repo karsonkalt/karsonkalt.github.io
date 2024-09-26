@@ -99,6 +99,37 @@ main {
   width: 100%;
   margin-bottom: 16px;
   color: var(--black-80);
+
+  .gravatar-status {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gravatar-status_meta {
+    font-weight: 300;
+    font-size: 15px;
+    color: var(--text--secondary);
+    margin-bottom: 8px;
+  }
+
+  .gravatar-status_status {
+    font-family: "Inter";
+    // font-size: 13px;
+    text-overflow: ellipsis;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .gravatar-status_all-statuses {
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--accent-color);
+    width: fit-content;
+
+    &:hover {
+      color: var(--accent-color-link-hover);
+    }
+  }
 }
 
 .flip-card {
@@ -154,7 +185,7 @@ main {
 .hero {
   display: flex;
   background-color: var(--black-20);
-  border-radius: 10px;
+  border-radius: 15px;
   margin-bottom: 20px;
   overflow: hidden;
 
@@ -213,7 +244,7 @@ main {
       all: unset;
       cursor: pointer;
       padding: 6px 12px;
-      background-color: var(--accent-color-50);
+      background-color: var(--accent-color-20);
       border-radius: 200px; // pill
       width: fit-content;
       color: var(--text-primary);
@@ -243,43 +274,6 @@ main {
     opacity: 1;
     transform: translateX(0) scale(1);
     transform-origin: bottom left;
-  }
-}
-
-.gravatar-status {
-  display: flex;
-  flex-direction: column;
-}
-
-.gravatar-status-meta {
-  font-size: 11px;
-  padding-left: 10px;
-  color: var(--text--secondary);
-}
-
-.gravatar-status-status {
-  position: relative;
-  flex-shrink: 1;
-  font-family: "Inter";
-  background-color: var(--white-10);
-  border-radius: 15px;
-  padding: 8px 12px;
-  font-size: 13px;
-  text-overflow: ellipsis;
-  color: var(--text-primary);
-  &:after {
-    --tip-height: 24px;
-    --tip-width: 8px;
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%) translateX(-100%);
-    width: 0;
-    height: 0;
-    // border-top: calc(var(--tip-height) / 2) solid transparent;
-    border-bottom: calc(var(--tip-height) / 2) solid transparent;
-    border-right: var(--tip-width) solid var(--white-10);
   }
 }
 
@@ -648,8 +642,9 @@ a .domain {
   border-radius: 50%;
   display: inline-block;
   margin-right: 4px;
-  background-color: var(--white-20);
+  background-color: #03c7176f;
   animation: pulse 6s 2;
+  border: 1px solid var(--white-20);
 }
 
 #github-status {

@@ -455,14 +455,19 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
                   />
                 </figure>
               </div>
+            </section>
+            <section style="margin-top: -20px;">
               <div class="gravatar">
                 <div class="gravatar-status">
-                  <div class="gravatar-status-meta">
-                    {{ site.status_updated | date: "%B %-d" }}
-                  </div>
-                  <div class="gravatar-status-status">{{ site.status }}</div>
+                  <div class="gravatar-status_meta">
+                   {{ site.status_updated | date: "%B %-d" }}
+                </div>
+                  <div class="gravatar-status_status">{{ site.status }}</div>
+                  <div class="gravatar-status_all-statuses">View past statuses</div>
                 </div>
               </div>
+            </section>
+            <section>
               <h2>About Me</h2>
               <p>
                 Growing up, I was always interested in design and technology. My
