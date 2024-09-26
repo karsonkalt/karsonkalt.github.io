@@ -147,6 +147,88 @@ main {
   border-radius: 50%;
 }
 
+.hero {
+  display: flex;
+  background-color: var(--black-20);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+
+  .profile-picture {
+    flex-shrink: 1;
+    max-width: 200px;
+    position: relative;
+    margin-bottom: 0;
+
+    .profile-picture_img {
+      aspect-ratio: 1;
+      object-fit: cover;
+      height: 100%;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 30%,
+        rgb(0, 0, 0) 100%
+      );
+      z-index: 100;
+    }
+  }
+
+  .hero_text-container {
+    flex-grow: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+
+    h1 {
+      margin-bottom: unset;
+      color: var(--white-80);
+    }
+
+    span.glow {
+      color: var(--white-90);
+      margin-bottom: unset;
+      text-shadow: 0 0 8px var(--accent-color-link);
+    }
+
+    p {
+      margin-bottom: unset;
+    }
+
+    a {
+      all: unset;
+      cursor: pointer;
+      padding: 6px 12px;
+      background-color: var(--accent-color-50);
+      border-radius: 200px; // pill
+      width: fit-content;
+      color: var(--text-primary);
+      transition: transform 100ms, color 100ms, border 100ms;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      user-select: none;
+      font-size: 12px;
+      gap: 6px;
+
+      &:hover {
+        text-decoration: none;
+        transform: scale(1.07);
+      }
+    }
+  }
+}
+
 @keyframes fadeInFromLeft {
   0% {
     opacity: 0;
@@ -552,7 +634,8 @@ a .domain {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 18px;
+  padding-top: 20px;
+  margin-top: auto;
 }
 
 .github-dot {
@@ -562,6 +645,7 @@ a .domain {
   display: inline-block;
   margin-right: 4px;
   background-color: var(--white-20);
+  animation: pulse 6s 2;
 }
 
 #github-status {

@@ -200,20 +200,6 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
     </nav>
   </div>
 
-  <div class="github-status-container">
-    <div class="github-dot"></div>
-    <div id="github-status"></div>
-  </div>
-
-  <div class="gravatar">
-    <div class="gravatar-status">
-      <div class="gravatar-status-meta">
-        {{ site.status_updated | date: "%B %-d" }}
-      </div>
-      <div class="gravatar-status-status">{{ site.status }}</div>
-    </div>
-  </div>
-
   <div class="tab-container">
     <div>
       <div role="tablist">
@@ -429,13 +415,55 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
         <div id="tab-panel-4" role="tabpanel" aria-labelledby="stdout">
           <ul class="tab-panel-content">
             <section>
-              <h2>About</h2>
-              <p>
-                I'm a software engineer with a passion for building things that
-                live on the internet. I develop exceptional websites and web
-                apps that provide intuitive, pixel-perfect user interfaces with
-                efficient and modern backends.
-              </p>
+              <div class="hero">
+                <div class="hero_text-container">
+                  <h1>
+                    👋🏻 Hi, I'm Karson.
+                    <span class="glow"
+                      >Software Engineer, UX Advocate, People Person</span
+                    >
+                  </h1>
+                  <p>
+                    I create UI experiences for the web that enable
+                    organizations to build faster and scale effectively.
+                  </p>
+                  <a href="#my-stack"
+                    ><span> My Stack </span>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 8L12 15L19 8H5Z"
+                        transform="rotate(270 12 12)"
+                      />
+                    </svg>
+                  </a>
+                  <div class="github-status-container">
+                    <div class="github-dot"></div>
+                    <div id="github-status"></div>
+                  </div>
+                </div>
+                <figure class="profile-picture">
+                  <img
+                    src="/assets/img/profile.jpg"
+                    alt="Karson Kalt"
+                    class="profile-picture_img"
+                  />
+                </figure>
+              </div>
+              <div class="gravatar">
+                <div class="gravatar-status">
+                  <div class="gravatar-status-meta">
+                    {{ site.status_updated | date: "%B %-d" }}
+                  </div>
+                  <div class="gravatar-status-status">{{ site.status }}</div>
+                </div>
+              </div>
+              <h2>About Me</h2>
               <p>
                 Growing up, I was always interested in design and technology. My
                 favorite book was
@@ -453,28 +481,107 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
               <p>
                 I began my professional career in 2014 working as a store
                 manager for Target. After a few very challenging, but very
-                rewarding roles, I re-evaluated my career path and gave myself
-                permission to pursue my passion of tech and building things.
-              </p>
-              <p>
-                I started my journey by attending a coding bootcamp at
+                rewarding roles, I re-evaluated my career path and attended a
+                coding bootcamp at
                 <a href="https://www.flatironschool.com/" target="_blank"
                   >Flatiron School</a
                 >
-                in 2019. I learned the fundamentals of software engineering and
-                web development. I've been building websites and web apps ever
-                since.
+                in 2019.
               </p>
               <p>
                 In 2020 I joined
                 <a href="https://www.jupiterone.com/" target="_blank">
                   JupiterOne</a
                 >
-                as a Software Engineer. Since then, I've been committed to
-                advancing my technical capabilities, learning new technologies,
-                and building projects that I'm proud of.
+                as a Software Engineer focusing on UI in React. After becoming
+                more comfortable with the codebase, I began to take on more
+                responsibilities. A few projects I worked on include: rolling
+                out a design system and data viz library,
+                <a href="https://single-spa.js.org/" target="_blank"
+                  >transitioning to a microfrontend architecture </a
+                >,
+                <a
+                  href="https://www.jupiterone.com/blog/get-easy-answers-complex-questions-ai-natural-language-search-jupiterone"
+                  target="_blank"
+                  >building natural language querying</a
+                >, and
+                <a
+                  href="https://www.jupiterone.com/blog/type-and-go-new-jupiterone-search-bar-enhancements"
+                  target="_blank"
+                  >overhauling our multi-modal search experience</a
+                >.
               </p>
-              <p>In 2024 I became a Senior Software Engineer at JupiterOne.</p>
+              <p>
+                In 2024 I became a Senior Software Engineer at JupiterOne with
+                the help of great mentors. Some recent projects I've worked on
+                include introducing <a href="https://www.jupiterone.com/blog/introducing-continuous-threat-exposure-management-with-jupiterone-and-watchtowr" target="_blank">continuous threat and exposure management</a> and
+                adding <a href="https://docs.jupiterone.io/features/assets/smart-classes" traget="_blank">smart classes</a> to our query language and data model.
+              </p>
+            </section>
+            <section id="my-stack">
+              <h2>My Stack</h2>
+              <p>
+                Here is a short list of things that I use most often when
+                starting a new project.
+              </p>
+              <ul>
+                <li>
+                  <a href="https://react.dev/" target="_blank">React</a> for
+                  true web apps. I have mixed feelings about the framework but
+                  can't argue that there is a large community and ecosystem
+                  around it.
+                </li>
+                <li>
+                  <a href="https://www.typescriptlang.org/" target="_blank"
+                    >TypeScript</a
+                  >. I believe in strong types, especially in an enterprise
+                  codebase. And with node now testing running TS, it's a
+                  no-brainer.
+                </li>
+                <li>
+                  <a href="https://nodejs.org/en" target="_blank">Node</a> for
+                  backends and scripting. I love the ecosystem and the ability
+                  to share code between the client and server.
+                </li>
+                <li>
+                  <a
+                    href="https://developer.chrome.com/blog/new-in-web-ui-io-2024"
+                    target="_blank"
+                    >CSS</a
+                  >
+                  of course for styling. Though I used to use them, I now don't
+                  think CSS preprocessors are needed with all of the new
+                  developments in CSS. Modern CSS supports design tokens,
+                  theming, and handles a lot of interactions that used to be
+                  handled by JS.
+                </li>
+                <li>
+                  <a href="http://vanilla-js.com/" target="_blank"
+                    >Vanilla JS and Browser APIs</a
+                  >. When I can, I try to stick to native web standards do so
+                  much cool stuff. Web components, element anchoring, view
+                  transitions, nested CSS is super powerful, so I keep it simple
+                  if I can.
+                </li>
+                <li>
+                  <a href="https://nextjs.org/" target="_blank">Next.js</a> if I
+                  need SSR and infra out of the box. I don't love the pricing
+                  model, but getting something spun up quickly is a huge win.
+                </li>
+                <li>
+                  <a href="https://vite.dev/" target="_blank">Vite</a>, it's
+                  my favorite build tool.
+                </li>
+                <li><a href="https://vitest.dev/" target="_blank"></a>Vitest</a> for unit testing.</li>
+                <li><a href="https://www.cypress.io/" target="_blank">Cypress</a> for E2E testing</li>
+                <li>
+                  <a href="https://storybook.js.org/" target="_blank"
+                    >Storybook and Chromatic</a
+                  >
+                  for interaction testing, design system libraries, visual
+                  regression testing, and as a UI sandbox.
+                </li>
+              </ul>
             </section>
           </ul>
         </div>
