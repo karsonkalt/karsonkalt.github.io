@@ -1,13 +1,19 @@
 import { addGithubStatus } from "./githubStatus";
 import { addTabs } from "./tabs";
 import { addTerminal } from "./terminal/index";
-import { addPingButtonListener } from "./addPingButtonListener";
 import { loadLocalStorage } from "./loadLocalStorage";
 
 document.addEventListener("DOMContentLoaded", () => {
   addTabs();
   addTerminal();
   addGithubStatus();
-  addPingButtonListener();
   loadLocalStorage();
 });
+
+document
+  .getElementById("my-stack-link")
+  ?.addEventListener("click", function (event) {
+    console.log("clicked");
+    event.preventDefault();
+    document.getElementById("my-stack")?.scrollIntoView({ behavior: "smooth" });
+  });

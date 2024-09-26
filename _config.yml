@@ -7,6 +7,8 @@ status:
   variables, and data visualization at JupiterOne.
 status_updated: 2024-09-26
 
+baseurl: ""
+
 collections:
   notes:
     output: true

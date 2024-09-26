@@ -9,13 +9,14 @@ export const addTabs = () => {
 
   tabNodes.forEach((tab) => {
     tab.addEventListener("click", () => {
-      history.replaceState(null, "", tab.id);
+      history.pushState(null, "", `${tab.id}`);
       applyChanges(tab);
     });
   });
-  window.onhashchange = function () {
-    if (location.hash) {
-      const tab = document.querySelector(location.hash);
+  window.onpopstate = function () {
+    const path = location.pathname.substring(1);
+    if (path) {
+      const tab = document.getElementById(path);
       if (tab) {
         applyChanges(tab);
       }

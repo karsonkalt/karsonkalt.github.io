@@ -1,14 +1,4 @@
 import { updateAccentColor } from "../updateAccentColor";
-import { sendPing } from "../sendPing";
-
-const messageCommand: CommandExecute = (args) => {
-  try {
-    sendPing(args.join(" ").trim());
-    return "Message sent to my phone";
-  } catch (error) {
-    return "Invalid message command. Usage: message <message>";
-  }
-};
 
 const restoreCommand: CommandExecute = (args) => {
   const promptCharacter = localStorage.getItem("PS1");
@@ -151,11 +141,6 @@ export type Commands = {
 };
 
 const supportedCommands = {
-  message: {
-    execute: messageCommand,
-    description: "Sends a message to the me",
-    flags: {},
-  },
   clear: {
     execute: clearCommand,
     description: "Clears the terminal screen",
