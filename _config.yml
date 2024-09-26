@@ -2,8 +2,10 @@ title: Karson Kalt
 author:
   name: Karson Kalt
   email: kars.kalt@gmail.com
-status: Currently building ts-shell, playing with WebGL, working on my site
-status_updated: 2024-08-01
+status:
+  Currently working on upgrading observability dashboards, filtering, query
+  variables, and data visualization at JupiterOne.
+status_updated: 2024-09-26
 
 collections:
   notes:
