@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "start:dev": "npm run build && bundle exec jekyll serve",
+    "start:dev:serve": "npm run build && bundle exec jekyll serve --host $HOST",
     "start": "bundle exec jekyll serve"
   },
   "author": "",
