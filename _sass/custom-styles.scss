@@ -97,6 +97,7 @@ main {
   align-items: center;
   gap: 16px;
   width: 100%;
+  margin-top: 20px;
   margin-bottom: 16px;
   color: var(--black-80);
 
@@ -182,66 +183,83 @@ main {
   border-radius: 50%;
 }
 
-.hero {
-  display: flex;
+.hero-container {
   border-radius: 15px;
-  margin-bottom: 20px;
-  overflow: hidden;
-  background-image: linear-gradient(
-    30deg,
-    var(--accent-color-05) 0%,
-    var(--white-05) 100%
-  );
+  transition: transform 300ms;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.15);
 
-  .profile-picture {
-    flex-shrink: 1;
-    max-width: 200px;
-    position: relative;
-    margin-bottom: 0;
+  &.mousemove {
+    transition: none !important;
 
-    .profile-picture_img {
-      aspect-ratio: 1;
-      object-fit: cover;
-      height: 100%;
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0) 30%,
-        rgb(0, 0, 0) 100%
-      );
-      z-index: 100;
+    h1 {
+      transform: translateZ(20px);
     }
   }
 
-  .hero_text-container {
-    flex-grow: 1;
-    padding: 30px;
+  .glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .hero {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 12px;
+    background-image: linear-gradient(
+      30deg,
+      var(--accent-color-05) 0%,
+      var(--white-05) 100%
+    );
+    transform-style: preserve-3d;
+    border-radius: inherit;
 
-    h1 {
-      margin-bottom: unset;
-      color: var(--white-80);
+    .profile-picture {
+      flex-shrink: 1;
+      max-width: 200px;
+      position: relative;
+      margin-bottom: 0;
+      border-top-right-radius: inherit;
+      border-bottom-right-radius: inherit;
+
+      .profile-picture_img {
+        aspect-ratio: 1;
+        object-fit: cover;
+        height: 100%;
+        border-top-right-radius: inherit;
+        border-bottom-right-radius: inherit;
+      }
     }
 
-    span.glow {
-      color: var(--white-90);
-      margin-bottom: unset;
-      text-shadow: 0 0 8px var(--accent-color-link);
-    }
+    .hero_text-container {
+      flex-grow: 1;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      transform-style: preserve-3d;
 
-    p {
-      margin-bottom: unset;
+      h1 {
+        transition: transform 300ms;
+        margin-bottom: unset;
+        color: var(--white-80);
+      }
+
+      span.glow {
+        color: var(--white-90);
+        margin-bottom: unset;
+        text-shadow: 0 0 8px var(--accent-color-link);
+      }
+
+      p {
+        margin-bottom: unset;
+      }
     }
   }
 }
@@ -260,7 +278,7 @@ main {
   display: inline-block;
   cursor: pointer;
   padding: 6px 12px;
-  background-color: var(--accent-color-20);
+  background-color: var(--accent-color-40);
   border-radius: 200px; // pill
   width: fit-content;
   color: var(--text-primary);
@@ -672,14 +690,14 @@ a .domain {
 }
 
 .github-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   display: inline-block;
   margin-right: 4px;
-  background-color: #03c7176f;
+  background-color: #0eaa52dc;
   animation: pulse 6s 2;
-  border: 1px solid var(--white-20);
+  border: 2px solid #095d2eb2;
 }
 
 #github-status {
