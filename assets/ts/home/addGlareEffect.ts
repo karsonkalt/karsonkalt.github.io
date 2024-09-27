@@ -15,8 +15,6 @@ export const addGlareEffect = (
     // Calculate the angle of the position relative to the center of the container
     const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 180;
 
-    console.log(angle);
-
     // Calculate the intensity of the glare based on the position
     const intensity = Math.min(
       intensityFactor, // Use the intensityFactor to control the maximum intensity
@@ -65,26 +63,34 @@ export const addGlareEffect = (
   });
 
   // Add an event listener for device orientation on mobile phones
-  if (
-    window.DeviceOrientationEvent &&
-    window.matchMedia("(max-width: 767px)").matches
-  ) {
-    let initialBeta: number | null = null;
-    let initialGamma: number | null = null;
 
-    window.addEventListener("deviceorientation", (event) => {
-      if (initialBeta === null) {
-        initialBeta = event.beta || 0;
-      }
-      if (initialGamma === null) {
-        initialGamma = event.gamma || 0;
-      }
+  if (window.matchMedia("(max-width: 767px)").matches) {
+    if (typeof (DeviceMotionEvent as any).requestPermission === "function") {
+      (DeviceMotionEvent as any)
+        .requestPermission()
+        .then((response: PermissionState) => {
+          if (response == "granted") {
+            let initialBeta: number | null = null;
+            let initialGamma: number | null = null;
 
-      const dy = (event.beta || 0) - initialBeta;
-      const dx = (event.gamma || 0) - initialGamma;
+            window.addEventListener("deviceorientation", (event) => {
+              console.log(event);
+              if (initialBeta === null) {
+                initialBeta = event.beta || 0;
+              }
+              if (initialGamma === null) {
+                initialGamma = event.gamma || 0;
+              }
 
-      // Update the effect based on device orientation
-      updateEffect(dx, dy);
-    });
+              const dy = (event.beta || 0) - initialBeta;
+              const dx = (event.gamma || 0) - initialGamma;
+
+              // Update the effect based on device orientation
+              updateEffect(dx, dy);
+            });
+          }
+        })
+        .catch(console.error);
+    }
   }
 };
