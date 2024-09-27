@@ -1,5 +1,19 @@
 import chroma from "chroma-js";
 
+// let currentHue = 0;
+// const HUE_INCREMENT = 1; // Adjust this value to control the speed of the transition
+// const UPDATE_INTERVAL = 250; // Update interval in milliseconds
+
+// const startRainbowTransition = (inputColor: string) => {
+//   setInterval(() => {
+//     currentHue = (currentHue + HUE_INCREMENT) % 360;
+//     const colorWithNewHue = chroma(inputColor).set("hsl.h", currentHue).hex();
+//     updateAccentColor(colorWithNewHue);
+//   }, UPDATE_INTERVAL);
+// };
+
+// startRainbowTransition("#ff0000");
+
 export const updateAccentColor = (inputColor: string): boolean => {
   try {
     if (!isValidColor(inputColor)) {
