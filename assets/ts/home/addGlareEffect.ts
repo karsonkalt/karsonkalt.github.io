@@ -1,5 +1,5 @@
 export const addGlareEffect = (
-  intensityFactor: number = 0.5,
+  intensityFactor: number = 0.4,
   tiltFactor: number = 15
 ) => {
   // Select the element with the class "glare"
@@ -64,7 +64,8 @@ export const addGlareEffect = (
 
   // Add an event listener for device orientation on mobile phones
 
-  if (window.matchMedia("(max-width: 767px)").matches) {
+  // if (window.matchMedia("(max-width: 767px)").matches) {
+  if (true) {
     if (typeof (DeviceMotionEvent as any).requestPermission === "function") {
       (DeviceMotionEvent as any)
         .requestPermission()

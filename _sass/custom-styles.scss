@@ -188,7 +188,8 @@ main {
   transition: transform 300ms;
   perspective: 1000px;
   transform-style: preserve-3d;
-  box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.15);
+  // box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--white-20);
 
   &.mousemove {
     transition: none !important;
