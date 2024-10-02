@@ -27,21 +27,27 @@ http://linkedin.com/in/kaltkarson
 
 insertThemeButton();
 
-document.addEventListener("scroll", () => {
-  const wrapper = document.querySelector(".wrapper") as HTMLElement;
-  const scrollTop = window.scrollY || document.documentElement.scrollTop;
-  const scrollHeight =
-    document.documentElement.scrollHeight - window.innerHeight;
-  const scrollPercent = scrollTop / scrollHeight;
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
 
-  const vh = Math.max(
-    document.documentElement.clientHeight || 0,
-    window.innerHeight || 0
-  );
+if (!prefersReducedMotion) {
+  document.addEventListener("scroll", () => {
+    const wrapper = document.querySelector(".wrapper") as HTMLElement;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = scrollTop / scrollHeight;
 
-  const vh50 = vh * 0.5;
+    const vh = Math.max(
+      document.documentElement.clientHeight || 0,
+      window.innerHeight || 0
+    );
 
-  const offset = scrollPercent * -vh50;
+    const vh50 = vh * 0.5;
 
-  wrapper?.style.setProperty("--gradient-top-offset", `${offset}px`);
-});
+    const offset = scrollPercent * -vh50;
+
+    wrapper?.style.setProperty("--gradient-top-offset", `${offset}px`);
+  });
+}

@@ -951,6 +951,12 @@ article {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .wrapper:before {
+    animation: none;
+  }
+}
+
 @keyframes fadeInAndDown {
   0% {
     opacity: 0.5;
