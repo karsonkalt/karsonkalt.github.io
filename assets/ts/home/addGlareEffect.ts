@@ -2,6 +2,13 @@ export const addGlareEffect = (
   intensityFactor: number = 0.4,
   tiltFactor: number = 15
 ) => {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (prefersReducedMotion) {
+    return;
+  }
   // Select the element with the class "glare"
   const glare = document.querySelector(".glare") as HTMLElement;
   const container = glare.parentElement as HTMLElement; // Assuming the container is the parent element

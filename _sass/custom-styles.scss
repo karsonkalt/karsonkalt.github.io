@@ -427,6 +427,12 @@ li {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-content {
+    animation: none !important;
+  }
+}
+
 .bottom-drawer {
   position: fixed;
   bottom: 0;
@@ -462,6 +468,12 @@ li {
       padding-right: $spacing-unit;
       padding-left: $spacing-unit;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-drawer {
+    transition: none;
   }
 }
 
@@ -791,6 +803,15 @@ a .domain {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel-content {
+    > * {
+      animation: none;
+      opacity: 1;
+    }
+  }
+}
+
 nav {
   display: flex;
   flex-direction: row;
@@ -954,6 +975,7 @@ article {
 @media (prefers-reduced-motion: reduce) {
   .wrapper:before {
     animation: none;
+    opacity: 1;
   }
 }
 
