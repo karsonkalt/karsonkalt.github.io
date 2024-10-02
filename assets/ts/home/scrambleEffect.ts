@@ -53,6 +53,10 @@ export const addScrambleEffect = () => {
   ];
   const elements = document.getElementsByClassName(className);
 
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   const startScrambleEffect = (element: HTMLElement) => {
     const originalText = element.innerText;
     const originalTextArray = originalText.split(" ");
@@ -102,6 +106,9 @@ export const addScrambleEffect = () => {
     }, 60); // Decrease the interval time to make the glitch effect faster
   };
 
+  if (prefersReducedMotion) {
+    return;
+  }
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i] as HTMLElement;
     startScrambleEffect(element);
