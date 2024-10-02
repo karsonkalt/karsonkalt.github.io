@@ -3,6 +3,7 @@ import { addTabs } from "./tabs";
 import { addTerminal } from "./terminal/index";
 import { loadLocalStorage } from "./loadLocalStorage";
 import { addGlareEffect } from "./addGlareEffect";
+import { addScrambleEffect } from "./scrambleEffect";
 
 document.addEventListener("DOMContentLoaded", () => {
   addTabs();
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   addGithubStatus();
   loadLocalStorage();
   addGlareEffect();
+  addScrambleEffect();
 });
 
 document

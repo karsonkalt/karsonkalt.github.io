@@ -628,6 +628,9 @@ li {
     h1 {
       margin-bottom: unset;
       line-height: 1;
+      font-family: "Ubuntu Mono";
+      text-transform: uppercase;
+      font-weight: 500;
     }
   }
 
@@ -635,6 +638,7 @@ li {
     color: var(--white-50);
     line-height: 1.3;
     font-family: "Ubuntu Mono";
+    margin-left: -5px;
   }
 
   @media (max-width: 800px) {
