@@ -930,10 +930,11 @@ article {
   overflow-x: hidden;
   min-height: 100vh;
   box-sizing: border-box;
+  --gradient-top-offset: 0;
   &:before {
     content: "";
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: var(--gradient-top-offset);
     left: 0;
     right: 0;
     height: 100vh;

@@ -26,3 +26,22 @@ http://linkedin.com/in/kaltkarson
 `);
 
 insertThemeButton();
+
+document.addEventListener("scroll", () => {
+  const wrapper = document.querySelector(".wrapper") as HTMLElement;
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollHeight =
+    document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = scrollTop / scrollHeight;
+
+  const vh = Math.max(
+    document.documentElement.clientHeight || 0,
+    window.innerHeight || 0
+  );
+
+  const vh50 = vh * 0.5;
+
+  const offset = scrollPercent * -vh50;
+
+  wrapper?.style.setProperty("--gradient-top-offset", `${offset}px`);
+});
