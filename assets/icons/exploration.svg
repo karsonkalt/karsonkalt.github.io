@@ -5,7 +5,7 @@
   width="12"
   height="12"
   fill="none"
-  stroke="#a8a8a8"
+  stroke="currentColor"
 >
   <defs></defs>
   <polygon

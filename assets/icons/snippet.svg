@@ -4,7 +4,7 @@
   stroke-width="1.5"
   width="16"
   height="16"
-  stroke="#a8a8a8"
+  stroke="currentColor"
   fill="none"
 >
   <defs></defs>
