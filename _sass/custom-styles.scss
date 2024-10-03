@@ -99,6 +99,22 @@ li {
   color: var(--text-primary);
 }
 
+.ml10 {
+  position: relative;
+}
+
+.ml10 .text-wrapper {
+  position: relative;
+  display: inline;
+  overflow: hidden;
+}
+
+.ml10 .letter {
+  display: inline-block;
+  line-height: 1em;
+  transform-origin: 0 0;
+}
+
 #theme-button-wrapper {
   background-color: var(--accent-color-80);
   position: fixed;
@@ -652,6 +668,10 @@ li {
     line-height: 1.3;
     font-family: "Ubuntu Mono";
     margin-left: -5px;
+    animation: fadeInFromLeft 500ms;
+    animation-delay: 1000ms;
+    opacity: 0;
+    animation-fill-mode: forwards;
   }
 
   @media (max-width: 800px) {

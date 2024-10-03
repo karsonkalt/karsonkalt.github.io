@@ -17,9 +17,11 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.2",
     "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "@types/animejs": "^3.1.12"
   },
   "dependencies": {
+    "animejs": "^3.2.2",
     "chroma-js": "^2.4.2"
   }
 }
