@@ -47,7 +47,7 @@
   --text-primary: var(--white-90);
   --text--secondary: var(--white-70);
 
-  --border-radius: 3px;
+  --border-radius: 2px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -77,7 +77,7 @@
     --white-02: #00000005;
 
     --accent-color: #ffffff;
-    --border-radius: 3px;
+    --border-radius: 2px;
   }
 }
 
@@ -186,7 +186,7 @@ li {
   .gravatar-status_all-statuses {
     cursor: pointer;
     font-size: 12px;
-    color: var(--accent-color);
+    color: var(--accent-color-link);
     width: fit-content;
 
     &:hover {
@@ -264,9 +264,8 @@ li {
       }
 
       span.glow {
-        color: var(--white-90);
+        color: var(--text-primary);
         margin-bottom: unset;
-        text-shadow: 0 0 8px var(--accent-color-50);
       }
 
       p {
@@ -290,11 +289,8 @@ li {
   all: unset;
   display: inline-block;
   cursor: pointer;
-  padding: 6px 12px;
-  background-color: var(--accent-color-40);
-  border-radius: var(--border-radius);
   width: fit-content;
-  color: var(--text-primary);
+  color: var(--accent-color-link);
   transition: transform 100ms, color 100ms, border 100ms;
   display: inline-flex;
   align-items: center;
@@ -302,6 +298,7 @@ li {
   user-select: none;
   font-size: 12px;
   gap: 6px;
+  border-bottom: 0.05px solid var(--accent-color-link);
 
   &:hover {
     text-decoration: none;
@@ -319,15 +316,14 @@ li {
 }
 
 .primary-action {
-  background-color: var(--accent-color-50);
-  color: var(--text-primary) !important;
+  // NOOP
 }
 
 .secondary-action {
   margin-left: 8px;
   background-color: unset;
-  border: 0.5px solid var(--accent-color-50);
-  color: var(--text-primary) !important;
+  color: var(--text--secondary) !important;
+  border-bottom: 0.05px solid var(--text--secondary);
 }
 
 @keyframes fadeInFromLeft {
