@@ -105,8 +105,6 @@ function echo(text: string, position: "topLeft" | "bottomRight") {
   } else {
     oval.style.right = "50px";
     oval.style.bottom = "50px";
-    oval.style.backgroundColor = "#001349";
-    oval.style.color = "#9a9a9a";
   }
 
   // Append the oval to the body
