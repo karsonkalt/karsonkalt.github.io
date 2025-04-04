@@ -18,40 +18,45 @@ I don’t need anything fancy. I just want to:
 
 I ended up writing a little createRouter helper that wraps the basics from react-router-dom, but with a nice DX and strong types. Here's what I ended up with.
 
-First, 
+First, we create a createRouter helper to cobble together the various methods
+we need to access in the application.
 
 ```ts
 import { generatePath, useParams } from 'react-router-dom';
 
-export const createRouter = <P extends Record<string, object | undefined>>(
+/**
+ * Creates a type-safe router based on a route map.
+ * @param routes A map of route keys to path templates (e.g., "/blog/posts/:postId")
+ */
+export const createRouter = <
+  P extends Record<string, Record<string, string> | undefined>
+>(
   routes: Record<keyof P, string>
 ) => {
   type RouteKeys = keyof P;
 
   return {
-    /** Returns the route path template (with placeholders).
-     * @example controlsPaths.getPattern('control') -> "/controls/control/:controlId"
+    /**
+     * Gets the raw path pattern (with `:param` placeholders).
+     * @example blogRouter.getPattern('post') -> "/blog/posts/:postId"
      */
-    getPattern: <K extends RouteKeys>(routeKey: K): string => {
-      return routes[routeKey];
-    },
+    getPattern: <K extends RouteKeys>(key: K): string => routes[key],
 
-    /** Constructs a full route path by replacing placeholders.
-     * @example controlsPaths.to('control', { controlId: '123' }) -> "/controls/control/123"
+    /**
+     * Generates a concrete path from a key and params.
+     * @example blogRouter.to('post', { postId: '123' }) -> "/blog/posts/123"
      */
-    to: <K extends RouteKeys>(routeKey: K, params?: P[K]): string => {
-      return generatePath(routes[routeKey], params as any);
-    },
+    to: <K extends RouteKeys>(key: K, params?: P[K]): string =>
+      generatePath(routes[key], params as any),
 
-    /** Extracts route parameters from the URL for a given route.
-     * @example controlsPaths.usePathParams('control') -> { controlId: '123' }
+    /**
+     * Gets typed route params for a route key using `useParams()`.
+     * @example const { postId } = blogRouter.useParams('post');
      */
-    useParams: <K extends RouteKeys>(routeKey: K): P[K] => {
-      return useParams() as P[K];
-    },
+    useParams: <K extends RouteKeys>(_: K): P[K] =>
+      useParams() as P[K],
   };
 };
-
 ```
 
 
@@ -100,6 +105,8 @@ This also works nicely when you’re setting up your app’s routes:
 </Routes>
 ```
 
-Still thinking through how to scale this across other parts of the app, but for now, it’s already made my life easier. If you’re tired of fragile routing, give this pattern a try.
+This pattern has already paid off. It removes friction, improves safety, and just feels cleaner to work with. I’m planning to apply it across other domains in the app too.
 
-Again, big thank you to [Sahaj Jain](https://iamsahaj.xyz/) for the inspiration.
+Big thanks again to [Sahaj Jain](https://iamsahaj.xyz/) for the inspiration.
+
+If you’re also tired of fragile route management in React, give this approach a try.
