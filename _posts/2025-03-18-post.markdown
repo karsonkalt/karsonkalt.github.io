@@ -1,0 +1,67 @@
+---
+layout: "Type-safe Routing"
+date:   2025-03-18 17:57:00 -0400
+description: 
+---
+
+At my day job, routing logic has been one of those “death by a thousand cuts” situations. I’ve seen a range of patterns across different domains -- and most aren’t type-safe. It’s too easy to fat-finger route segments or get the params wrong, and there’s little in the way of guardrails when working across teams.
+
+After reading a great article by [Sahaj Jain](https://iamsahaj.xyz/), I wanted something better. Something type-safe, explicit, and intuitive to use.
+
+## What I wanted
+
+I don’t need anything fancy. I just want to:
+- Define routes in one place
+- Get type safety for route params
+- Not worry about typos or forgetting a param when I’m deep in a feature
+
+I ended up writing a little createRouter helper that wraps the basics from react-router-dom, but with a nice DX and strong types. Here's what I ended up with.
+
+First, define your route templates and their expected params:
+
+```ts
+const BLOG_ROUTES = {
+  home: '/blog',
+  posts: '/blog/posts',
+  post: '/blog/posts/:postId',
+  postEdit: '/blog/posts/:postId/edit',
+  newPost: '/blog/new',
+} as const;
+
+type RouteParams = {
+  home: undefined;
+  posts: undefined;
+  post: { postId: string };
+  postEdit: { postId: string };
+  newPost: undefined;
+};
+```
+
+Then you create the router:
+```ts
+export const blogRouter = createRouter<RouteParams>(BLOG_ROUTES);
+```
+
+Now you can generate paths and access params without worrying about mismatches:
+```ts
+// Generates: "/blog/posts/123/edit"
+blogRouter.to('postEdit', { postId: '123' });
+
+// Inside a component
+const { postId } = blogRouter.useParams('postEdit');
+```
+
+This also works nicely when you’re setting up your app’s routes:
+```tsx
+<Routes>
+  <Route path={blogRouter.getPattern('home')} element={<HomePage />} />
+  <Route path={blogRouter.getPattern('posts')} element={<PostList />} />
+  <Route path={blogRouter.getPattern('post')} element={<PostDetail />} />
+  <Route path={blogRouter.getPattern('postEdit')} element={<EditPost />} />
+  <Route path={blogRouter.getPattern('newPost')} element={<NewPost />} />
+</Routes>
+```
+
+Still thinking through how to scale this across other parts of the app, but for now, it’s already made my life easier. If you’re tired of fragile routing, give this pattern a try.
+
+Again, big thank you to [Sahaj Jain](https://iamsahaj.xyz/) for the inspiration.
