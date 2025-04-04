@@ -18,7 +18,44 @@ I don’t need anything fancy. I just want to:
 
 I ended up writing a little createRouter helper that wraps the basics from react-router-dom, but with a nice DX and strong types. Here's what I ended up with.
 
-First, define your route templates and their expected params:
+First, 
+
+```ts
+import { generatePath, useParams } from 'react-router-dom';
+
+export const createRouter = <P extends Record<string, object | undefined>>(
+  routes: Record<keyof P, string>
+) => {
+  type RouteKeys = keyof P;
+
+  return {
+    /** Returns the route path template (with placeholders).
+     * @example controlsPaths.getPattern('control') -> "/controls/control/:controlId"
+     */
+    getPattern: <K extends RouteKeys>(routeKey: K): string => {
+      return routes[routeKey];
+    },
+
+    /** Constructs a full route path by replacing placeholders.
+     * @example controlsPaths.to('control', { controlId: '123' }) -> "/controls/control/123"
+     */
+    to: <K extends RouteKeys>(routeKey: K, params?: P[K]): string => {
+      return generatePath(routes[routeKey], params as any);
+    },
+
+    /** Extracts route parameters from the URL for a given route.
+     * @example controlsPaths.usePathParams('control') -> { controlId: '123' }
+     */
+    useParams: <K extends RouteKeys>(routeKey: K): P[K] => {
+      return useParams() as P[K];
+    },
+  };
+};
+
+```
+
+
+Then, define your route templates and their expected params:
 
 ```ts
 const BLOG_ROUTES = {
