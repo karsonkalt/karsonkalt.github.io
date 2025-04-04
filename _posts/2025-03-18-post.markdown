@@ -1,7 +1,8 @@
 ---
-layout: "Type-safe Routing"
-date:   2025-03-18 17:57:00 -0400
-description: 
+layout: "post"
+title: "Cleaning Up Routing with Type Safety in React"
+date: 2025-03-18 17:57:00 -0400
+description: "A lightweight approach to centralizing and type-checking route definitions using React Router and TypeScript."
 ---
 
 At my day job, routing logic has been one of those “death by a thousand cuts” situations. I’ve seen a range of patterns across different domains -- and most aren’t type-safe. It’s too easy to fat-finger route segments or get the params wrong, and there’s little in the way of guardrails when working across teams.
