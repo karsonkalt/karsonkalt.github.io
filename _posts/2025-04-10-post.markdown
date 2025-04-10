@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Building a Predictable Query Builder UI in React"
+title: "Architecting a Query Builder for Composability and Control"
 date: 2025-04-10 12:00:00 -0400
-description: "Creating a flexible and testable query builder in React using encapsulated filter logic"
+description: "Building a composable, testable query builder by treating filter logic as a first-class domain model. Exploring encapsulation, API design, and intentional state management for predictable and scalable systems"
 ---
 
 In data-heavy applications, it’s common to allow users to manipulate queries through a visual interface — filtering by status, date, type, or any number of fields.
