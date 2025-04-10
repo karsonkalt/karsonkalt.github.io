@@ -9,7 +9,7 @@ In data-heavy applications, it’s common to allow users to manipulate queries t
 
 At [JupiterOne](https://www.jupiterone.com/), I built a robust **Data Explorer UI** where users interact with filters that are transformed into our domain-specific query language (J1QL). For this post, I’ll use SQL to illustrate the same structure more generically.
 
-![JupiterOne Data Explorer](assets/img/j1-data-explorer.png)
+![JupiterOne Data Explorer]({{ site.baseurl }}/assets/img/j1-data-explorer.png)
 
 The feature: as users interact with filter panels — dropdowns, date pickers, range inputs — we construct a SQL query string:
 
@@ -78,8 +78,6 @@ It worked. But as soon as we had a few real filters in the system, we hit limita
 
 I needed better tooling around the core state — but I still didn’t want to expose raw state to components.
 
----
-
 ## Encapsulating Mutation Logic
 
 I introduced a utility inside the hook: `setFiltersDeduped`, which centralizes how filters are added/updated and deduplicated. Now we could safely compose filters while preserving the data integrity.
@@ -128,9 +126,7 @@ const update = (fn: (prev: Filter[]) => Filter[]) => {
 
 This small contract — `add`, `remove`, `update`, `has`, and `getQuery` — gave us full, intentional control over the filters. The API was now **declarative**, **testable**, and **closed to ad-hoc mutation**.
 
----
-
-## Step 3: Adding Filter Selection Logic
+## Adding Filter Selection Logic
 
 Later on, I had to support more advanced cases — like getting the query string *excluding* the current field (to avoid premature data fetches while editing a filter). I needed to let consumers query and operate on filtered subsets of filters.
 
@@ -171,8 +167,6 @@ And use the same pattern across:
 
 This allowed us to keep a consistent mental model throughout the API: declarative, filtered, intention-driven.
 
----
-
 ## Final Hook API
 
 Here’s what the final, composable API looked like for our SQL-backed UI:
@@ -189,9 +183,7 @@ qb.getFilters({ mode: 'only', properties: { field: 'status' } });
 qb.getQuery({ mode: 'except', properties: { field: 'status' } });
 ```
 
----
-
-## Closing Thoughts
+## Wrapping Up
 
 This pattern scaled because it enforced **encapsulation from day one**. That let us:
 - Prevent divergent implementations
