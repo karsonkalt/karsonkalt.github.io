@@ -4,8 +4,6 @@ title: "Designing a Predictable Filter State Manager"
 date: 2025-04-10 12:00:00 -0400
 description: "Designing a predictable, composable filter state manager for query-building UIs. Covers API encapsulation, deduplication, and SQL query generation using React hooks."
 ---
-# Designing a Predictable Filter State Manager
-
 I recently had to design a query builder system and deciding to share a bit of my approach and thoughts. The feature needed to generate a SQL-like output where the UI is composed of isolated controls—a status dropdown here, a date picker there. Each one manages its own logic. But together, they need to generate a consistent backend query like:
 
 ```sql
