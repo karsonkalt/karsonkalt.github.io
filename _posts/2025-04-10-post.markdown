@@ -1,48 +1,29 @@
 ---
 layout: post
-title: "Architecting a Query Builder for Composability and Control"
+title: "Designing a Predictable Filter State Manager"
 date: 2025-04-10 12:00:00 -0400
-description: "Building a composable, testable query builder by treating filter logic as a first-class domain model. Exploring encapsulation, API design, and intentional state management for predictable and scalable systems"
+description: "Designing a predictable, composable filter state manager for query-building UIs. Covers API encapsulation, deduplication, and SQL query generation using React hooks."
 ---
+# Designing a Predictable Filter State Manager
 
-In data-heavy applications, it’s common to allow users to manipulate queries through a visual interface — filtering by status, date, type, or any number of fields.
-
-At [JupiterOne](https://www.jupiterone.com/), I built a robust **Data Explorer UI** where users interact with filters that are transformed into our domain-specific query language (J1QL). For this post, I’ll use SQL to illustrate the same structure more generically.
-
-![JupiterOne Data Explorer]({{ site.baseurl }}/assets/img/j1-data-explorer.png)
-
-The feature: as users interact with filter panels — dropdowns, date pickers, range inputs — we construct a SQL query string:
+I recently had to design a query builder system and deciding to share a bit of my approach and thoughts. The feature needed to generate a SQL-like output where the UI is composed of isolated controls—a status dropdown here, a date picker there. Each one manages its own logic. But together, they need to generate a consistent backend query like:
 
 ```sql
-SELECT * FROM users WHERE status = 'active' AND created_at > DATE('2024-01-01')
+SELECT * FROM users
+WHERE status = 'active'
+  AND created_at > DATE('2024-01-01')
 ```
 
-Each filter component manages just one field. But I needed a centralized layer to track all filters, avoid duplication, format the SQL string, and keep UIs decoupled from logic. What I wanted was a purpose-built, state-owning hook — something other developers could consume without needing to understand the internal shape of the data.
+Up front, I knew I wanted to design a system with the following behaviors:
+- **Encapsulated API** — Consumers shouldn't mutate raw state, and raw state should not be exposed 
+- **Deduplication** — Only one filter per `(field, operator, value)` triplet  
+- **Predictable behavior** — No silent overwrites  
+- **Composable** — Can be scoped per tab, page, or context  
+- **Declarative** — Consumers describe intent, not mechanics
+  
+![JupiterOne Data Explorer]({{ site.baseurl }}/assets/img/j1-data-explorer.png)
 
-## Requirements
-
-Here’s what the filter system needed to support:
-- One component per field (e.g. `status`, `age`, `created_at`)
-- A shared source of truth for active filters
-- SQL query generation
-- Predictable updates (no fetches during edits)
-- A clean, testable, intentional API
-
-## Encapsulation
-
-This is where the design really matters. In the first iteration, I exposed the filter array directly to consumers. This led to predictable problems:
-- Filters were updated inconsistently across components
-- Race conditions emerged from concurrent state updates
-- Duplicate filters were accidentally added
-- Removing filters required too much knowledge of internal state
-
-So I pushed state down into a custom hook and exposed only the actions that made sense — add, remove, check existence, and build the query.
-
-This pattern wasn’t just about correctness — it was about **preventing divergence**. Developers couldn’t write one-off logic to mutate the filters — they had to go through the hook. That meant one source of truth, one place to test, and no surprises downstream.
-
-## The Simplest Version
-
-I started with a minimal internal data model and two methods — `add` and `getQuery`.
+## The Hook
 
 ```ts
 interface Filter {
@@ -51,14 +32,54 @@ interface Filter {
   value: string | number | boolean | Date;
 }
 
-function useQueryBuilder() {
+// Ensure no duplicate filters exist, put in the module instead of the hook
+// since it's a helper.
+const dedupe = (filters: Filter[]) => {
+  return filters.filter(
+    (f, i, arr) =>
+      i === arr.findIndex(
+        o =>
+          o.field === f.field &&
+          o.operator === f.operator &&
+          o.value === f.value
+      )
+  );
+};
+
+function useFilterManager() {
   const [filters, setFilters] = useState<Filter[]>([]);
 
-  const add = (filter: Filter) => {
-    setFilters(prev => [...prev, filter]);
+  const updateFiltersSafely = (updater: (prev: Filter[]) => Filter[]) => {
+    setFilters(prev => dedupe(updater(prev)));
   };
 
-  const getQuery = () => {
+  const add = (filter: Filter) => {
+    updateFiltersSafely(prev => [...prev, filter]);
+  };
+
+  const remove = (criteria: Partial<Filter>) => {
+    updateFiltersSafely(prev =>
+      prev.filter(f =>
+        !Object.entries(criteria).every(
+          ([key, val]) => f[key as keyof Filter] === val
+        )
+      )
+    );
+  };
+
+  const update = (fn: (prev: Filter[]) => Filter[]) => {
+    updateFiltersSafely(fn);
+  };
+
+  const has = (criteria: Partial<Filter>) => {
+    return filters.some(f =>
+      Object.entries(criteria).every(
+        ([key, val]) => f[key as keyof Filter] === val
+      )
+    );
+  };
+
+  const toSQLQuery = () => {
     if (filters.length === 0) return '';
     const clauses = filters.map(
       ({ field, operator, value }) => `${field} ${operator} '${value}'`
@@ -66,131 +87,26 @@ function useQueryBuilder() {
     return `SELECT * FROM users WHERE ${clauses.join(' AND ')}`;
   };
 
-  return { add, getQuery };
+  return { add, remove, update, has, toSQLQuery, filters };
 }
 ```
 
-It worked. But as soon as we had a few real filters in the system, we hit limitations:
-- You could add the same filter multiple times
-- There was no way to remove or update filters
-- You couldn’t check whether a filter was active
-- The SQL string always included every filter, even if a component was still mid-edit
+## Design Principles
 
-I needed better tooling around the core state — but I still didn’t want to expose raw state to components.
+1. **Single Responsibility** - Filter logic is centralized. UI components only interact via `add()`, `remove()`, or `update()`—no `Array.filter()` calls scattered across your codebase.
+2. **Encapsulation** - Consumers don’t know how filters are stored—they use a clean, intention-revealing API.
+3. **Determinism** - Given the same inputs, the output query string is the same—helpful for debugging, caching, and reruns.
+4. ** Inversion of Control** - Instead of each filter component managing its own quirks, the hook owns the lifecycle of filter state and decides what’s valid.
 
-## Encapsulating Mutation Logic
+## Usage
 
-I introduced a utility inside the hook: `setFiltersDeduped`, which centralizes how filters are added/updated and deduplicated. Now we could safely compose filters while preserving the data integrity.
+- Scope the hook to a page or tab context
+- Have each filter UI control call `add()` or `remove()` based on user interaction
+- Use `toSQLQuery()` to build your backend request
+- Use `has()` to enable conditional UI (e.g., active states)
 
-```ts
-const setFiltersDeduped = (
-  updater: (prev: Filter[]) => Filter[]
-) => {
-  setFilters(prev => {
-    const updated = updater(prev);
-    return updated.filter(
-      (f, i, self) =>
-        i === self.findIndex(
-          o => o.field === f.field && o.operator === f.operator && o.value === f.value
-        )
-    );
-  });
-};
-```
+## Final Thoughts
 
-Then I added a few more core methods to the hook:
+I didn't need a full-blown query engine, so avoided building a full AST parser and query builder. I just wanted to stop wasting time untangling bugs from duplicate filters and shared state leaks.
 
-```ts
-const remove = (criteria: Partial<Filter>) => {
-  setFiltersDeduped(prev =>
-    prev.filter(f =>
-      !Object.entries(criteria).every(
-        ([key, value]) => f[key as keyof Filter] === value
-      )
-    )
-  );
-};
-
-const has = (criteria: Partial<Filter>) => {
-  return filters.some(f =>
-    Object.entries(criteria).every(
-      ([key, value]) => f[key as keyof Filter] === value
-    )
-  );
-};
-
-const update = (fn: (prev: Filter[]) => Filter[]) => {
-  setFiltersDeduped(fn);
-};
-```
-
-This small contract — `add`, `remove`, `update`, `has`, and `getQuery` — gave us full, intentional control over the filters. The API was now **declarative**, **testable**, and **closed to ad-hoc mutation**.
-
-## Adding Filter Selection Logic
-
-Later on, I had to support more advanced cases — like getting the query string *excluding* the current field (to avoid premature data fetches while editing a filter). I needed to let consumers query and operate on filtered subsets of filters.
-
-To support this in a reusable way, I introduced:
-
-```ts
-interface FilterSelectionOptions {
-  mode: 'only' | 'except';
-  properties?: Partial<Filter>;
-}
-```
-
-This structure is now shared across all selectors:
-
-```ts
-function getMatchingFilters(opts?: FilterSelectionOptions) {
-  if (!opts?.properties) return filters;
-
-  return filters.filter(f => {
-    const matches = Object.entries(opts.properties!).every(
-      ([key, value]) => f[key as keyof Filter] === value
-    );
-    return opts.mode === 'only' ? matches : !matches;
-  });
-}
-```
-
-Now we could write things like:
-
-```ts
-getQuery({ mode: 'except', properties: { field: 'status' } });
-```
-
-And use the same pattern across:
-- `getFilters()`
-- `getFilterCount()`
-- `getQuery()`
-
-This allowed us to keep a consistent mental model throughout the API: declarative, filtered, intention-driven.
-
-## Final Hook API
-
-Here’s what the final, composable API looked like for our SQL-backed UI:
-
-```ts
-const qb = useQueryBuilder();
-
-qb.add({ field: 'status', operator: '=', value: 'active' });
-qb.remove({ field: 'status' });
-qb.update(filters => filters.map(...));
-qb.has({ field: 'status', value: 'active' });
-
-qb.getFilters({ mode: 'only', properties: { field: 'status' } });
-qb.getQuery({ mode: 'except', properties: { field: 'status' } });
-```
-
-## Wrapping Up
-
-This pattern scaled because it enforced **encapsulation from day one**. That let us:
-- Prevent divergent implementations
-- Unit test filtering logic without rendering anything
-- Reuse consistent selection patterns across features
-- Add complexity incrementally, without breaking consumers
-
-Whether you're building a query UI, a form builder, or any complex interactive state: if it will evolve, **encapsulate it**. Don't let components own the rules. Build primitives that define behavior and let components declare intent.
-
-This is how you write UI logic that still works 6 months later — and still makes sense to the next engineer who reads it.
+I'll try and post more soon about other cool features I put in here.
