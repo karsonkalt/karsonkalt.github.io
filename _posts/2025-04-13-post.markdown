@@ -2,9 +2,7 @@
 layout: post
 title: "Building a Modular Data Explorer UI from a JSON config"
 date: 2025-04-13 20:00:00 -0400
-description:
-  "A scalable, declarative UI module that turns raw SQL and JSON configs into
-  live filter UIs—no hand-coded views required."
+description: "A scalable, declarative UI module that turns raw SQL and JSON configs into live filter UIs—no hand-coded views required."
 ---
 
 In my last two posts, I’ve shared how I've been working on a flexible data
