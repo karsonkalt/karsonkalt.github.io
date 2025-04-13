@@ -2,7 +2,7 @@
 layout: post
 title: "Structuring Dynamic Filter Sections with Config-Driven Rendering"
 date: 2025-04-12 12:00:00 -0400
-description: "A walkthrough of how we use a config-driven system to define filter behavior across different data explorer views Covers dynamic SQL-backed filters, input types, and rendering logic—all declaratively mapped and easy to scale”
+description: "A walkthrough of how we use a config-driven system to define filter behavior across different data explorer views Covers dynamic SQL-backed filters, input types, and rendering logic—all declaratively mapped and easy to scale"
 ---
 
 Approaching the Data Explorer project, I identified the opportunity to make the filter sections configurable by target entity type -- this way would could dynamically show filters that are relevant to the entity you're looking at. A previous approach a peer of mine had taken had tightly coupled the UI components to the specific view the organization wanted to show. If we could create a configurable way to show relevant data we got a stable UI experience and the ability to spin up UI exponentially more quickly.
