@@ -1,0 +1,90 @@
+---
+layout: post
+title: "Structuring Dynamic Filter Sections with Config-Driven Rendering"
+date: 2025-04-12 12:00:00 -0400
+description: “A walkthrough of how we use a config-driven system to define filter behavior across different data explorer views. Covers dynamic SQL-backed filters, input types, and rendering logic—all declaratively mapped and easy to scale”
+---
+
+Approaching the Data Explorer project, I identified the opportunity to make the filter sections configurable by target entity type -- this way would could dynamically show filters that are relevant to the entity you're looking at. A previous approach a peer of mine had taken had tightly coupled the UI components to the specific view the organization wanted to show. If we could create a configurable way to show relevant data we got a stable UI experience and the ability to spin up UI exponentially more quickly.
+
+### Filters vary by entity
+
+The filters I'd show for “Users” aren’t the same as what I'd show for “Events” or “Organizations”. Some filter sections would need to use checkboxes, some text, some need a date range, etc.
+
+I structured it so each entity owns a list of `FilterConfig` entries. This keeps the UI declarative and avoids needing special-cased rendering logic everywhere.
+
+```ts
+type FilterConfig = {
+  id: string
+  label: string
+  type: 'checkbox' | 'text' | 'date-range'
+  field: string
+  operator?: string
+  sql?: string
+  displayValue?: (row: any) => string
+  dependsOn?: string[]
+}
+```
+
+### Example: “Users” entity
+
+The user table supports filtering by status, signup date, and email domain.
+
+Here’s what that looks like in config:
+
+```ts
+const USER_FILTERS: FilterConfig[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'checkbox',
+    field: 'status',
+    operator: 'IN',
+    sql: `
+      SELECT status AS value, COUNT(*) AS count
+      FROM users
+      GROUP BY status
+    `
+  },
+  {
+    id: 'signup_date',
+    label: 'Signup Date',
+    type: 'date-range',
+    field: 'created_at'
+  },
+  {
+    id: 'email_domain',
+    label: 'Email Domain',
+    type: 'checkbox',
+    field: 'email',
+    operator: 'LIKE',
+    sql: `
+      SELECT SPLIT_PART(email, '@', 2) AS value, COUNT(*) AS count
+      FROM users
+      GROUP BY value
+      ORDER BY count DESC
+    `,
+    displayValue: row => row.value.toUpperCase()
+  }
+]
+```
+
+The config file gives us:
+- Each entity full control over how it wants its filters to behave
+- The query builder can consume the config and build correct SQL
+- The UI can render the filter panel without needing knowledge of the entity
+- It’s testable, composable, and easy to extend and maintain
+
+### What this unlocks
+
+Once the filter panel is config-driven, we can:
+
+- Fetch filter options dynamically based on the `sql`
+- Inject filter dependencies (e.g. “Region” limits values for “Country”)
+- Override display formatting with `displayValue`
+- Share filters across views by spreading configs
+- **Suggest AI-generated filters based on these keys** -- Something I'm trying to make happen in our product.
+
+It also sets us up to allow users to create their own saved views from these filters—since the filter inputs and output query are always in sync.
+
+This kind of config layer makes dynamic UIs easier to scale. It’s not just about being DRY—it’s about making intent declarative and pushing behavior closer to the data layer.
