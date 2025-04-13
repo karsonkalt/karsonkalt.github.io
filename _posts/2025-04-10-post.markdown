@@ -94,7 +94,7 @@ function useFilterManager() {
 1. **Single Responsibility** - Filter logic is centralized. UI components only interact via `add()`, `remove()`, or `update()`—no `Array.filter()` calls scattered across your codebase.
 2. **Encapsulation** - Consumers don’t know how filters are stored—they use a clean, intention-revealing API.
 3. **Determinism** - Given the same inputs, the output query string is the same—helpful for debugging, caching, and reruns.
-4. ** Inversion of Control** - Instead of each filter component managing its own quirks, the hook owns the lifecycle of filter state and decides what’s valid.
+4. **Inversion of Control** - Instead of each filter component managing its own quirks, the hook owns the lifecycle of filter state and decides what’s valid.
 
 ## Usage
 
