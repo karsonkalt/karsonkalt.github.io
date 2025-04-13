@@ -2,7 +2,7 @@
 layout: post
 title: "Building a Modular Data Explorer UI from a JSON config"
 date: 2025-04-13 20:00:00 -0400
-description: "Wring up the FilterManager to a Filter config for modular, well-tested, scalable UI"
+description: "Wiring up the FilterManager to a Filter config for modular, well-tested, scalable UI"
 ---
 
 In my last two posts, I’ve shared how I've been working on a flexible data
@@ -99,7 +99,6 @@ const userConfig = {
           GROUP BY value
           ORDER BY count DESC
         `,
-      displayValue: (row) => row.value.toUpperCase(),
     },
   ],
 };
