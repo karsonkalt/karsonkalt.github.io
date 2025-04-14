@@ -29,7 +29,7 @@ This is the shape of the app now:
 - **apiClient** — Central query/mutation registry, no logic
 - **Query Hooks** — React Query wrappers, one per resource
 
-## DAOs
+### DAOs
 
 DAOs are the only place that know about your tables. They don’t validate or compose anything — they’re just wrappers over Supabase’s query API.
 
@@ -44,7 +44,7 @@ export const videoDao = {
 };
 ```
 
-## Internal Services
+### Internal Services
 
 This is where orchestration happens. Fetching + enriching, batching logic, conditionally selecting, etc.
 
@@ -61,7 +61,7 @@ export const videoService = {
 };
 ```
 
-## External Services
+### External Services
 
 Things like Supabase Storage and future S3 uploads live here.
 
@@ -74,9 +74,7 @@ export const storageService = {
 };
 ```
 
----
-
-## apiClient
+### apiClient
 
 We define a single stable entry point for querying data. It maps cleanly to internal service functions and keeps all queries discoverable.
 
@@ -89,7 +87,7 @@ export const apiClient = {
 };
 ```
 
-## Query Hooks
+### Query Hooks
 
 Each hook wraps a single resource. These stay tiny, testable, and cacheable via React Query.
 
