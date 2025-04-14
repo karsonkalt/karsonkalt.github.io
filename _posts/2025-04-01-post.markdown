@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building a Scalable Architecture from Supabase to React Hooks"
+title: "Building a Scalable Architecture Pattern to Migrate Off Supabase and Ship Quickly"
 date: 2025-04-01 08:00:00 -0400
 description: "How I layered our Supabase app to stay modular, testable, and ready to scale"
 ---
@@ -13,9 +13,7 @@ But it was also built with Supabase running directly in the frontend, using RLS 
 - You have no single place to put shared behavior
 - Your API is implicitly defined by your DB structure
 
-Supabase is great for small projects, but we knew we couldn’t build long-term on a foundation that tied logic to SQL and auth to policies we couldn’t see in code.
-
-So I introduced some layering. This isn’t novel — just clean separation of concerns, adapted to a Supabase + React + React Query stack.
+Supabase is great for small projects, but we knew we couldn’t build long-term on a foundation that tied logic to SQL and auth to policies we couldn’t see in code. So I introduced some layering. This isn’t novel — just clean separation of concerns, adapted to a Supabase + React + React Query stack.
 
 ## The Architecture
 
