@@ -5,7 +5,9 @@ date: 2025-04-12 12:00:00 -0400
 description: "A walkthrough of how we use a config-driven system to define filter behavior across different data explorer views Covers dynamic SQL-backed filters, input types, and rendering logic—all declaratively mapped and easy to scale"
 ---
 
-Approaching the Data Explorer project, I identified the opportunity to make the filter sections configurable by target entity type -- this way would could dynamically show filters that are relevant to the entity you're looking at. A previous approach a peer of mine had taken had tightly coupled the UI components to the specific view the organization wanted to show. If we could create a configurable way to show relevant data we got a stable UI experience and the ability to spin up UI exponentially more quickly.
+Approaching the Data Explorer project, I identified the opportunity to make the filter sections configurable by target entity type -- this way would could dynamically show filters that are relevant to the entity you're looking at. A previous approach on this project by a peer had tightly coupled the UI components to the specific view the organization wanted to show -- I wanted to make this reusable and to move on to new features. If we could create a configurable way to show relevant data we got a stable UI experience and the ability to spin up UI exponentially more quickly.
+
+![JupiterOne Data Explorer]({{ site.baseurl }}/assets/img/j1-data-explorer.png)
 
 ### Filters vary by entity
 
@@ -26,7 +28,7 @@ type FilterConfig = {
 }
 ```
 
-### Example: “Users” entity
+### Example
 
 The user table supports filtering by status, signup date, and email domain.
 
@@ -77,13 +79,13 @@ The config file gives us:
 
 ### What this unlocks
 
-Once the filter panel is config-driven, we can:
+Because the filter panel is config-driven, we can:
 
 - Fetch filter options dynamically based on the `sql`
-- Inject filter dependencies (e.g. “Region” limits values for “Country”)
 - Override display formatting with `displayValue`
 - Share filters across views by spreading configs
-- **Suggest AI-generated filters based on these keys** -- Something I'm trying to make happen in our product.
+- Prepare for the ability for users to **save custom data explorer views** since we have a defined data type powering this view.
+- **Suggest AI-generated filters based on these keys** -- We can leverage our AI system to generate these configs for each user, intelligently adding information about the shape of that customer's graph and outputting relevant filter views. Something I'm trying to make happen in our product.
 
 It also sets us up to allow users to create their own saved views from these filters—since the filter inputs and output query are always in sync.
 

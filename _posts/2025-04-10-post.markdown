@@ -89,19 +89,15 @@ function useFilterManager() {
 }
 ```
 
+### Criteria
+
+After I began implementing this hook, I noticed the need to have more fine-grained control over the filter state, so I added the criteria args to each method. I wanted a consistent interface where the caller could either include or omit certain fields. This came in helpful to avoid a filter section from re-fetching data as the user drilled-down (since we can omit certain fields). The `has` method similarly lets me determine the state of an `input` element.
+
 ## Design Principles
 
-1. **Single Responsibility** - Filter logic is centralized. UI components only interact via `add()`, `remove()`, or `update()`—no `Array.filter()` calls scattered across your codebase.
-2. **Encapsulation** - Consumers don’t know how filters are stored—they use a clean, intention-revealing API.
-3. **Determinism** - Given the same inputs, the output query string is the same—helpful for debugging, caching, and reruns.
-4. **Inversion of Control** - Instead of each filter component managing its own quirks, the hook owns the lifecycle of filter state and decides what’s valid.
-
-## Usage
-
-- Scope the hook to a page or tab context
-- Have each filter UI control call `add()` or `remove()` based on user interaction
-- Use `toSQLQuery()` to build your backend request
-- Use `has()` to enable conditional UI (e.g., active states)
+1. **Single Responsibility** - Filter logic is centralized. UI components only interact via `add()`, `remove()`, or `update()`. I wanted to avoid things like `Array.filter()` calls scattered in the consumers.
+2. **Encapsulation** - Consumers don’t know how filters are stored. They use a clean, developer-friendly API.
+3. **Inversion of Control** - Instead of each filter component managing its own quirks, the hook owns the filter state and decides what’s valid.
 
 ## Final Thoughts
 

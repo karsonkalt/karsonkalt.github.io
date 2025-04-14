@@ -5,14 +5,9 @@ date: 2025-04-13 8:00:00 -0400
 description: "Wiring up the FilterManager to a Filter config for modular, well-tested, scalable UI"
 ---
 
-In my last two posts, I’ve shared how I've been working on a flexible data
-explorer / query builder system. My main goal when approaching this feature was
-to build a scalable, modular UI system where custom bespoke view components
-would no longer need to be developed. By leveraging a typed input and a config,
-we get a stable, tested, scalable working UI -- We get a lever to pull to spin
-up new UI quickly.
+In my last two posts, I shared how I've been working on a flexible data explorer / query builder system. My main goal when approaching this feature was to build a scalable, modular UI system where custom bespoke view components would no longer need to be developed. By leveraging a stable filterManager and a static config, we get a stable, tested, scalable working UI. Essentially a big lever to pull to spin up new UI quickly.
 
-By parsing SQL input and mapping it to entity config files, we get:
+## Benefits of This Approach
 
 - **Composable UI modules** that render based on user intent
 - **Live filter state with insights where to drill-down** from live data
@@ -25,12 +20,13 @@ By parsing SQL input and mapping it to entity config files, we get:
   of a user's graph and can dynamically create custom views with relevant
   filters based on that user's specific graph.
 
-This makes the UI layer **configurable**, **shareable**, and **generative**.
+This makes the UI layer configurable, stable, shareable, and generative.
 
-## How It Works
+## Next Steps
 
-First, I detect which entity the user is targeting after they put in their raw
-SQL query:
+To dynamically load in a config for the Data Explorer, we first begin by parsing the SQL query that the user input and see if it is eligible for this enhanced view.
+
+We begin by detecting which entity the user is targeting after they put in their raw SQL query:
 
 ```ts
 const extractEntity = (sql: string): string | null => {
@@ -67,7 +63,7 @@ filterManager.
 filters.forEach((f) => filterManager.add(f));
 ```
 
-Each entity has a config file with fields like:
+After this, we look for which config to load which looks like:
 
 ```ts
 const userConfig = {
@@ -105,7 +101,7 @@ const userConfig = {
 
 ```
 
-We load the right config based on the detected entity:
+We then load the right config based on the detected entity:
 
 ```ts
 const config = entity ? configs[entity] : null;
@@ -114,29 +110,24 @@ if (config) {
 }
 ```
 
-That’s it. The system renders the view, scopes the explorer, and populates the
-UI—all from the input string and config.
+That’s it. The system renders the view if the query meets Data Explorer criteria, and populates the UI, just from the input string and config.
 
 ## Applied Principles
 
 This system was built around a few key ideas:
 
-- **Encapsulation** – All filter logic is owned by the hook, not scattered in
-  views
+- **Encapsulation** – All filter logic is owned by the hook, not scattered in views
 - **Inversion of Control** – The input drives the UI, not the other way around
-- **Determinism** – Same input string always yields the same visual + backend
-  state
-- **Composable architecture** – Configs act as the schema, the hook as the
-  runtime
-- **Scalability through abstraction** – Adding a new entity means adding a
-  config, not writing new views
+- **Determinism** – Same input string always yields the same visual + backend state
+- **Composable architecture** – Configs act as the schema, the hook as the runtime
+- **Scalability through abstraction** – Adding a new entity means adding a config, not writing new views
 
-This turns our UI into a declarative runtime. You don’t wire views together—you
-describe what you want in SQL, and the system builds the rest.
+This turns our UI into a declaration. I don’t have to create new custom views as we expand this feature, we just describe what want in SQL, and the system builds the rest.
 
 And because it's just config + state, it opens doors:
 
-- Shareable query links
-- Saved dashboards
-- AI copilots that write full queries for you
-- New entities supported instantly via config
+- Saved data explorer views
+- Ability to create new Data Explorer views quickly
+- Ability for users to create their own relevant Data Explorer Views
+- Ability for AI to generate relevant Data Explorer views based on graph shape
+- Support new entities supported instantly via a config
