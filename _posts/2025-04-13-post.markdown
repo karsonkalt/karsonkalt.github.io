@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building a Modular Data Explorer UI from a JSON config"
+title: "Connecting The useFilterManager Hook to FilterConfig with Query Parsing"
 date: 2025-04-13 8:00:00 -0400
 description: "Wiring up the FilterManager to a Filter config for modular, well-tested, scalable UI"
 ---

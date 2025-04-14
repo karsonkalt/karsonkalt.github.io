@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Structuring Dynamic Filter Sections with Config-Driven Rendering"
+title: "Building Config-Driven Rendering for a Data Explorer with Filtering"
 date: 2025-04-12 12:00:00 -0400
 description: "A walkthrough of how we use a config-driven system to define filter behavior across different data explorer views Covers dynamic SQL-backed filters, input types, and rendering logic—all declaratively mapped and easy to scale"
 ---
