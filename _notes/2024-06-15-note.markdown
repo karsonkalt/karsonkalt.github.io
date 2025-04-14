@@ -6,7 +6,7 @@ tags:   [snippet]
 description: A simple script to cleanup node_modules from a development directory.
 ---
 
-A simple script to cleanup node_modules from a development directory. If no
+I use this script on a chron job to cleanup my node_modules from my development directory. If no
 development directory is passed it will default to the current directory with
 a depth limit of 15.
 

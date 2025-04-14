@@ -6,9 +6,7 @@ tags:   [exploration]
 description: Exploring method chaining in JavaScript and how it can be used to transform data in a more readable way.
 ---
 
-Method chaining is an easy way to transform data in a more-readable way. It allows us to be more concise and expressive in our code. I have seen this pattern in libraries like D3.js, jQuery, Express/Koa, and testing libraries and I wanted to explore how I could use it in my own code.
-
-I started with a simple calculator.
+Just exploring method chaining by returning `this` from public instance methods.
 
 ```ts
 class Calculator {
