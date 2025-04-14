@@ -7,6 +7,8 @@ description: "Wiring up the FilterManager to a Filter config for modular, well-t
 
 In my last two posts, I shared how I've been working on a flexible data explorer / query builder system. My main goal when approaching this feature was to build a scalable, modular UI system where custom bespoke view components would no longer need to be developed. By leveraging a stable filterManager and a static config, we get a stable, tested, scalable working UI. Essentially a big lever to pull to spin up new UI quickly.
 
+![JupiterOne Data Explorer]({{ site.baseurl }}/assets/img/j1-data-explorer.png)
+
 ## Benefits of This Approach
 
 - **Composable UI modules** that render based on user intent
