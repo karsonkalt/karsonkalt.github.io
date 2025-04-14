@@ -1,0 +1,122 @@
+---
+layout: post
+title: "Building a Scalable Architecture from Supabase to React Hooks"
+date: 2025-04-01 08:00:00 -0400
+description: "How I layered our Supabase app to stay modular, testable, and ready to scale"
+---
+
+I recently started working on a side project for [As1 Social](http://www.as1.social), where I’m focused on getting an MVP out and applying some proper software methodology. When I inherited the codebase, it was very much in a vibe-coded, prototype state — which, to be fair, is expected for proof-of-concept work. It was fast, clever, and got the idea working.
+
+But it was also built with Supabase running directly in the frontend, using RLS to gate data access. The entire app talked to the database with no backend in between. This works fine early on, but you very quickly hit the ceiling:
+
+- You can’t test or control business logic easily
+- You have no single place to put shared behavior
+- Your API is implicitly defined by your DB structure
+
+Supabase is great for small projects, but we knew we couldn’t build long-term on a foundation that tied logic to SQL and auth to policies we couldn’t see in code.
+
+So I introduced some layering. This isn’t novel — just clean separation of concerns, adapted to a Supabase + React + React Query stack.
+
+## The Architecture
+
+This is the shape of the app now:
+
+- **Supabase** — DB + Bucket storage
+- **DAOs** — Direct access to a single table
+- **Services**
+  - `external/` — Supabase Storage, auth, etc.
+  - `internal/` — business logic and composition
+- **apiClient** — Central query/mutation registry, no logic
+- **Query Hooks** — React Query wrappers, one per resource
+
+## DAOs
+
+DAOs are the only place that know about your tables. They don’t validate or compose anything — they’re just wrappers over Supabase’s query API.
+
+```ts
+// daos/videoDao.ts
+export const videoDao = {
+  async getById(id: string) {
+    const { data, error } = await supabase.from('videos').select('*').eq('id', id).single();
+    if (error) throw error;
+    return data;
+  },
+};
+```
+
+## Internal Services
+
+This is where orchestration happens. Fetching + enriching, batching logic, conditionally selecting, etc.
+
+```ts
+// services/internal/videoService.ts
+import { videoDao } from '@/daos/videoDao';
+
+export const videoService = {
+  async getVideoForFeed(id: string) {
+    const video = await videoDao.getById(id);
+    // add enrichment here later
+    return video;
+  },
+};
+```
+
+## External Services
+
+Things like Supabase Storage and future S3 uploads live here.
+
+```ts
+// services/external/storageService.ts
+export const storageService = {
+  async getUploadUrl(path: string) {
+    return supabase.storage.from('videos').getUploadUrl(path);
+  },
+};
+```
+
+---
+
+## apiClient
+
+We define a single stable entry point for querying data. It maps cleanly to internal service functions and keeps all queries discoverable.
+
+```ts
+// lib/apiClient.ts
+import { videoService } from '@/services/internal/videoService';
+
+export const apiClient = {
+  getVideoForFeed: videoService.getVideoForFeed,
+};
+```
+
+## Query Hooks
+
+Each hook wraps a single resource. These stay tiny, testable, and cacheable via React Query.
+
+```ts
+// hooks/queries/useVideo.ts
+import { useQuery } from '@tanstack/react-query';
+import { apiClient } from '@/lib/apiClient';
+
+export const useVideo = (id: string) => {
+  return useQuery({
+    queryKey: ['video', id],
+    queryFn: () => apiClient.getVideoForFeed(id),
+    enabled: !!id,
+  });
+};
+```
+
+## Why This Matters
+
+I wanted to adopt a clear pattern for the project before it continued to scale and became tangled spaghetti code. Adopting these patterns early on allows us to ship with more confidence and speed up development as we have more engineers join the team.
+
+- Logic is reusable and testable  
+- Hooks are cache-safe by design  
+- You can swap Supabase for REST/GQL with minimal changes  
+- We can incrementally move off Supabase without affecting the UI as long as we maintain contracts
+- You get true layering, without overengineering  
+- Internal services let you separate business logic from fetch mechanics
+
+This pattern gives us the safety of a real backend, while still leaning on Supabase’s power for now. And when the time comes to swap in our own endpoints — or move to AWS or something heavier — we won’t need to change any of our UI.
+
