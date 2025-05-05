@@ -1,0 +1,16 @@
+---
+layout: home
+---
+
+<script>
+  // Set the initial tab state based on the page path
+  document.addEventListener("DOMContentLoaded", () => {
+    const path = window.location.pathname.substring(1); // Remove leading slash
+    if (path) {
+      const tab = document.getElementById(path);
+      if (tab) {
+        tab.click();
+      }
+    }
+  });
+</script>

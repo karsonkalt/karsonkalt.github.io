@@ -654,3 +654,16 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
   </div>
 </div>
 <script src="{{ 'assets/js/home.js' | relative_url }}" type="module"></script>
+
+<script>
+  // Handle initial path
+  document.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname.substring(1); // Remove leading slash
+    if (path) {
+      const tab = document.getElementById(path);
+      if (tab) {
+        tab.click();
+      }
+    }
+  });
+</script>

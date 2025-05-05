@@ -9,14 +9,15 @@ export const addTabs = () => {
 
   tabNodes.forEach((tab) => {
     tab.addEventListener("click", () => {
-      history.pushState(null, "", `${tab.id}`);
+      history.pushState(null, "", `#${tab.id}`);
       applyChanges(tab);
     });
   });
+
   window.onpopstate = function () {
-    const path = location.pathname.substring(1);
-    if (path) {
-      const tab = document.getElementById(path);
+    const hash = window.location.hash.substring(1); // Remove # symbol
+    if (hash) {
+      const tab = document.getElementById(hash);
       if (tab) {
         applyChanges(tab);
       }
@@ -51,8 +52,10 @@ export const addTabs = () => {
     }
   }
 
-  if (location.hash) {
-    const tab = document.querySelector(location.hash);
+  // Check initial hash
+  const hash = window.location.hash.substring(1); // Remove # symbol
+  if (hash) {
+    const tab = document.getElementById(hash);
     if (tab) {
       applyChanges(tab);
     }
@@ -62,6 +65,6 @@ export const addTabs = () => {
 document.addEventListener("keydown", function (event) {
   if (event.key === "/") {
     event.preventDefault();
-    history.pushState(null, "", "console");
+    history.pushState(null, "", "#console");
   }
 });
