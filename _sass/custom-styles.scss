@@ -177,7 +177,6 @@ li {
 
   .gravatar-status_status {
     font-family: "Inter";
-    // font-size: 13px;
     text-overflow: ellipsis;
     margin-bottom: 8px;
     color: var(--text-primary);
@@ -856,22 +855,13 @@ nav > a {
 }
 
 .year-divider {
-  color: var(--text--secondary);
-  font-size: 1em;
-  font-weight: 400;
-  margin-top: 30px;
-  margin-bottom: -20px;
-  position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 2rem 0 1rem;
 
-  &::after {
-    content: "";
-    display: block;
-    position: absolute;
-    height: 0.5px;
-    background-color: var(--white-10);
-    width: calc(100% - 50px);
-    left: 50px;
-    top: 50%;
+  &:first-child {
+    margin-top: 0;
   }
 }
 
@@ -961,10 +951,11 @@ nav > a {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-
+  height: 120px;
   .project-image {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 100%;
+    min-height: 100px;
     border-radius: var(--border-radius);
     object-fit: cover;
     flex-shrink: 0;
@@ -977,8 +968,9 @@ nav > a {
   }
 
   .project-icon-container {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 100%;
+    min-height: 100px;
     border-radius: var(--border-radius);
     flex-shrink: 0;
     background-color: var(--white-10);
@@ -993,10 +985,23 @@ nav > a {
     }
 
     svg {
-      width: 48px;
-      height: 48px;
+      width: 28px;
+      height: 28px;
       color: var(--text-primary);
       transition: color 100ms;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    align-items: stretch;
+    .project-image,
+    .project-icon-container {
+      width: 60px;
+      min-height: 80px;
+    }
+    .project-icon-container svg {
+      width: 20px;
+      height: 20px;
     }
   }
 
@@ -1011,6 +1016,10 @@ nav > a {
     font-size: 20px;
     font-weight: 500;
     color: var(--text-primary);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .project-description {
@@ -1026,16 +1035,11 @@ nav > a {
 }
 
 .project-badge {
-  display: inline-block;
-  background: var(--white-10);
-  color: var(--text-primary);
+  display: block;
+  color: var(--text--secondary);
   font-size: 12px;
-  font-weight: 500;
-  padding: 2px 10px;
-  border-radius: 100px;
-  margin-left: 10px;
-  vertical-align: middle;
-  letter-spacing: 0.5px;
+  font-weight: 400;
+  margin-bottom: 2px;
 }
 
 article {
@@ -1267,5 +1271,56 @@ body.modal-open {
 
 .ping-drawer-content {
   font-size: 16px;
+  color: var(--text-primary);
+}
+
+.status-item {
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Statuses tab panel specific styles
+#tab-panel-6 {
+  .tab-panel-content {
+    gap: 0; // Override the default 38px gap
+
+    > * {
+      animation: fadeInUp 500ms forwards;
+      animation-delay: calc(0.065s * var(--i));
+    }
+  }
+
+  .gravatar {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .status-item {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .year-divider {
+    margin: 2rem 0 1rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.status-entry {
+  margin-bottom: 2rem;
+}
+
+.status-message {
+  font-size: 1rem;
+  line-height: 1.5;
   color: var(--text-primary);
 }

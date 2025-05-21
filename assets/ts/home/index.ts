@@ -5,6 +5,18 @@ import { loadLocalStorage } from "./loadLocalStorage";
 import { addGlareEffect } from "./addGlareEffect";
 import { addM110Effect } from "./addM110Effect";
 
+const addStatusesTrigger = () => {
+  const trigger = document.getElementById("statuses-trigger");
+  const statusesTab = document.getElementById("statuses");
+
+  if (trigger && statusesTab) {
+    trigger.addEventListener("click", (e) => {
+      e.preventDefault();
+      statusesTab.click();
+    });
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   addTabs();
   addTerminal();
@@ -12,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadLocalStorage();
   addGlareEffect();
   addM110Effect();
+  addStatusesTrigger();
 });
 
 document

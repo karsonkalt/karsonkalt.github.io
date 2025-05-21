@@ -12,6 +12,9 @@ baseurl: ""
 collections:
   notes:
     output: true
+  statuses:
+    output: true
+    permalink: /statuses/:year/:month/:day/:title/
 
 include:
   - _data
