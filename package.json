@@ -13,6 +13,7 @@
     "@tailwindcss/cli": "^4.3.2",
     "@tailwindcss/postcss": "^4.3.2",
     "@types/animejs": "^3.1.12",
+    "@types/matter-js": "^0.20.2",
     "autoprefixer": "^10.5.2",
     "css-loader": "^7.1.4",
     "dotenv": "^16.4.5",
@@ -26,6 +27,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "animejs": "^3.2.2"
+    "animejs": "^3.2.2",
+    "matter-js": "^0.20.0"
   }
 }

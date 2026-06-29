@@ -6,6 +6,7 @@ module.exports = {
     home: "./assets/ts/home/index.ts",
     post: "./assets/ts/post/index.ts",
     index: "./assets/ts/index.ts",
+    gutter: "./assets/ts/gutter.ts",
   },
   module: {
     rules: [
