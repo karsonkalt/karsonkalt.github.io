@@ -1,4 +1,5 @@
 ---
+published: false
 layout: post
 title:  "What is a 'Hash' and How to Build one from Scratch in Ruby"
 date:   2021-10-26  12:00:00 -0400
