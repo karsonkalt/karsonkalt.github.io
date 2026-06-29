@@ -1,158 +1,31 @@
-import chroma from "chroma-js";
+interface Palette {
+  // RGB triple for the gradient accent color (dark, vivid)
+  base: [number, number, number];
+  // Link text colors — pre-validated for 4.5:1 contrast
+  darkLink: string;       // readable on dark bg
+  lightLink: string;      // readable on light bg
+  darkLinkHover: string;
+  lightLinkHover: string;
+}
 
-// let currentHue = 0;
-// const HUE_INCREMENT = 1; // Adjust this value to control the speed of the transition
-// const UPDATE_INTERVAL = 250; // Update interval in milliseconds
+// Curated palette — each entry looks great as a gradient and has
+// accessible link colors for both dark and light modes.
+export const PALETTE: Palette[] = [
+  { base: [30, 80, 180],   darkLink: "#60a5fa", lightLink: "#1d4ed8", darkLinkHover: "#93c5fd", lightLinkHover: "#1e40af" },
+  { base: [100, 40, 200],  darkLink: "#a78bfa", lightLink: "#5b21b6", darkLinkHover: "#c4b5fd", lightLinkHover: "#4c1d95" },
+  { base: [0, 120, 120],   darkLink: "#2dd4bf", lightLink: "#0f766e", darkLinkHover: "#5eead4", lightLinkHover: "#115e59" },
+  { base: [170, 20, 60],   darkLink: "#f87171", lightLink: "#b91c1c", darkLinkHover: "#fca5a5", lightLinkHover: "#991b1b" },
+  { base: [150, 80, 0],    darkLink: "#fbbf24", lightLink: "#92400e", darkLinkHover: "#fcd34d", lightLinkHover: "#78350f" },
+  { base: [0, 110, 60],    darkLink: "#34d399", lightLink: "#065f46", darkLinkHover: "#6ee7b7", lightLinkHover: "#064e3b" },
+  { base: [60, 40, 180],   darkLink: "#818cf8", lightLink: "#3730a3", darkLinkHover: "#a5b4fc", lightLinkHover: "#312e81" },
+  { base: [160, 0, 80],    darkLink: "#f472b6", lightLink: "#9d174d", darkLinkHover: "#f9a8d4", lightLinkHover: "#831843" },
+];
 
-// const startRainbowTransition = (inputColor: string) => {
-//   setInterval(() => {
-//     currentHue = (currentHue + HUE_INCREMENT) % 360;
-//     const colorWithNewHue = chroma(inputColor).set("hsl.h", currentHue).hex();
-//     updateAccentColor(colorWithNewHue);
-//   }, UPDATE_INTERVAL);
-// };
-
-// startRainbowTransition("#ff0000");
-
-export const updateAccentColor = (inputColor: string): boolean => {
-  try {
-    if (!isValidColor(inputColor)) {
-      return false;
-    }
-
-    const accentColor = getAdjustedAccentColor(chroma(inputColor));
-    const linkColor = getContrastColor(accentColor);
-    const linkHoverColor = getHoverColor(accentColor);
-    const linkDecoration = hasLowSaturation(linkColor) ? "underline" : "none";
-
-    setColorsInLocalStorage(
-      accentColor,
-      linkColor,
-      linkHoverColor,
-      linkDecoration
-    );
-    setColorsInCSS(accentColor, linkColor, linkHoverColor, linkDecoration);
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
-
-const getHoverColor = (color: chroma.Color): chroma.Color => {
-  if (color.luminance() < 0.95) {
-    return color.brighten(0.5);
-  } else {
-    return color.darken(0.05);
-  }
-};
-
-const isValidColor = (color: string): boolean => {
-  return chroma.valid(color);
-};
-
-const getAdjustedAccentColor = (color: chroma.Color): chroma.Color => {
-  const minLuminance = 0.15;
-  const maxLuminance = 0.85;
-
-  const luminance = color.luminance();
-  if (luminance < minLuminance) {
-    color = color.luminance(minLuminance);
-  } else if (luminance > maxLuminance) {
-    color = color.luminance(maxLuminance);
-  }
-
-  // Ensure color is vibrant but not fully saturated
-  const saturation = color.get("hsl.s");
-  return color.set("hsl.s", Math.min(saturation, 0.85));
-};
-
-const getContrastColor = (accentColor: chroma.Color): chroma.Color => {
-  // Check if the color is totally grey
-  if (accentColor.get("hsl.s") === 0) {
-    // Return a vibrant link-friendly color like teal blue
-    const colorOptions = ["#00796b", "#00acc1", "#1976d2", "#2196f3"];
-    const chromaColor = chroma(
-      colorOptions[Math.floor(Math.random() * colorOptions.length)]
-    );
-    return chromaColor.set("hsl.s", 1);
-  }
-
-  const vibrantColor = accentColor.set("hsl.s", 1);
-  vibrantColor.set("hsl.l", 0.5);
-
-  const MIN_CONTRAST = 1.75;
-
-  // Ensure the vibrant color meets the 3 contrast ratio against the accent color
-  if (chroma.contrast(vibrantColor, accentColor) >= MIN_CONTRAST) {
-    return vibrantColor;
-  }
-
-  // Adjust the lightness to find a suitable contrast color
-  const lightnessSteps = 20;
-  const lightnessIncrement = 1 / lightnessSteps;
-
-  for (let i = 1; i <= lightnessSteps; i++) {
-    const lightenedColor = vibrantColor.set(
-      "hsl.l",
-      vibrantColor.get("hsl.l") + lightnessIncrement * i
-    );
-    if (chroma.contrast(lightenedColor, accentColor) >= MIN_CONTRAST) {
-      return lightenedColor;
-    }
-  }
-
-  // If no suitable color is found, return the original vibrant color
-  return vibrantColor;
-};
-
-const hasLowSaturation = (color: chroma.Color): boolean => {
-  const saturation = color.get("hsl.s");
-  // Adjusting the condition to focus on low saturation to include all shades of grey and white.
-  return saturation < 0.2;
-};
-
-const setColorsInLocalStorage = (
-  accentColor: chroma.Color,
-  linkColor: chroma.Color,
-  linkHoverColor: chroma.Color,
-  linkDecoration: string
-): void => {
-  localStorage.setItem("ACCENT_COLOR", rgbString(accentColor));
-  localStorage.setItem("LINK_COLOR", rgbString(linkColor));
-  localStorage.setItem("LINK_COLOR_HOVER", rgbString(linkHoverColor));
-  localStorage.setItem("LINK_DECORATION", linkDecoration);
-};
-
-const setColorsInCSS = (
-  accentColor: chroma.Color,
-  linkColor: chroma.Color,
-  linkHoverColor: chroma.Color,
-  linkDecoration: string
-): void => {
-  document.documentElement.style.setProperty(
-    "--accent-color-base",
-    formatAccentColor(accentColor)
-  );
-  document.documentElement.style.setProperty(
-    "--accent-color-link",
-    rgbString(linkColor)
-  );
-  document.documentElement.style.setProperty(
-    "--accent-color-link-hover",
-    rgbString(linkHoverColor)
-  );
-  document.documentElement.style.setProperty(
-    "--link-decoration",
-    linkDecoration
-  );
-};
-
-const formatAccentColor = (color: chroma.Color): string => {
-  return color.rgb().join(", ");
-};
-
-const rgbString = (color: chroma.Color): string => {
-  return "rgb(" + color.rgb().join(", ") + ")";
+export const updateAccentColor = (palette: Palette): void => {
+  const root = document.documentElement;
+  root.style.setProperty("--accent-color-base",          palette.base.join(", "));
+  root.style.setProperty("--accent-color-link-dark",     palette.darkLink);
+  root.style.setProperty("--accent-color-link-light",    palette.lightLink);
+  root.style.setProperty("--accent-color-link-dark-hover",  palette.darkLinkHover);
+  root.style.setProperty("--accent-color-link-light-hover", palette.lightLinkHover);
 };

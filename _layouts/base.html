@@ -1,37 +1,27 @@
 <!DOCTYPE html>
-
-{%- include head.html -%}
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-/>
-<html lang='{{ page.lang | default: site.lang | default: " en" }}'>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
   <head>
-    <style>
-      @view-transition {
-        navigation: auto;
-      }
-    </style>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="description" content="{{ page.description | default: site.description | escape }}" />
+    {%- seo -%}
+    {%- feed_meta -%}
+    <style>@view-transition { navigation: auto; }</style>
+    <script>
+      const t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.classList.add(t);
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="apple-touch-icon" sizes="180x180" href={{
-    'assets/favicon_io/apple-touch-icon.png' | relative_url }}> <link rel="icon"
-    type="image/png" sizes="32x32" href={{ 'assets/favicon_io/favicon-32x32.png'
-    | relative_url }}> <link rel="icon" type="image/png" sizes="16x16" href={{
-    'assets/favicon_io/favicon-16x16.png' | relative_url }}> <link
-    rel="manifest" {{ 'assets/favicon_io/site.webmanifest' | relative_url }}>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ 'assets/favicon_io/apple-touch-icon.png' | relative_url }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ 'assets/favicon_io/favicon-32x32.png' | relative_url }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ 'assets/favicon_io/favicon-16x16.png' | relative_url }}" />
+    <link rel="manifest" href="{{ 'assets/favicon_io/site.webmanifest' | relative_url }}" />
   </head>
-
-  <body class="wrapper">
+  <body class="wrapper max-w-[800px] mx-auto px-4">
     {{ content }}
     <script src="{{ 'assets/js/index.js' | relative_url }}"></script>
   </body>

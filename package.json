@@ -4,24 +4,28 @@
   "description": "```bash bundle exec jekyll serve ```",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "start:dev": "npm run build && bundle exec jekyll serve",
-    "start:dev:serve": "npm run build && bundle exec jekyll serve --host $HOST",
-    "start": "bundle exec jekyll serve"
+    "build": "npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/main.css && webpack --config webpack.config.js",
+    "dev": "npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/main.css --watch & webpack --config webpack.config.js --watch & bundle exec jekyll serve --livereload"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/chroma-js": "^2.4.4",
+    "@tailwindcss/cli": "^4.3.2",
+    "@tailwindcss/postcss": "^4.3.2",
+    "@types/animejs": "^3.1.12",
+    "autoprefixer": "^10.5.2",
+    "css-loader": "^7.1.4",
     "dotenv": "^16.4.5",
+    "mini-css-extract-plugin": "^2.10.2",
+    "postcss": "^8.5.16",
+    "postcss-loader": "^8.2.1",
+    "tailwindcss": "^4.3.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.2",
     "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4",
-    "@types/animejs": "^3.1.12"
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "animejs": "^3.2.2",
-    "chroma-js": "^2.4.2"
+    "animejs": "^3.2.2"
   }
 }
