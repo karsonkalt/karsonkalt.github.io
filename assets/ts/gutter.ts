@@ -1,0 +1,441 @@
+import * as Matter from "matter-js";
+
+// Auto-init on load
+document.addEventListener("DOMContentLoaded", () => initGutter());
+
+const CHARS = [
+  // ── TypeScript deep cuts ──────────────────────────────────────────────
+  "keyof T", "infer R", "as const", "satisfies", "readonly",
+  "T extends U", "T[keyof T]", "[K in keyof T]", "T & U", "T | U",
+  "asserts", "override", "abstract", "namespace", "declare",
+  "is T", "never", "unknown", "unique symbol",
+  // Utility types
+  "Partial<T>", "Omit<T,K>", "Pick<T,K>", "Record<K,V>",
+  "Extract<T,U>", "Exclude<T,U>", "NonNullable<T>", "Awaited<T>",
+  "ReturnType<T>", "Parameters<T>", "InstanceType<T>",
+  "Required<T>", "Readonly<T>", "Mutable<T>", "DeepPartial<T>",
+  "PropsWithChildren", "ComponentProps<T>",
+  // TS operators & syntax
+  "nullish coalescing", "optional chaining", "type narrowing",
+  "discriminated union", "type predicate", "assertion fn",
+  "satisfies T", "non-null assertion", "const assertion",
+  // ── React / hooks ─────────────────────────────────────────────────────
+  "useCallback", "useMemo", "useRef<T>", "useState<T>",
+  "useEffect", "useContext", "useReducer", "useDeferredValue",
+  "useTransition", "useId", "forwardRef", "memo()",
+  "Suspense", "ErrorBoundary", "lazy()", "startTransition",
+  "VariantProps", "cva()", "cn()", "data-slot",
+  // ── JupiterOne / web-app ──────────────────────────────────────────────
+  "_class", "_type", "_key", "_scope", "displayName",
+  "queryKey", "qc.invalidateQueries()", "qc.prefetchQuery()",
+  "qc.setQueryData()", "qc.select()", "pageInfo",
+  "useMutation", "useSuspense", "useInfiniteQuery",
+  "LaidOutNode", "ElkLayout", "GraphCanvas", "LaidOutEdge",
+  "J1QL", "parseJ1QL", "EntityTarget", "QueryResult",
+  "graphqlQueryOptions", "mutationKey",
+  // ── Tanstack Query ────────────────────────────────────────────────────
+  "tq.staleTime", "tq.gcTime", "tq.placeholderData",
+  "tq.refetchOnMount", "tq.throwOnError", "tq.networkMode",
+  // ── New baseline CSS (2024–2025) ──────────────────────────────────────
+  "@layer", "@property", "@container", ":has()", "@scope",
+  "@starting-style", "light-dark()", "oklch()", "color-mix()",
+  "text-wrap:balance", "text-wrap:pretty", "svh", "dvh", "lh",
+  "anchor-name", "position-anchor", "field-sizing",
+  "content-visibility", "scrollbar-gutter", "scrollbar-color",
+  "subgrid", "container-type", "@supports",
+  // ── View Transitions ──────────────────────────────────────────────────
+  "view-transition-name", "::view-transition",
+  "startViewTransition", "@view-transition",
+  "::view-transition-group", "navigation:auto",
+  "::view-transition-old", "::view-transition-new",
+  // ── Bash / Zsh ────────────────────────────────────────────────────────
+  "#!/bin/zsh", "set -euo pipefail", "$?", "$!", "$()", "${:-}",
+  "2>&1", ">/dev/null", "&&", "||", "| grep", "| awk",
+  "| xargs", "| sort -u", "| jq '.'", "| head -n",
+  "chmod +x", "source ~/.zshrc", "alias", "export PATH",
+  "for f in", "if [[ -z", "trap", "read -r",
+  // ── Git / worktrees / PRs ─────────────────────────────────────────────
+  "git worktree", "git rebase -i", "git stash pop",
+  "git bisect", "git reflog", "git log --oneline",
+  "git diff HEAD~1", "git cherry-pick", "git fetch --prune",
+  "--force-with-lease", "git blame", "git shortlog",
+  "gh pr create", "gh pr merge", "gh pr view",
+  "gh run watch", "gh issue list",
+  "CODEOWNERS", ".gitattributes", "squash & merge",
+  // ── Design / NN-g ─────────────────────────────────────────────────────
+  "Fitts", "Hick", "Gestalt", "affordance", "signifier",
+  "mental model", "F-pattern", "progressive", "Doherty",
+  "cognitive load", "chunking", "5-second test",
+  "error prevention", "recognition", "flexibility",
+  // ── Figma ─────────────────────────────────────────────────────────────
+  "auto layout", "variants", "tokenize", "constraints",
+  "dev mode", "detach", "overlay", "component set",
+  "instance swap", "exposed props", "slot", "fill container",
+  "hug contents", "base component", "boolean prop",
+  // ── Packages / tools ──────────────────────────────────────────────────
+  "Tailwind", "Vite", "webpack", "esbuild", "Turbopack",
+  "Storybook", "Chromatic", "Cypress", "Playwright", "Vitest",
+  "React Query", "Zustand", "Jotai", "Zod", "Radix UI",
+  "shadcn/ui", "Framer Motion", "D3", "Three.js", "Matter.js",
+  "Figma", "PostCSS", "Biome", "ESLint", "Prettier",
+  "GraphQL", "tRPC", "REST", "WebSockets", "SSE",
+  "Jekyll", "GitHub Pages", "Vercel", "Netlify",
+  // ── Web APIs / platform ───────────────────────────────────────────────
+  "WebAssembly", "WASM", "Canvas API", "WebGL", "WebGPU",
+  "ResizeObserver", "IntersectionObserver", "MutationObserver",
+  "requestAnimationFrame", "PerformanceObserver",
+  "Web Workers", "SharedArrayBuffer", "Atomics",
+  "Clipboard API", "Drag & Drop API", "Pointer Events",
+  "BroadcastChannel", "structuredClone", "AbortController",
+  // ── a11y ──────────────────────────────────────────────────────────────
+  "aria-label", "aria-live", "aria-describedby", "role=",
+  "focus-visible", "prefers-reduced-motion", "WCAG 2.1",
+  "axe-core", "screen reader", "tab order", "skip link",
+  // ── i18n ──────────────────────────────────────────────────────────────
+  "i18next", "Intl.DateTimeFormat", "Intl.NumberFormat",
+  "locale", "RTL", "pluralization", "ICU MessageFormat",
+  // ── Data viz / D3 ────────────────────────────────────────────────────
+  "d3.select()", "d3.selectAll()", "d3.enter()", "d3.exit()",
+  "d3.join()", "d3.append()", "d3.datum()", "d3.data()",
+  "d3.scaleLinear()", "d3.scaleBand()", "d3.scaleOrdinal()",
+  "d3.scaleLog()", "d3.scaleTime()", "d3.scaleSqrt()",
+  "d3.extent()", "d3.max()", "d3.min()", "d3.sum()",
+  "d3.rollup()", "d3.group()", "d3.bin()", "d3.histogram()",
+  "d3.line()", "d3.area()", "d3.arc()", "d3.pie()",
+  "d3.curveCatmullRom", "d3.curveMonotoneX", "d3.curveBasis",
+  "d3.forceSimulation()", "d3.forceManyBody()", "d3.forceLink()",
+  "d3.forceCenter()", "d3.forceCollide()", "d3.forceX()",
+  "d3.zoom()", "d3.drag()", "d3.brush()", "d3.axisBottom()",
+  "d3.treemap()", "d3.hierarchy()", "d3.pack()", "d3.cluster()",
+  "d3.sankey()", "d3.chord()", "d3.ribbon()",
+  "d3.interpolate()", "d3.interpolateRgb()", "d3.quantize()",
+  "d3.transition()", "d3.ease()", "d3.easeElastic",
+  "sel.attr()", "sel.style()", "sel.call()", "sel.on('click')",
+  // ── Graph theory / layout ─────────────────────────────────────────────
+  "DAG", "BFS", "DFS", "topological sort", "adjacency list",
+  "force-directed", "hierarchical layout", "ELK", "dagre",
+  "graph vertex", "graph edge", "node degree", "node centrality",
+  "shortest path", "Dijkstra", "A*", "cycle detection",
+  "connected components", "spanning tree", "bipartite",
+  "graph in-degree", "graph out-degree", "source node", "sink node",
+  // ── React Flow ────────────────────────────────────────────────────────
+  "useNodes()", "useEdges()", "useReactFlow()",
+  "onNodesChange", "onEdgesChange", "onConnect",
+  "NodeTypes", "EdgeTypes", "Handle", "Position",
+  "MiniMap", "Controls", "Background",
+  "RF.addEdge()", "RF.applyNodeChanges()", "RF.applyEdgeChanges()",
+  "rf.fitView()", "rf.getViewport()", "rf.setCenter()",
+  "RF.MarkerType", "RF.ConnectionMode", "RF.PanOnScrollMode",
+  "rf.useStore()", "rf.useNodeId()", "rf.useUpdateNodeInternals()",
+  // ── Visualization concepts ────────────────────────────────────────────
+  "treemap", "sunburst", "heatmap", "sankey", "chord",
+  "voronoi", "hexbin", "contour", "streamgraph",
+  "zoomable", "pannable", "brushable", "linked views",
+  "overview+detail", "focus+context", "semantic zoom",
+  "WebGL renderer", "Canvas 2D", "SVG layer",
+  "quadtree", "spatial index", "R-tree", "kdtree",
+  "path morphing", "shape tweening", "FLIP animation",
+  // ── AWS ───────────────────────────────────────────────────────────────
+  "Lambda", "S3", "CloudFront", "API Gateway", "DynamoDB",
+  "SQS", "SNS", "EventBridge", "Step Functions", "ECS",
+  "EC2", "RDS", "Aurora", "ElastiCache", "Secrets Manager",
+  "IAM", "IAM Role", "IAM Policy", "AssumeRole", "STS",
+  "presigned URL", "S3 lifecycle", "CloudWatch", "X-Ray",
+  "VPC", "CIDR", "security group", "NACLs", "ALB",
+  "Cognito", "ACM", "Route53", "WAF", "Shield",
+  "CDK", "SAM", "CloudFormation", "Terraform",
+  // ── Protocols / networking ────────────────────────────────────────────
+  "REST", "GraphQL", "gRPC", "WebSocket", "SSE",
+  "CORS", "preflight", "OPTIONS", "CSRF", "XSS",
+  "JWT", "OAuth2", "PKCE", "mTLS", "OIDC",
+  "HTTP/2", "HTTP/3", "QUIC", "TLS 1.3",
+  "idempotent", "rate limit", "backoff", "retry",
+  "pagination", "cursor", "offset", "Content-Type",
+  "Authorization:", "Bearer", "ETag", "Cache-Control",
+  // ── System design & architecture ──────────────────────────────────────
+  "microservices", "monorepo", "monolith", "modular monolith",
+  "service mesh", "sidecar", "BFF", "API gateway",
+  "event-driven", "event sourcing", "CQRS", "saga pattern",
+  "pub/sub", "message queue", "dead letter queue",
+  "idempotency key", "distributed tracing", "correlation ID",
+  "circuit breaker", "bulkhead", "retry with backoff",
+  "blue/green", "canary deploy", "feature flag", "A/B test",
+  "strangler fig", "anti-corruption layer", "hexagonal",
+  "domain model", "bounded context", "aggregate root",
+  "eventual consistency", "CAP theorem", "two-phase commit",
+  // ── Frontend architecture ─────────────────────────────────────────────
+  "colocation", "code splitting", "tree shaking", "dead code",
+  "SSR", "SSG", "ISR", "RSC", "streaming", "hydration",
+  "edge runtime", "middleware", "optimistic UI",
+  "stale-while-revalidate", "cache invalidation",
+  "micro-frontend", "module federation", "islands arch",
+  "component-driven", "atomic design", "design tokens",
+  // ── CI/CD & DX ────────────────────────────────────────────────────────
+  "nx affected", "changesets", "semantic versioning",
+  "GitHub Actions", "workflow", "matrix build",
+  "lint-staged", "husky", "pre-commit", "trunk-based",
+  "DORA metrics", "lead time", "MTTR", "deploy freq",
+  // ── Performance ───────────────────────────────────────────────────────
+  "LCP", "INP", "CLS", "FID", "TTFB", "FCP",
+  "bundle analysis", "lazy load", "prefetch", "preload",
+  "memoization", "virtualization", "windowing",
+  "debounce", "throttle", "requestIdleCallback",
+  "paint hold", "layout thrash", "composite layer",
+  // ── Security ─────────────────────────────────────────────────────────
+  "least privilege", "zero trust", "RBAC", "ABAC",
+  "supply chain", "SBOM", "CVE", "CVSS", "patch",
+  "secrets rotation", "key management", "HSM",
+  "pen test", "threat model", "STRIDE",
+  // ── Observability ─────────────────────────────────────────────────────
+  "OpenTelemetry", "tracing", "span", "trace ID",
+  "Sentry", "Datadog", "NewRelic.noticeError()", "Grafana",
+  "NR.addPageAction()", "NR.setCustomAttribute()",
+  "structured log", "log level", "alert fatigue",
+  "P50", "P95", "P99", "SLA", "SLO", "SLI", "error budget",
+  // ── Design system governance ──────────────────────────────────────────
+  "design token", "token alias", "semantic token", "primitive",
+  "component API", "prop contract", "slot pattern", "compound",
+  "controlled", "uncontrolled", "headless", "polymorphic",
+  "as prop", "asChild", "Radix slot", "render prop",
+  "forward ref", "display name", "story", "argTypes",
+  "Storybook CSF", "autodocs", "play function", "interactions",
+  "Chromatic snapshot", "visual regression", "baseline",
+  "breaking change", "deprecation", "migration guide",
+  "versioning", "CHANGELOG", "peer dep", "bundle analysis",
+  "tree-shakeable", "side-effect free", "ESM", "CJS",
+  "color ramp", "type scale", "spacing scale", "grid system",
+  "8pt grid", "4pt grid", "optical alignment", "rhythm",
+  "elevation", "shadow token", "motion token", "duration",
+  "easing token", "z-index scale", "breakpoint token",
+  "icon system", "icon grid", "keyline", "padding zone",
+  "accessibility token", "focus ring", "contrast ratio",
+  "light mode token", "dark mode token", "high contrast",
+  "figma variable", "mode", "collection", "publish styles",
+  "code connect", "storybook link", "dev handoff",
+  "contribution guide", "governance model", "RFC",
+  "DACI", "design review", "ship criteria", "acceptance",
+  // ── Database ──────────────────────────────────────────────────────────
+  "Neptune", "graph DB", "Neo4j", "Cypher", "Gremlin",
+  "adjacency list", "index", "query plan", "N+1",
+  "connection pool", "read replica", "sharding",
+  // ── npm / package management ──────────────────────────────────────────
+  "npm workspaces", "npm publish", "npm link", "npm pack",
+  "package.json exports", "conditional exports",
+  "peer dependencies", "npm overrides", "publishConfig",
+  "prepublishOnly", "npm provenance",
+  // ── GitHub Actions / CI ───────────────────────────────────────────────
+  "workflow_dispatch", "matrix strategy", "concurrency group",
+  "cancel-in-progress", "actions/cache@v4", "job needs:",
+  "environment secrets", "OIDC token", "id-token: write",
+  "reusable workflow", "composite action", "step outputs",
+  "gh workflow run", "status check", "branch protection",
+  // ── Vite / bundling ───────────────────────────────────────────────────
+  "vite.config.ts", "defineConfig()", "rollupOptions",
+  "manualChunks", "chunk splitting", "vendor chunk",
+  "dynamic import()", "import.meta.env", "import.meta.glob",
+  "optimizeDeps", "vite.resolve.alias", "ssr.noExternal",
+  // ── Browser caching ───────────────────────────────────────────────────
+  "content hash", "immutable cache", "Cache-Control:immutable",
+  "service worker", "workbox precache", "cache busting",
+  "304 Not Modified", "modulepreload", "prefetch hint",
+];
+const MAX_BODIES = 40;
+const MIN_FONT = 11;
+const MAX_FONT = 22;
+const CONTENT_WIDTH = 800;
+
+export const initGutter = () => {
+  if (window.innerWidth <= CONTENT_WIDTH) return;
+
+  const { Engine, Render, Runner, Bodies, Body, Composite, Events } = Matter;
+
+  const MIN_GUTTER = 80; // px — below this, fade out
+
+  const canvas = document.createElement("canvas");
+  canvas.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;transition:opacity 400ms ease;";
+  document.body.appendChild(canvas);
+
+  const dpr = window.devicePixelRatio || 1;
+
+  const setCanvasSize = () => {
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+  };
+  setCanvasSize();
+
+  const engine = Engine.create({ gravity: { y: 2 } });
+
+  const render = Render.create({
+    canvas,
+    engine,
+    options: {
+      width: window.innerWidth * dpr,
+      height: window.innerHeight * dpr,
+      background: "transparent",
+      wireframes: false,
+    },
+  });
+
+  // Static boundary bodies — outer walls + floor + inner content guards
+  const gw = () => Math.max(0, (window.innerWidth - CONTENT_WIDTH) / 2);
+
+  const makeWalls = () => {
+    const W = window.innerWidth * dpr;
+    const H = window.innerHeight * dpr;
+    const G = gw() * dpr; // gutter width in physical px
+    const thick = 50;
+    const opts = { isStatic: true, render: { fillStyle: "transparent" } };
+    return [
+      // Floor
+      Bodies.rectangle(W / 2, H + 25, W * 4, thick, opts),
+      // Outer left wall
+      Bodies.rectangle(-25, H / 2, thick, H * 4, opts),
+      // Outer right wall
+      Bodies.rectangle(W + 25, H / 2, thick, H * 4, opts),
+      // Inner left guard (right edge of left gutter)
+      Bodies.rectangle(G, H / 2, thick, H * 4, opts),
+      // Inner right guard (left edge of right gutter)
+      Bodies.rectangle(W - G, H / 2, thick, H * 4, opts),
+    ];
+  };
+
+  let walls = makeWalls();
+  Composite.add(engine.world, walls);
+
+  // Custom rendering: draw characters instead of rectangles
+  Events.on(render, "afterRender", () => {
+    const ctx = render.context;
+    const bodies = Composite.allBodies(engine.world).filter((b: Matter.Body) => !b.isStatic);
+
+    bodies.forEach((body: Matter.Body) => {
+      const { x, y } = body.position;
+      const angle = body.angle;
+      const char = body.label;
+      const baseOpacity: number = (body as any).charOpacity ?? 0.9;
+      const spawnedAt: number = (body as any).spawnedAt ?? Date.now();
+      const fadeDuration: number = (body as any).fadeDuration ?? 2000;
+      const LIFETIME = 15000;
+      const age = Date.now() - spawnedAt;
+      const fadeStart = LIFETIME - fadeDuration;
+      const fadeProgress = age > fadeStart
+        ? Math.max(0, 1 - (age - fadeStart) / fadeDuration)
+        : 1;
+      const opacity = baseOpacity * fadeProgress;
+      const scale = fadeProgress;
+
+      // Remove once fully faded
+      if (age > LIFETIME) {
+        Composite.remove(engine.world, body);
+        return;
+      }
+      const color: string = (body as any).charColor ?? "#ffffff";
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      const size: number = (body as any).charSize ?? 16;
+      ctx.font = `${size * dpr * scale}px "Ubuntu Mono", monospace`;
+      ctx.fillStyle = color;
+      ctx.globalAlpha = opacity;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(char, 0, 0);
+      ctx.restore();
+    });
+  });
+
+  Render.run(render);
+  Runner.run(Runner.create(), engine);
+
+  const isLightMode = () => {
+    const cl = document.documentElement.classList;
+    if (cl.contains("light")) return true;
+    if (cl.contains("dark")) return false;
+    return window.matchMedia("(prefers-color-scheme: light)").matches;
+  };
+
+  const getAccentColor = () => {
+    const prop = isLightMode() ? "--accent-color-link-light" : "--accent-color-link-dark";
+    return getComputedStyle(document.documentElement).getPropertyValue(prop).trim() || (isLightMode() ? "#1d4ed8" : "#60a5fa");
+  };
+
+  const gutterWidth = () => Math.max(0, (window.innerWidth - CONTENT_WIDTH) / 2);
+
+  const isInGutter = (x: number) =>
+    gutterWidth() >= MIN_GUTTER &&
+    (x < gutterWidth() || x > window.innerWidth - gutterWidth());
+
+  const spawnChar = (x: number, y: number) => {
+    const bodies = Composite.allBodies(engine.world).filter((b: Matter.Body) => !b.isStatic);
+    if (bodies.length >= MAX_BODIES) {
+      Composite.remove(engine.world, bodies[0]);
+    }
+
+    const char = CHARS[Math.floor(Math.random() * CHARS.length)];
+    const fontSize = MIN_FONT + Math.random() * (MAX_FONT - MIN_FONT);
+    // Physical size scaled by dpr
+    const w = (char.length > 1 ? fontSize * char.length * 0.55 : fontSize * 0.6) * dpr;
+    const h = fontSize * dpr;
+
+    const body = Bodies.rectangle(x * dpr, y * dpr, w, h, {
+      restitution: 0.35,
+      friction: 0.5,
+      frictionAir: 0.015,
+      label: char,
+      render: { fillStyle: "transparent", strokeStyle: "transparent" },
+    });
+
+    (body as any).charColor = getAccentColor();
+    (body as any).charOpacity = 0.75 + Math.random() * 0.25;
+    (body as any).charSize = fontSize;
+    (body as any).spawnedAt = Date.now();
+    (body as any).fadeDuration = 2000; // ms to fade out over
+
+    Body.setVelocity(body, { x: (Math.random() - 0.5) * 3 * dpr, y: 0 });
+    Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.08);
+
+    Composite.add(engine.world, body);
+  };
+
+  let holdInterval: ReturnType<typeof setInterval> | null = null;
+  let lastX = 0, lastY = 0;
+
+  document.addEventListener("mousedown", (e) => {
+    if (!isInGutter(e.clientX)) return;
+    lastX = e.clientX; lastY = e.clientY;
+    spawnChar(lastX, lastY);
+    holdInterval = setInterval(() => spawnChar(lastX, lastY), 120);
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    lastX = e.clientX; lastY = e.clientY;
+    // Stop ticking if dragged out of gutter
+    if (holdInterval && !isInGutter(e.clientX)) {
+      clearInterval(holdInterval);
+      holdInterval = null;
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
+  });
+
+  const updateVisibility = () => {
+    canvas.style.opacity = gw() < MIN_GUTTER ? "0" : "1";
+  };
+  updateVisibility();
+
+  // Resize: rebuild boundaries, update canvas
+  window.addEventListener("resize", () => {
+    updateVisibility();
+    setCanvasSize();
+    render.canvas.width = window.innerWidth * dpr;
+    render.canvas.height = window.innerHeight * dpr;
+    render.options.width = window.innerWidth * dpr;
+    render.options.height = window.innerHeight * dpr;
+
+    walls.forEach(w => Composite.remove(engine.world, w));
+    walls = makeWalls();
+    Composite.add(engine.world, walls);
+  });
+};
