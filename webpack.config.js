@@ -1,10 +1,11 @@
 const path = require("path");
 
 module.exports = {
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
   entry: {
-    index: "./assets/ts/index.ts",
     home: "./assets/ts/home/index.ts",
     post: "./assets/ts/post/index.ts",
+    index: "./assets/ts/index.ts",
   },
   module: {
     rules: [

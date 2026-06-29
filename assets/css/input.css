@@ -1,0 +1,467 @@
+@import "tailwindcss";
+
+@source "../../_layouts/**/*.html";
+@source "../../_includes/**/*.html";
+@source "../../_posts/**/*.md";
+@source "../ts/**/*.ts";
+
+/* ─── Theme: CSS variable color palette ──────────────────────────────────── */
+
+@theme {
+  --color-primary: var(--text-primary);
+  --color-muted: var(--text-secondary);
+  --color-accent: var(--accent-color-link);
+  --color-accent-hover: var(--accent-color-link-hover);
+  --color-w-02: var(--white-02);
+  --color-w-05: var(--white-05);
+  --color-w-10: var(--white-10);
+  --color-w-20: var(--white-20);
+  --color-w-30: var(--white-30);
+  --color-w-50: var(--white-50);
+  --color-w-60: var(--white-60);
+  --color-w-70: var(--white-70);
+  --color-w-80: var(--white-80);
+  --color-w-90: var(--white-90);
+  --color-w-100: var(--white-100);
+  --color-b-40: var(--black-40);
+  --color-b-50: var(--black-50);
+  --color-b-80: var(--black-80);
+  --color-b-100: var(--black-100);
+  --color-accent-30: var(--accent-color-30);
+
+  --font-mono: "Ubuntu Mono", "Liberation Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+}
+
+/* ─── CSS variable palette (runtime, flipped for light mode) ─────────────── */
+
+:root {
+  --black-100: #000000ff;
+  --black-90: #000000e6;
+  --black-80: #000000cc;
+  --black-50: #00000080;
+  --black-40: #00000066;
+  --black-20: #00000033;
+  --black-10: #0000001a;
+
+  --white-100: #ffffffff;
+  --white-90: #ffffffe6;
+  --white-80: #ffffffcc;
+  --white-70: #ffffffb3;
+  --white-60: #ffffff99;
+  --white-50: #ffffff80;
+  --white-40: #ffffff66;
+  --white-30: #ffffff4d;
+  --white-20: #ffffff33;
+  --white-10: #ffffff1a;
+  --white-05: #ffffff0d;
+  --white-02: #ffffff05;
+
+  --accent-color-base: 28, 69, 144;
+  --accent-color: rgba(var(--accent-color-base), 1);
+  --accent-color-40: rgba(var(--accent-color-base), 0.4);
+  --accent-color-30: rgba(var(--accent-color-base), 0.3);
+  --accent-color-10: rgba(var(--accent-color-base), 0.1);
+
+  /* These get overridden by JS with contrast-checked values per mode */
+  --accent-color-link-dark:        rgb(30 144 255);
+  --accent-color-link-dark-hover:  rgb(80 170 255);
+  --accent-color-link-light:       rgb(21 96 171);
+  --accent-color-link-light-hover: rgb(15 70 130);
+
+  --accent-color-link:       var(--accent-color-link-dark);
+  --accent-color-link-hover: var(--accent-color-link-dark-hover);
+  --link-decoration: none;
+
+  --text-primary: var(--white-90);
+  --text-secondary: var(--white-70);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    --accent-color-link:       var(--accent-color-link-light);
+    --accent-color-link-hover: var(--accent-color-link-light-hover);
+
+    --black-100: #ffffffff;
+    --black-80: #ffffffcc;
+    --black-50: #ffffff80;
+    --black-40: #ffffff66;
+
+    --white-100: #000000ff;
+    --white-90: #000000e6;
+    --white-80: #000000cc;
+    --white-70: #000000b3;
+    --white-60: #00000099;
+    --white-50: #00000080;
+    --white-40: #00000066;
+    --white-30: #0000004d;
+    --white-20: #00000033;
+    --white-10: #0000001a;
+    --white-05: #0000000d;
+    --white-02: #00000005;
+
+    --accent-color: #ffffff;
+  }
+}
+
+/* Forced light via class */
+:root.light {
+  --accent-color-link:       var(--accent-color-link-light);
+  --accent-color-link-hover: var(--accent-color-link-light-hover);
+  --black-100: #ffffffff;
+  --black-80: #ffffffcc;
+  --black-50: #ffffff80;
+  --black-40: #ffffff66;
+  --white-100: #000000ff;
+  --white-90: #000000e6;
+  --white-80: #000000cc;
+  --white-70: #000000b3;
+  --white-60: #00000099;
+  --white-50: #00000080;
+  --white-40: #00000066;
+  --white-30: #0000004d;
+  --white-20: #00000033;
+  --white-10: #0000001a;
+  --white-05: #0000000d;
+  --white-02: #00000005;
+  --accent-color: #ffffff;
+}
+
+html.light::before {
+  background:
+    linear-gradient(180deg, rgba(245,245,245,0) 40%, #ebebeb 100%),
+    linear-gradient(30deg, #f2f2f2 20%, rgba(var(--accent-color-base), 0.15) 100%);
+}
+
+@media (prefers-color-scheme: light) {
+  html:not(.dark)::before {
+    background:
+      linear-gradient(180deg, rgba(245,245,245,0) 40%, #ebebeb 100%),
+      linear-gradient(30deg, #f2f2f2 20%, rgba(var(--accent-color-base), 0.15) 100%);
+  }
+}
+
+/* ─── Icon button (no border, rounded hover bg) ──────────────────────────── */
+
+.icon-btn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--white-50);
+  transition: background-color 150ms, color 150ms;
+}
+.icon-btn:hover {
+  background-color: var(--white-10);
+  color: var(--white-80);
+}
+
+
+/* Tooltip on icon button */
+.icon-btn::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) translateY(3px);
+  background: var(--white-80);
+  color: var(--black-100);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  padding: 3px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms, transform 150ms;
+}
+.icon-btn { position: relative; }
+.icon-btn:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Icon visibility — dark mode default: show sun (click → light) */
+#theme-toggle .icon-sun  { display: block; }
+#theme-toggle .icon-moon { display: none;  }
+
+/* In light mode (system or forced): show moon, hide sun */
+@media (prefers-color-scheme: light) {
+  html:not(.dark) #theme-toggle .icon-sun  { display: none;  }
+  html:not(.dark) #theme-toggle .icon-moon { display: block; }
+}
+html.light #theme-toggle .icon-sun  { display: none;  }
+html.light #theme-toggle .icon-moon { display: block; }
+html.dark  #theme-toggle .icon-sun  { display: block; }
+html.dark  #theme-toggle .icon-moon { display: none;  }
+
+/* ─── View transitions ───────────────────────────────────────────────────── */
+
+/* Root is frozen — gradient on html::before stays completely still */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Page content: quick scale-fade, both directions opacity so no overlap */
+::view-transition-old(page) {
+  animation: 160ms ease-in both vt-out;
+}
+::view-transition-new(page) {
+  animation: 200ms ease-out both vt-in;
+}
+
+@keyframes vt-out {
+  to { opacity: 0; transform: scale(0.97); }
+}
+
+@keyframes vt-in {
+  from { opacity: 0; transform: scale(0.98); }
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+
+::selection { background: var(--accent-color-40); }
+
+html { background: var(--black-100); }
+body { background: transparent; view-transition-name: page; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+}
+
+p, h1, h2, h3, h4, h5, h6, li { color: var(--text-primary); }
+
+/* ─── Background gradient (on html so it never moves during transitions) ─── */
+
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0) 30%, var(--black-100) 100%),
+    linear-gradient(30deg, var(--black-100) 20%, var(--accent-color) 100%);
+}
+
+
+
+
+/* ─── Hero card ──────────────────────────────────────────────────────────── */
+
+.hero-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 10px 0.5px rgba(0, 0, 0, 0.05);
+  border: 0.5px solid var(--white-20);
+  border-radius: 6px;
+}
+
+.glare {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ─── Name animation ─────────────────────────────────────────────────────── */
+
+.ml10 { position: relative; }
+.ml10 .text-wrapper { position: relative; display: inline; overflow: hidden; }
+.ml10 .letter { display: inline-block; line-height: 1em; transform-origin: 0 0; }
+
+.domain {
+  opacity: 0;
+  animation: fadeInFromLeft 500ms 1000ms forwards;
+}
+
+/* ─── Tab underline ──────────────────────────────────────────────────────── */
+
+[role="tab"] {
+  border-bottom: 0.5px solid transparent;
+  transform: translateY(0.5px);
+}
+[role="tab"]:hover { border-color: var(--white-50); }
+[role="tab"][aria-selected="true"] { border-color: var(--white-80); }
+
+/* ─── Link item hover ────────────────────────────────────────────────────── */
+
+.link-item:hover {
+  background-color: var(--white-05);
+  border-radius: 4px;
+}
+
+/* ─── Dropdown ───────────────────────────────────────────────────────────── */
+
+/* Ensure dropdown menus sit above the overlay */
+.dropdown-menu { z-index: 10; }
+
+.dropdown-menu:focus-within .dropdown-content { display: flex; }
+.dropdown-content {
+  background: #141414 !important;
+  backdrop-filter: none !important;
+  border: 0.5px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .dropdown-content {
+    background: #ffffff !important;
+    border: 0.5px solid rgba(0,0,0,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08) !important;
+  }
+}
+html.light .dropdown-content {
+  background: #ffffff !important;
+  border: 0.5px solid rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* ─── Post content ───────────────────────────────────────────────────────── */
+
+.post-content img { border-radius: 2px; background-color: var(--white-100); }
+
+.post-content h1, .post-content h2, .post-content h3,
+.post-content h4, .post-content h5, .post-content h6 { margin-top: 1.5rem; }
+
+.post-content h1 { font-size: 2rem; font-weight: 600; }
+.post-content h2 { font-size: 1.5rem; font-weight: 600; }
+.post-content h3 { font-size: 1.25rem; font-weight: 500; }
+.post-content p  { margin-bottom: 1rem; }
+.post-content ul, .post-content ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+.post-content ul { list-style: disc; }
+.post-content ol { list-style: decimal; }
+.post-content li { margin-bottom: 0.25rem; }
+.post-content a  { color: var(--accent-color-link); text-decoration: underline; }
+.post-content pre {
+  position: relative;
+  background: #0d1117;
+  border: 0.5px solid var(--white-10);
+  border-radius: 6px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+}
+.post-content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.875em;
+  color: #e6edf3;
+}
+.post-content :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--white-10);
+  color: #e6edf3;
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+.post-content blockquote { border-left: 2px solid var(--white-20); padding-left: 1rem; color: var(--text-secondary); }
+
+.copy-button {
+  all: unset;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px;
+  background-color: rgba(255,255,255,0.08);
+  color: #8b949e;
+  display: flex;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.copy-button:hover { background-color: rgba(255,255,255,0.15); color: #e6edf3; }
+
+/* ─── Syntax highlighting (GitHub Dark) ──────────────────────────────────── */
+
+.highlight { background: #0d1117; border-radius: 6px; }
+.highlight pre { background: transparent; border: none; }
+
+/* Comments */
+.highlight .c, .highlight .ch, .highlight .cm, .highlight .c1,
+.highlight .cs, .highlight .cp { color: #8b949e; font-style: italic; }
+/* Keywords */
+.highlight .k, .highlight .kc, .highlight .kd, .highlight .kn,
+.highlight .kp, .highlight .kr { color: #ff7b72; }
+/* Types */
+.highlight .kt { color: #ffa657; }
+/* Strings */
+.highlight .s, .highlight .sa, .highlight .sb, .highlight .sc,
+.highlight .dl, .highlight .sd, .highlight .s2, .highlight .se,
+.highlight .sh, .highlight .si, .highlight .sx, .highlight .sr,
+.highlight .s1, .highlight .ss { color: #a5d6ff; }
+/* Numbers */
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh,
+.highlight .mi, .highlight .mo, .highlight .mx { color: #79c0ff; }
+/* Functions */
+.highlight .nf, .highlight .fm { color: #d2a8ff; }
+/* Classes */
+.highlight .nc { color: #ffa657; }
+/* Variables */
+.highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi { color: #ffa657; }
+/* Built-ins */
+.highlight .nb { color: #79c0ff; }
+/* Plain names */
+.highlight .n, .highlight .no, .highlight .nd, .highlight .ni,
+.highlight .ne, .highlight .nl, .highlight .nn, .highlight .nx,
+.highlight .py { color: #e6edf3; }
+/* Tags */
+.highlight .nt { color: #7ee787; }
+/* Attributes */
+.highlight .na { color: #79c0ff; }
+/* Operators */
+.highlight .o, .highlight .ow, .highlight .p,
+.highlight .w { color: #e6edf3; }
+/* Errors */
+.highlight .err { color: #f85149; background: none; }
+/* Diffs */
+.highlight .gd { color: #ffa198; background: #490202; }
+.highlight .gi { color: #56d364; background: #0f5323; }
+
+/* ─── Tab panel stagger ──────────────────────────────────────────────────── */
+
+.tab-panel-content > * {
+  opacity: 0;
+  animation: fadeInUp 500ms forwards;
+  animation-delay: calc(0.065s * var(--i));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel-content > * { animation: none; opacity: 1; }
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+
+@keyframes fadeInFromLeft {
+  0%   { opacity: 0; transform: translateX(-16px) scale(0.75); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes fadeInUp {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeInAndDown {
+  0%   { opacity: 0.5; transform: translateY(-50%); }
+  100% { opacity: 1;   transform: translateY(0); }
+}
+
+@keyframes grow {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes pulse {
+  0%   { transform: scale(0);   opacity: 0; }
+  7%   { transform: scale(1);   opacity: 1; }
+  85%  { transform: scale(1);   opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}

@@ -2,98 +2,75 @@
 layout: base
 ---
 
-{% assign posts = site.posts %} {% assign notes = site.notes | sort: 'date' |
-reverse %} {% assign tag_icons = site.data.tag_icons %}
+<main class="pt-8 pb-16 transition-all duration-500">
 
-<main>
-  <div class="header">
-    <div class="title-container">
-      <h1 class="ml10">
-        <span class="text-wrapper">
+  {{/* ── Header ── */}}
+  <div class="flex justify-between items-center mb-8 max-[800px]:flex-col max-[800px]:items-start max-[800px]:gap-4">
+    <div class="flex flex-row items-end gap-1.5">
+      <h1 class="ml10 m-0 leading-none font-mono uppercase font-medium text-primary text-4xl tracking-tight">
+        <span class="text-wrapper relative inline overflow-hidden">
           <span class="letters">Karson Kalt</span>
         </span>
       </h1>
-      <span class="domain">.dev</span>
+      <span class="domain font-mono text-w-50 text-2xl leading-[1.35] -ml-0.5">.dev</span>
     </div>
-    <nav class="nav">
-      <a href="http://www.github.com/karsonkalt" target="_blank"> GitHub </a>
-      <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank">
-        LinkedIn
-      </a>
-      <div class="dropdown-menu" tabindex="0">
-        <button
-          id="contact-button"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-controls="contact-menu"
-        >
+
+    <nav class="flex flex-row items-center gap-6">
+      <div class="dropdown-menu relative select-none" tabindex="0">
+        <button aria-haspopup="true" aria-expanded="false" aria-controls="appearance-menu"
+                class="icon-btn" aria-label="Appearance">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m14.622 17.897-10.68-2.913"/><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"/><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"/>
+          </svg>
+        </button>
+        <div id="appearance-menu" class="dropdown-content hidden flex-col absolute right-0 top-[calc(100%+6px)] min-w-44 bg-b-40 backdrop-blur-lg shadow-xl z-10 overflow-hidden origin-top-right rounded-sm" role="menu" aria-labelledby="appearance-button" style="animation: grow 200ms;">
+          <button id="theme-toggle" class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 hover:bg-w-05 transition-colors duration-100 w-full cursor-pointer" role="menuitem">
+            <svg class="icon-sun shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="icon-moon shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span class="icon-sun">Light mode</span>
+            <span class="icon-moon">Dark mode</span>
+          </button>
+          <button id="color-swatch" class="flex items-center gap-3 px-4 py-3 text-sm text-primary hover:bg-w-05 transition-colors duration-100 w-full cursor-pointer" role="menuitem" aria-label="Cycle accent color">
+            <span id="swatch-dot" class="w-3.5 h-3.5 rounded-full shrink-0 border border-w-20" style="background: rgb(30,80,180);"></span>
+            Accent color
+          </button>
+        </div>
+      </div>
+      <a href="http://www.github.com/karsonkalt" target="_blank"
+         class="text-w-50 text-sm no-underline hover:text-w-70 transition-colors duration-150">GitHub</a>
+      <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank"
+         class="text-w-50 text-sm no-underline hover:text-w-70 transition-colors duration-150">LinkedIn</a>
+
+      <div class="dropdown-menu relative select-none" tabindex="0">
+        <button id="contact-button" aria-haspopup="true" aria-expanded="false" aria-controls="contact-menu"
+                class="flex items-center gap-1.5 px-2.5 py-1 text-accent border border-accent text-sm rounded-sm transition-transform duration-100 hover:scale-[1.03]">
           Contact
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M5 8L12 15L19 8H5Z" />
           </svg>
         </button>
-        <div
-          id="contact-menu"
-          class="dropdown-content"
-          aria-labelledby="contact-button"
-          role="menu"
-          data-position="bottom-right"
-        >
+        <div id="contact-menu" role="menu" aria-labelledby="contact-button" data-position="bottom-right"
+             class="dropdown-content hidden flex-col absolute right-0 top-[calc(100%+6px)] min-w-44 bg-b-40 backdrop-blur-lg shadow-xl z-10 overflow-hidden origin-top-right rounded-sm"
+             style="animation: grow 200ms;">
           <a href="mailto:karson@karsonkalt.dev" role="menuitem"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              width="14"
-              height="14"
-              stroke="currentColor"
-              fill="none"
-            >
-              <defs>
-                <style>
-                  .cls-6374f8d9b67f094e4896c64c-1 {
-                    fill: none;
-                    stroke: currentColor;
-                    stroke-miterlimit: 10;
-                  }
-                </style>
-              </defs>
-              <rect
-                class="cls-6374f8d9b67f094e4896c64c-1"
-                x="1.5"
-                y="4.36"
-                width="21"
-                height="15.27"
-              ></rect>
-              <polyline
-                class="cls-6374f8d9b67f094e4896c64c-1"
-                points="1.5 4.36 12 14.86 22.5 4.36"
-              ></polyline></svg
-            >Email</a
-          >
-          <a
-            href="/assets/docs/karson_kalt_resume_2025_03.pdf"
-            target="_blank"
-            role="menuitem"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              width="14"
-              height="14"
-              stroke="currentColor"
-              fill="none"
-            >
-              <path
-                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-              />
+             class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
+              <rect x="1.5" y="4.36" width="21" height="15.27" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
+              <polyline points="1.5 4.36 12 14.86 22.5 4.36" stroke="currentColor" fill="none" stroke-miterlimit="10"></polyline>
+            </svg>
+            Email
+          </a>
+          <a href="/assets/docs/karson_kalt_resume_2025_03.pdf" target="_blank" role="menuitem"
+             class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
               <line x1="16" y1="13" x2="8" y2="13" />
               <line x1="16" y1="17" x2="8" y2="17" />
@@ -101,844 +78,166 @@ reverse %} {% assign tag_icons = site.data.tag_icons %}
             </svg>
             Resume
           </a>
-          <a
-            href="https://cal.com/karsonkalt/15min"
-            target="_blank"
-            role="menuitem"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              width="14"
-              height="14"
-              stroke="currentColor"
-              fill="none"
-            >
-              <defs>
-                <style>
-                  .cls-6374f8d9b67f094e4896c61a-1 {
-                    fill: none;
-                    stroke: currentColor;
-                    stroke-miterlimit: 10;
-                  }
-                </style>
-              </defs>
-              <rect
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x="1.48"
-                y="3.37"
-                width="21.04"
-                height="4.78"
-              ></rect>
-              <rect
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x="1.48"
-                y="8.15"
-                width="21.04"
-                height="14.35"
-              ></rect>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="5.3"
-                y1="12.93"
-                x2="7.22"
-                y2="12.93"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="9.13"
-                y1="12.93"
-                x2="11.04"
-                y2="12.93"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="12.96"
-                y1="12.93"
-                x2="14.87"
-                y2="12.93"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="16.78"
-                y1="12.93"
-                x2="18.7"
-                y2="12.93"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="16.78"
-                y1="17.72"
-                x2="18.7"
-                y2="17.72"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="5.3"
-                y1="17.72"
-                x2="7.22"
-                y2="17.72"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="9.13"
-                y1="17.72"
-                x2="11.04"
-                y2="17.72"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="12.96"
-                y1="17.72"
-                x2="14.87"
-                y2="17.72"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="6.26"
-                y1="0.5"
-                x2="6.26"
-                y2="5.28"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="12"
-                y1="0.5"
-                x2="12"
-                y2="5.28"
-              ></line>
-              <line
-                class="cls-6374f8d9b67f094e4896c61a-1"
-                x1="17.74"
-                y1="0.5"
-                x2="17.74"
-                y2="5.28"
-              ></line></svg
-            >Set up a chat</a
-          >
+          <a href="https://cal.com/karsonkalt/15min" target="_blank" role="menuitem"
+             class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
+              <rect x="1.48" y="3.37" width="21.04" height="4.78" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
+              <rect x="1.48" y="8.15" width="21.04" height="14.35" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
+              <line x1="5.3" y1="12.93" x2="7.22" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="9.13" y1="12.93" x2="11.04" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="12.96" y1="12.93" x2="14.87" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="16.78" y1="12.93" x2="18.7" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="16.78" y1="17.72" x2="18.7" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="5.3" y1="17.72" x2="7.22" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="9.13" y1="17.72" x2="11.04" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="12.96" y1="17.72" x2="14.87" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="6.26" y1="0.5" x2="6.26" y2="5.28" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="12" y1="0.5" x2="12" y2="5.28" stroke="currentColor" stroke-miterlimit="10"></line>
+              <line x1="17.74" y1="0.5" x2="17.74" y2="5.28" stroke="currentColor" stroke-miterlimit="10"></line>
+            </svg>
+            Set up a chat
+          </a>
         </div>
       </div>
     </nav>
   </div>
 
-  <div class="tab-container">
-    <div>
-      <div role="tablist">
-        <button
-          role="tab"
-          id="about"
-          aria-controls="tab-panel-4"
-          aria-selected="true"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            width="12"
-            height="12"
-            fill="none"
-          >
-            <circle cx="12" cy="7.25" r="5.73" stroke="currentColor"></circle>
-            <path
-              stroke="currentColor"
-              d="M1.5,23.48l.37-2.05A10.3,10.3,0,0,1,12,13h0a10.3,10.3,0,0,1,10.13,8.45l.37,2.05"
-            ></path>
-          </svg>
-          About
-        </button>
-        <button
-          role="tab"
-          id="blog"
-          aria-controls="tab-panel-2"
-          aria-selected="false"
-          tabindex="0"
-        >
-          <svg
-            id="Layer_1"
-            data-name="Layer 1"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            width="12"
-            height="12"
-            fill="currentColor"
-          >
-            <defs>
-              <style>
-                .cls-6374f8d9b67f094e4896c640-1 {
-                  fill: none;
-                  stroke: currentColor;
-                  stroke-miterlimit: 10;
-                }
-              </style>
-            </defs>
-            <line
-              class="cls-6374f8d9b67f094e4896c640-1"
-              x1="0.5"
-              y1="1.46"
-              x2="23.5"
-              y2="1.46"
-            ></line>
-            <line
-              class="cls-6374f8d9b67f094e4896c640-1"
-              x1="0.5"
-              y1="8.17"
-              x2="23.5"
-              y2="8.17"
-            ></line>
-            <line
-              class="cls-6374f8d9b67f094e4896c640-1"
-              x1="0.5"
-              y1="15.83"
-              x2="23.5"
-              y2="15.83"
-            ></line>
-            <line
-              class="cls-6374f8d9b67f094e4896c640-1"
-              x1="0.5"
-              y1="22.54"
-              x2="12.96"
-              y2="22.54"
-            ></line>
-          </svg>
-          Blog
-        </button>
-        <button
-          role="tab"
-          id="projects"
-          aria-controls="tab-panel-5"
-          aria-selected="false"
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke-width="1.5"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M3 3h18v18H3z" stroke="currentColor" fill="none"></path>
-            <path d="M3 9h18" stroke="currentColor" fill="none"></path>
-            <path d="M9 21V9" stroke="currentColor" fill="none"></path>
-          </svg>
-          Projects
-        </button>
-        <button
-          role="tab"
-          id="statuses"
-          aria-controls="tab-panel-6"
-          aria-selected="false"
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke-width="1.5"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
-              stroke="currentColor"
-              fill="none"
-            />
-          </svg>
-          Statuses
-        </button>
-        <button
-          role="tab"
-          id="console"
-          aria-controls="tab-panel-3"
-          aria-selected="false"
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke-width="1.5"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M2 21L12 12L2 3" stroke="currentColor" fill="none"></path>
-            <path d="M12 21H22" stroke="currentColor" fill="none"></path>
-          </svg>
-          Console
-          <span class="unread-badge"></span>
-        </button>
-      </div>
-
-      <div class="tab-panels">
-        <div id="tab-panel-2" role="tabpanel" aria-labelledby="blog" hidden>
-          <ul class="tab-panel-content">
-            {%- assign current_year = '' -%} {%- assign date_format = "%b %-d,
-            %Y" -%} {%- for post in posts -%} {%- assign post_year = post.date |
-            date: '%Y' -%} {%- if post_year != current_year -%} {%- assign
-            current_year = post_year -%} {%- if forloop.first == false -%}
-            <div class="year-divider">{{ current_year }}</div>
-            {%- endif -%} {%- endif -%}
-            <li>
-              <a class="link-item" href="{{ post.url | relative_url }}">
-                <div class="link-item-left">
-                  <span class="post-meta"
-                    >{{ post.date | date: date_format }}</span
-                  >
-                  <span class="post-title-list">{{ post.title | escape }}</span>
-                  {% if post.description %}
-                  <span class="post-description"
-                    >{{ post.description | escape }}</span
-                  >
-                  {% endif %}
-                </div>
-              </a>
-            </li>
-            {%- endfor -%}
-          </ul>
-        </div>
-
-        <div id="tab-panel-1" role="tabpanel" aria-labelledby="notes" hidden>
-          <ul class="tab-panel-content">
-            {%- for note in notes -%} {% assign tags = note.tags %}
-            <li>
-              <a class="link-item" href="{{ note.url | relative_url }}">
-                <div class="link-item-left">
-                  {% if tags %}
-                  <span class="post-tags">
-                    {%- for tag in tags -%}
-                    <span class="post-tag">
-                      {% if tag %} {% assign icon = tag_icons[tag] %} {% if icon
-                      %}
-                      <img
-                        src="/assets/icons/{{ icon }}"
-                        alt="{{ tag }} icon"
-                      />
-                      {% endif %} {{ tag | escape }} {% endif %}
-                    </span>
-                    {%- endfor -%}
-                  </span>
-                  {% endif %}
-                  <span class="post-title-list">{{ note.title | escape }}</span>
-                  {% if note.description %}
-                  <span class="post-description">
-                    {{ note.description | escape }}
-                  </span>
-                  {% endif %}
-                </div>
-              </a>
-            </li>
-            {%- endfor -%}
-          </ul>
-        </div>
-
-        <div id="tab-panel-3" role="tabpanel" aria-labelledby="stdout" hidden>
-          <ul class="tab-panel-content stdout-log"></ul>
-        </div>
-
-        <div id="tab-panel-5" role="tabpanel" aria-labelledby="projects" hidden>
-          <ul class="tab-panel-content">
-            <li>
-              <a class="project-item" href="https://as1.social" target="_blank">
-                <div class="project-icon-container">
-                  <svg
-                    viewBox="0 0 48 48"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <mask id="as1-mask">
-                        <rect width="48" height="48" fill="white" />
-                        <text
-                          x="24"
-                          y="38"
-                          text-anchor="middle"
-                          font-family="Inter, Arial, sans-serif"
-                          font-size="40"
-                          font-weight="bold"
-                          fill="black"
-                        >
-                          1
-                        </text>
-                      </mask>
-                    </defs>
-                    <rect
-                      width="48"
-                      height="48"
-                      fill="currentColor"
-                      mask="url(#as1-mask)"
-                    />
-                  </svg>
-                </div>
-                <div class="project-content">
-                  <span class="project-badge">karsonkalt.dev</span>
-                  <span class="project-title">As1 Social</span>
-                  <span class="project-description">
-                    A user-owned social networking app that empowers individuals
-                    to control their data, customize their content experience,
-                    and participate in platform governance. Developed by The
-                    Democratic Economy LLC, it aims to reshape digital
-                    interactions by eliminating intrusive ads and opaque
-                    algorithms, fostering a community-driven digital
-                    environment.
-                  </span>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a
-                class="project-item"
-                href="https://www.jupiterone.com"
-                target="_blank"
-              >
-                <div class="project-icon-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <line x1="3" y1="9" x2="21" y2="9" />
-                    <line x1="9" y1="21" x2="9" y2="9" />
-                    <line x1="12" y1="12" x2="12" y2="12" />
-                    <line x1="15" y1="12" x2="15" y2="12" />
-                    <line x1="18" y1="12" x2="18" y2="12" />
-                  </svg>
-                </div>
-                <div class="project-content">
-                  <span class="project-badge">JupiterOne</span>
-                  <span class="project-title">Dashboard Query Variables</span>
-                  <span class="project-description">
-                    Enhanced our dashboard system and query language to allow
-                    hydrating queries with query variables, enhancing rollup
-                    data visualization and enhancing interactivity in
-                    dashboards. Resulted in more powerful insights by allowing
-                    users to update numerous query views simultaneously.
-                  </span>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a
-                class="project-item"
-                href="https://www.jupiterone.com"
-                target="_blank"
-              >
-                <div class="project-icon-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path
-                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-                    />
-                    <path d="M2 12h20" />
-                  </svg>
-                </div>
-                <div class="project-content">
-                  <span class="project-badge">JupiterOne</span>
-                  <span class="project-title">Data Explorer</span>
-                  <span class="project-description">
-                    A way to inspect a graph database with config driven
-                    rendering for scalable UI. Features include the ability for
-                    users to save custom views and an AI model to create custom
-                    views. Dynamically fetches properties by class/type and
-                    provides drill-down insights.
-                  </span>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a
-                class="project-item"
-                href="https://www.jupiterone.com"
-                target="_blank"
-              >
-                <div class="project-icon-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  >
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                    <path
-                      d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
-                    />
-                    <path d="M12 6h4" />
-                    <path d="M12 10h4" />
-                    <path d="M12 14h4" />
-                  </svg>
-                </div>
-                <div class="project-content">
-                  <span class="project-badge">JupiterOne</span>
-                  <span class="project-title">Smart Classes</span>
-                  <span class="project-description">
-                    Developed a system for users to define and create custom
-                    "smart classes," enabling them to classify and query
-                    critical assets based on unique business criteria. Empowered
-                    users to tailor their data organization and streamline
-                    querying of the assets essential to them.
-                  </span>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a
-                class="project-item"
-                href="https://www.jupiterone.com/blog/get-easy-answers-complex-questions-ai-natural-language-search-jupiterone"
-                target="_blank"
-              >
-                <div class="project-icon-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  >
-                    <path
-                      d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
-                    />
-                  </svg>
-                </div>
-                <div class="project-content">
-                  <span class="project-badge">JupiterOne</span>
-                  <span class="project-title">Natural Language Querying</span>
-                  <span class="project-description">
-                    Designed and developed the integration of generative AI into
-                    our search experience, converting natural language to our
-                    query language. Implemented a vector database embedding
-                    cache, improving query response times and reducing
-                    operational costs. Implemented Natural Language Processing
-                    (NLP) techniques including fuzzy matching and stop word
-                    filtering to enhance search precision.
-                  </span>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a
-                class="project-item"
-                href="https://www.jupiterone.com"
-                target="_blank"
-              >
-                <div class="project-icon-container">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  >
-                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                    <path d="M2 17l10 5 10-5" />
-                    <path d="M2 12l10 5 10-5" />
-                  </svg>
-                </div>
-                <div class="project-content">
-                  <span class="project-badge">JupiterOne</span>
-                  <span class="project-title">Design System Development</span>
-                  <span class="project-description">
-                    Spearheaded the development of JupiterOne's design system,
-                    including creation of a comprehensive component library,
-                    design tokens, and theming system. Helping to streamline the
-                    development process and enabling engineers to focus on core
-                    feature development.
-                  </span>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div id="tab-panel-4" role="tabpanel" aria-labelledby="stdout">
-          <ul class="tab-panel-content">
-            <section>
-              <div class="hero-container">
-                <div class="hero">
-                  <div class="hero_text-container">
-                    <h1>
-                      <span class="glow">Software Engineer & UX Designer</span>
-                    </h1>
-                    <p>
-                      I collaborate across product, design, and engineering to
-                      ship work that balances architecture, speed, and user
-                      value.
-                    </p>
-                    <div class="button-container">
-                      <a
-                        class="button-round primary-action"
-                        href="/assets/docs/karson_kalt_resume_2025_03.pdf"
-                        target="_blank"
-                        ><span> Resume </span>
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M5 8L12 15L19 8H5Z"
-                            transform="rotate(270 12 12)"
-                          />
-                        </svg>
-                      </a>
-                      <a
-                        class="button-round secondary-action"
-                        href="https://www.linkedin.com/in/kaltkarson/"
-                        target="_blank"
-                        ><span> LinkedIn </span>
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M5 8L12 15L19 8H5Z"
-                            transform="rotate(270 12 12)"
-                          />
-                        </svg>
-                      </a>
-                    </div>
-                    <div class="github-status-container">
-                      <div class="github-dot"></div>
-                      <div id="github-status"></div>
-                    </div>
-                  </div>
-                  <figure class="profile-picture">
-                    <img
-                      src="/assets/img/profile.jpg"
-                      alt="Karson Kalt"
-                      class="profile-picture_img"
-                    />
-                  </figure>
-                </div>
-                <div class="glare"></div>
-              </div>
-            </section>
-            <section style="margin-top: -20px">
-              <div class="gravatar">
-                <div class="gravatar-status">
-                  <div class="gravatar-status_meta">
-                    {% assign latest_status = site.statuses | sort: 'date' |
-                    reverse | first %} {{ latest_status.date | date: "%B %-d" }}
-                  </div>
-                  <div class="gravatar-status_status">
-                    {{ latest_status.status }}
-                  </div>
-                  <div
-                    class="gravatar-status_all-statuses"
-                    id="statuses-trigger"
-                  >
-                    Past statuses
-                  </div>
-                </div>
-              </div>
-            </section>
-            <section class="services-section" style="padding: 0">
-              <h2 style="margin-bottom: 0.5em">Professional Services</h2>
-              <p style="margin-bottom: 1.5em">
-                I provide comprehensive digital solutions tailored to meet your
-                business needs. My expertise spans the full development
-                lifecycle, ensuring seamless integration from concept to
-                deployment.
-              </p>
-              <div>
-                <div class="project-item">
-                  <div class="service-icon-container">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="var(--accent-color)"
-                      stroke-width="2"
-                      width="28"
-                      height="28"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 6v6l4 2" />
-                    </svg>
-                  </div>
-                  <div class="project-content">
-                    <span class="project-title">Technical Leadership</span>
-                    <span class="project-description"
-                      >Providing strategic direction and oversight for complex
-                      projects</span
-                    >
-                  </div>
-                </div>
-                <div class="project-item">
-                  <div class="service-icon-container">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="var(--accent-color)"
-                      stroke-width="2"
-                      width="28"
-                      height="28"
-                    >
-                      <rect x="4" y="4" width="16" height="16" rx="3" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  </div>
-                  <div class="project-content">
-                    <span class="project-title"
-                      >User Experience (UX) Design</span
-                    >
-                    <span class="project-description"
-                      >Crafting intuitive and engaging user interfaces</span
-                    >
-                  </div>
-                </div>
-                <div class="project-item">
-                  <div class="service-icon-container">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="var(--accent-color)"
-                      stroke-width="2"
-                      width="28"
-                      height="28"
-                    >
-                      <rect x="3" y="7" width="18" height="13" rx="2" />
-                      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                    </svg>
-                  </div>
-                  <div class="project-content">
-                    <span class="project-title"
-                      >Full-Stack Web Development</span
-                    >
-                    <span class="project-description"
-                      >Building responsive and scalable web applications</span
-                    >
-                  </div>
-                </div>
-                <div class="project-item">
-                  <div class="service-icon-container">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="var(--accent-color)"
-                      stroke-width="2"
-                      width="28"
-                      height="28"
-                    >
-                      <rect x="7" y="2" width="10" height="20" rx="2" />
-                      <circle cx="12" cy="18" r="1" />
-                    </svg>
-                  </div>
-                  <div class="project-content">
-                    <span class="project-title"
-                      >Mobile Application Development</span
-                    >
-                    <span class="project-description"
-                      >Creating cross-platform mobile apps for iOS and
-                      Android</span
-                    >
-                  </div>
-                </div>
-                <div class="project-item">
-                  <div class="service-icon-container">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="var(--accent-color)"
-                      stroke-width="2"
-                      width="28"
-                      height="28"
-                    >
-                      <path
-                        d="M17.5 19a4.5 4.5 0 0 0 0-9 5.5 5.5 0 0 0-10.9 1.5A4 4 0 0 0 6 19h11.5z"
-                      />
-                    </svg>
-                  </div>
-                  <div class="project-content">
-                    <span class="project-title"
-                      >Cloud Infrastructure & DevOps</span
-                    >
-                    <span class="project-description"
-                      >Implementing reliable and efficient cloud solutions</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div>
-                <a
-                  href="mailto:karson@karsonkalt.dev"
-                  class="button-round primary-action"
-                  ><span>Email</span>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 8L12 15L19 8H5Z"
-                      transform="rotate(270 12 12)"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </section>
-          </ul>
-        </div>
-
-        <div id="tab-panel-6" role="tabpanel" aria-labelledby="statuses" hidden>
-          <ul class="tab-panel-content">
-            {%- assign current_year = '' -%} {%- assign date_format = "%b %-d,
-            %Y" -%} {%- assign sorted_statuses = site.statuses | sort: 'date' |
-            reverse -%} {%- for status in sorted_statuses -%} {%- assign
-            status_year = status.date | date: '%Y' -%} {%- if status_year !=
-            current_year -%} {%- assign current_year = status_year -%} {%- if
-            forloop.first == false -%}
-            <div class="year-divider">{{ current_year }}</div>
-            {%- endif -%} {%- endif -%}
-            <li class="status-entry">
-              <span class="post-meta"
-                >{{ status.date | date: date_format }}</span
-              >
-              <div class="status-message">{{ status.status | escape }}</div>
-            </li>
-            {%- endfor -%}
-          </ul>
+  {{/* ── Hero card ── */}}
+  <div class="hero-container relative mb-20 rounded" style="transform-style: preserve-3d;">
+    <div class="flex overflow-hidden rounded"
+         style="background-image: linear-gradient(30deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.05) 100%); transform-style: preserve-3d;">
+      <div class="flex-1 p-8 flex flex-col gap-3 max-[800px]:p-6" style="transform-style: preserve-3d;">
+        <h2 class="text-primary m-0 text-xl font-semibold leading-snug">
+          Software Engineer & UX Designer
+        </h2>
+        <p class="text-muted m-0 text-sm leading-relaxed">
+          I collaborate across product, design, and engineering to
+          ship work that balances architecture, speed, and user value.
+        </p>
+        <div class="flex items-center gap-5 pt-1">
+          <a href="/assets/docs/karson_kalt_resume_2025_03.pdf" target="_blank"
+             class="inline-flex items-center gap-1.5 text-xs text-accent border-b border-accent no-underline transition-transform duration-100 hover:scale-[1.07]">
+            Resume
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 8L12 15L19 8H5Z" transform="rotate(270 12 12)" />
+            </svg>
+          </a>
+          <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank"
+             class="inline-flex items-center gap-1.5 text-xs text-muted border-b border-w-40 no-underline transition-transform duration-100 hover:scale-[1.07]">
+            LinkedIn
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 8L12 15L19 8H5Z" transform="rotate(270 12 12)" />
+            </svg>
+          </a>
         </div>
       </div>
+      <figure class="shrink-0 w-44 m-0 max-[800px]:hidden">
+        <img src="/assets/img/profile.jpg" alt="Karson Kalt" class="object-cover w-full h-full" />
+      </figure>
     </div>
+    <div class="glare"></div>
   </div>
-</main>
-<div id="console-drawer" class="bottom-drawer">
-  <div class="bottom-drawer-content">
-    <pre class="terminal ripple-container">
-      <span class="system-prompt" aria-hidden="true">$</span>
-      <div class="input-container">
-        <input type="text" class="prompt" value="" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
-        <span class="input-mirror"></span>
-        <span class="cursor" aria-hidden="true">_</span>
-      </div>
-    </pre>
-  </div>
-</div>
-<script src="{{ 'assets/js/home.js' | relative_url }}" type="module"></script>
 
-<script>
-  // Handle initial path
-  document.addEventListener("DOMContentLoaded", () => {
-    const path = window.location.pathname.substring(1); // Remove leading slash
-    if (path) {
-      const tab = document.getElementById(path);
-      if (tab) {
-        tab.click();
-      }
-    }
-  });
-</script>
+  {{/* ── Writing ── */}}
+  <section class="mb-20">
+    <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Writing</p>
+    <ul class="list-none m-0">
+      {%- assign date_format = "%b %-d, %Y" -%}
+      {%- for post in site.posts -%}
+      <li>
+        <a href="{{ post.url | relative_url }}"
+           class="link-item flex flex-col gap-1.5 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <span class="text-[10px] font-normal text-muted uppercase tracking-wider">{{ post.date | date: date_format }}</span>
+          <span class="text-lg font-semibold text-primary leading-snug post-title">{{ post.title | escape }}</span>
+          {% if post.description %}
+          <span class="text-sm text-muted font-normal leading-relaxed line-clamp-2">{{ post.description | escape }}</span>
+          {% endif %}
+        </a>
+      </li>
+      {%- endfor -%}
+    </ul>
+  </section>
+
+  {{/* ── Projects ── */}}
+  <section>
+    <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Projects</p>
+    <ul class="list-none m-0">
+
+      <li>
+        <a href="https://docs.jupiterone.io/features/admin/whats-new-in-search" target="_blank"
+           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <img src="/assets/icons/jupiterone.svg" class="w-10 h-10 shrink-0 opacity-75 mt-0.5" alt="JupiterOne" />
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[10px] text-muted uppercase tracking-wider">JupiterOne</span>
+            <span class="text-base font-semibold text-primary">Web Client Rearchitecture <span class="text-[10px] font-normal text-muted ml-1">2026</span></span>
+            <span class="text-sm text-muted leading-relaxed">Full architectural overhaul of the JupiterOne web client — new global search palette (⌘K) with live results, a rebuilt GraphCanvas with zoom-based detail scaling and node spotlighting, AI query expansion generating multiple candidates, a universal entity inspector accessible from anywhere with shareable URLs, and a context-aware AI assistant embedded across the platform. Shipped alongside a new frontend architecture to support the scale of these features.</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="https://www.jupiterone.com" target="_blank"
+           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <img src="/assets/icons/jupiterone.svg" class="w-10 h-10 shrink-0 opacity-75 mt-0.5" alt="JupiterOne" />
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[10px] text-muted uppercase tracking-wider">JupiterOne</span>
+            <span class="text-base font-semibold text-primary truncate">Dashboard Query Variables <span class="text-[10px] font-normal text-muted ml-1">2025</span></span>
+            <span class="text-sm text-muted leading-relaxed line-clamp-2">Query variables for dashboards — richer rollup visualizations and interactive filtering.</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="https://www.jupiterone.com" target="_blank"
+           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <img src="/assets/icons/jupiterone.svg" class="w-10 h-10 shrink-0 opacity-75 mt-0.5" alt="JupiterOne" />
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[10px] text-muted uppercase tracking-wider">JupiterOne</span>
+            <span class="text-base font-semibold text-primary truncate">Data Explorer <span class="text-[10px] font-normal text-muted ml-1">2025</span></span>
+            <span class="text-sm text-muted leading-relaxed line-clamp-2">Config-driven graph database inspector with AI-powered custom views and dynamic drill-down.</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="https://www.jupiterone.com" target="_blank"
+           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <img src="/assets/icons/jupiterone.svg" class="w-10 h-10 shrink-0 opacity-75 mt-0.5" alt="JupiterOne" />
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[10px] text-muted uppercase tracking-wider">JupiterOne</span>
+            <span class="text-base font-semibold text-primary truncate">Smart Classes <span class="text-[10px] font-normal text-muted ml-1">2024</span></span>
+            <span class="text-sm text-muted leading-relaxed line-clamp-2">User-defined asset classification for querying critical resources by custom business criteria.</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="https://www.jupiterone.com/blog/get-easy-answers-complex-questions-ai-natural-language-search-jupiterone" target="_blank"
+           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <img src="/assets/icons/jupiterone.svg" class="w-10 h-10 shrink-0 opacity-75 mt-0.5" alt="JupiterOne" />
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[10px] text-muted uppercase tracking-wider">JupiterOne</span>
+            <span class="text-base font-semibold text-primary truncate">Natural Language Querying <span class="text-[10px] font-normal text-muted ml-1">2023</span></span>
+            <span class="text-sm text-muted leading-relaxed line-clamp-2">AI search converting natural language to our query language, with vector embedding cache.</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="https://www.jupiterone.com" target="_blank"
+           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <img src="/assets/icons/jupiterone.svg" class="w-10 h-10 shrink-0 opacity-75 mt-0.5" alt="JupiterOne" />
+          <div class="flex flex-col gap-1 min-w-0">
+            <span class="text-[10px] text-muted uppercase tracking-wider">JupiterOne</span>
+            <span class="text-base font-semibold text-primary truncate">Design System <span class="text-[10px] font-normal text-muted ml-1">2022</span></span>
+            <span class="text-sm text-muted leading-relaxed line-clamp-2">Component library, design tokens, and theming system to streamline development across teams.</span>
+          </div>
+        </a>
+      </li>
+
+    </ul>
+  </section>
+
+</main>
+
+<script src="{{ 'assets/js/home.js' | relative_url }}" type="module"></script>

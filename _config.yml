@@ -2,22 +2,8 @@ title: Karson Kalt
 author:
   name: Karson Kalt
   email: karson@karsonkalt.dev
-status:
-  Currently working on upgrading observability dashboards, filtering, query
-  variables, and data visualization at JupiterOne.
-status_updated: 2025-03-26
 
 baseurl: ""
-
-collections:
-  notes:
-    output: true
-  statuses:
-    output: true
-    permalink: /statuses/:year/:month/:day/:title/
-
-include:
-  - _data
 
 plugins:
   - jekyll-feed
@@ -26,3 +12,9 @@ plugins:
 exclude:
   - node_modules
   - assets/ts
+  - assets/css/input.css
+  - postcss.config.js
+  - webpack.config.js
+  - package.json
+  - package-lock.json
+  - tsconfig.json
