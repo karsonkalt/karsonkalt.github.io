@@ -110,13 +110,19 @@ export const initGutter = () => {
   const ORGANIZE_THRESHOLD = 8;
   const updateBinUI = () => {
     const count = Composite.allBodies(engine.world).filter(b => !b.isStatic).length;
-    const hint = document.getElementById("skills-hint") as HTMLElement | null;
-    const btn  = document.getElementById("skills-sort-btn") as HTMLElement | null;
-    if (hint) hint.style.opacity = count === 0 ? "1" : "0";
-    if (btn) {
-      const ready = count >= ORGANIZE_THRESHOLD;
-      btn.style.opacity = ready ? "1" : "0";
-      btn.style.pointerEvents = ready ? "auto" : "none";
+    const btn = document.getElementById("skills-sort-btn") as HTMLButtonElement | null;
+    if (!btn) return;
+    const ready = count >= ORGANIZE_THRESHOLD;
+    if (ready) {
+      btn.textContent = "Organize";
+      btn.style.cursor = "pointer";
+      btn.style.pointerEvents = "auto";
+      btn.style.color = "var(--white-50)";
+    } else {
+      btn.textContent = "Click anywhere to drop";
+      btn.style.cursor = "default";
+      btn.style.pointerEvents = "none";
+      btn.style.color = "var(--white-40)";
     }
   };
   updateBinUI();

@@ -282,12 +282,11 @@ layout: base
   </section>
 
   <!-- Skills bin -->
-  <div id="skills-bin" class="relative mt-20 w-full" style="border-left:0.5px solid var(--white-20);border-right:0.5px solid var(--white-20);border-bottom:0.5px solid var(--white-20);">
+  <div id="skills-bin" class="relative w-full" style="border-left:0.5px solid var(--white-20);border-right:0.5px solid var(--white-20);border-bottom:0.5px solid var(--white-20);">
     <span class="absolute top-3 left-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-muted select-none pointer-events-none">Skills</span>
-    <button id="skills-sort-btn" class="text-[10px] font-semibold tracking-[0.12em] uppercase text-muted hover:text-primary cursor-pointer bg-transparent border-0 p-1 opacity-0 pointer-events-none" style="position:sticky;top:1rem;float:right;margin-right:1rem;margin-top:60vh;transition:opacity 400ms ease;">Organize</button>
-    <!-- Empty state hint — sticky so it stays centered in viewport while scrolling through bin -->
-    <div id="skills-hint" class="pointer-events-none text-center w-full" style="position:sticky;top:50vh;transform:translateY(-50%);transition:opacity 400ms ease;margin-top:60vh;">
-      <span class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted select-none">Click anywhere to drop</span>
+    <!-- Centered sticky label — says 'Click anywhere to drop' until 8 bodies, then becomes 'Organize' button -->
+    <div id="skills-hint" class="text-center w-full" style="position:sticky;top:50vh;transform:translateY(-50%);margin-top:60vh;">
+      <button id="skills-sort-btn" class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted select-none bg-transparent border-0 p-0 cursor-default pointer-events-none" style="transition:color 300ms ease;">Click anywhere to drop</button>
     </div>
   </div>
 

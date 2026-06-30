@@ -32,6 +32,8 @@
     --leading-snug: 1.375;
     --leading-relaxed: 1.625;
     --radius-sm: 0.25rem;
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --blur-md: 12px;
     --blur-lg: 16px;
     --default-transition-duration: 150ms;
@@ -520,8 +522,8 @@
   .object-cover {
     object-fit: cover;
   }
-  .p-1 {
-    padding: var(--spacing);
+  .p-0 {
+    padding: 0;
   }
   .p-8 {
     padding: calc(var(--spacing) * 8);
@@ -806,13 +808,6 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-w-05);
-      }
-    }
-  }
-  .hover\:text-primary {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-primary);
       }
     }
   }
