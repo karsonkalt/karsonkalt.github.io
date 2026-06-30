@@ -243,8 +243,8 @@ export const initGutter = () => {
     // Build pill overlay (invisible to start)
     const overlay = document.createElement("div");
     overlay.style.cssText = `
-      position:absolute;inset:0;padding:48px 24px 32px;
-      display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px;
+      position:absolute;inset:0;padding:12px 16px 12px;
+      display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;
       pointer-events:none;opacity:0;
     `;
 
@@ -296,8 +296,8 @@ document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
     probe.style.cssText = `
       position:fixed;left:-9999px;top:0;
       width:${bin.getBoundingClientRect().width}px;
-      padding:48px 24px 32px;
-      display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px;
+      padding:12px 16px 12px;
+      display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;
       visibility:hidden;pointer-events:none;
     `;
     CATEGORIES.forEach(({ label }) => {
