@@ -117,6 +117,7 @@ export const initGutter = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const sy    = window.scrollY;
+    if (typeof drawSortLabels === "function") drawSortLabels(sy);
     const color = accentColor();
     const vh    = window.innerHeight;
 
@@ -180,63 +181,144 @@ export const initGutter = () => {
   });
 
   // ── Sort ────────────────────────────────────────────────────────────────
+  // Category map: word → category label
+  const CATEGORIES: { label: string; words: string[] }[] = [
+    { label: "TypeScript",     words: ["keyof T","infer R","as const","satisfies","readonly","T extends U","T[keyof T]","[K in keyof T]","T & U","T | U","asserts","override","abstract","namespace","declare","is T","never","unknown","unique symbol","Partial<T>","Omit<T,K>","Pick<T,K>","Record<K,V>","Extract<T,U>","Exclude<T,U>","NonNullable<T>","Awaited<T>","ReturnType<T>","Parameters<T>","InstanceType<T>","Required<T>","Readonly<T>","Mutable<T>","DeepPartial<T>","PropsWithChildren","ComponentProps<T>","nullish coalescing","optional chaining","type narrowing","discriminated union","type predicate","assertion fn","satisfies T","non-null assertion","const assertion"] },
+    { label: "React",          words: ["useCallback","useMemo","useRef<T>","useState<T>","useEffect","useContext","useReducer","useDeferredValue","useTransition","useId","forwardRef","memo()","Suspense","ErrorBoundary","lazy()","startTransition","VariantProps","cva()","cn()","data-slot","queryKey","qc.invalidateQueries()","qc.prefetchQuery()","qc.setQueryData()","qc.select()","pageInfo","useMutation","useSuspense","useInfiniteQuery","graphqlQueryOptions","mutationKey","tq.staleTime","tq.gcTime","tq.placeholderData","tq.refetchOnMount","tq.throwOnError","tq.networkMode"] },
+    { label: "D3 / Data Viz",  words: ["d3.select()","d3.selectAll()","d3.enter()","d3.exit()","d3.join()","d3.append()","d3.datum()","d3.data()","d3.scaleLinear()","d3.scaleBand()","d3.scaleOrdinal()","d3.scaleLog()","d3.scaleTime()","d3.scaleSqrt()","d3.extent()","d3.max()","d3.min()","d3.sum()","d3.rollup()","d3.group()","d3.bin()","d3.histogram()","d3.line()","d3.area()","d3.arc()","d3.pie()","d3.curveCatmullRom","d3.curveMonotoneX","d3.curveBasis","d3.forceSimulation()","d3.forceManyBody()","d3.forceLink()","d3.forceCenter()","d3.forceCollide()","d3.forceX()","d3.zoom()","d3.drag()","d3.brush()","d3.axisBottom()","d3.treemap()","d3.hierarchy()","d3.pack()","d3.cluster()","d3.sankey()","d3.chord()","d3.ribbon()","d3.interpolate()","d3.interpolateRgb()","d3.quantize()","d3.transition()","d3.ease()","d3.easeElastic","sel.attr()","sel.style()","sel.call()","sel.on('click')","treemap","sunburst","heatmap","sankey","chord","voronoi","hexbin","contour","streamgraph","zoomable","pannable","brushable","linked views","overview+detail","focus+context","semantic zoom","WebGL renderer","Canvas 2D","SVG layer","quadtree","spatial index","R-tree","kdtree","path morphing","shape tweening","FLIP animation"] },
+    { label: "React Flow",     words: ["useNodes()","useEdges()","useReactFlow()","onNodesChange","onEdgesChange","onConnect","NodeTypes","EdgeTypes","Handle","Position","MiniMap","Controls","Background","RF.addEdge()","RF.applyNodeChanges()","RF.applyEdgeChanges()","rf.fitView()","rf.getViewport()","rf.setCenter()","RF.MarkerType","RF.ConnectionMode","RF.PanOnScrollMode","rf.useStore()","rf.useNodeId()","rf.useUpdateNodeInternals()","LaidOutNode","ElkLayout","GraphCanvas","LaidOutEdge","J1QL","parseJ1QL","EntityTarget","QueryResult"] },
+    { label: "Graph Theory",   words: ["DAG","BFS","DFS","topological sort","adjacency list","force-directed","hierarchical layout","ELK","dagre","graph vertex","graph edge","node degree","node centrality","shortest path","Dijkstra","A*","cycle detection","connected components","spanning tree","bipartite","graph in-degree","graph out-degree","source node","sink node","Neptune","graph DB","Neo4j","Cypher","Gremlin","index","query plan","N+1","connection pool","read replica","sharding"] },
+    { label: "CSS / Platform", words: ["@layer","@property","@container",":has()","@scope","@starting-style","light-dark()","oklch()","color-mix()","text-wrap:balance","text-wrap:pretty","svh","dvh","lh","anchor-name","position-anchor","field-sizing","content-visibility","scrollbar-gutter","scrollbar-color","subgrid","container-type","@supports","view-transition-name","::view-transition","startViewTransition","@view-transition","::view-transition-group","navigation:auto","::view-transition-old","::view-transition-new","WebAssembly","WASM","Canvas API","WebGL","WebGPU","ResizeObserver","IntersectionObserver","MutationObserver","requestAnimationFrame","PerformanceObserver","Web Workers","SharedArrayBuffer","Atomics","Clipboard API","Drag & Drop API","Pointer Events","BroadcastChannel","structuredClone","AbortController"] },
+    { label: "Design Systems", words: ["design token","token alias","semantic token","primitive","component API","prop contract","slot pattern","compound","controlled","uncontrolled","headless","polymorphic","as prop","asChild","Radix slot","render prop","forward ref","display name","story","argTypes","Storybook CSF","autodocs","play function","interactions","Chromatic snapshot","visual regression","baseline","breaking change","deprecation","migration guide","versioning","CHANGELOG","peer dep","bundle analysis","tree-shakeable","side-effect free","ESM","CJS","color ramp","type scale","spacing scale","grid system","8pt grid","4pt grid","optical alignment","rhythm","elevation","shadow token","motion token","duration","easing token","z-index scale","breakpoint token","icon system","icon grid","keyline","padding zone","accessibility token","focus ring","contrast ratio","light mode token","dark mode token","high contrast","figma variable","mode","collection","publish styles","code connect","storybook link","dev handoff","contribution guide","governance model","RFC","DACI","design review","ship criteria","acceptance"] },
+    { label: "Figma",          words: ["auto layout","variants","tokenize","constraints","dev mode","detach","overlay","component set","instance swap","exposed props","slot","fill container","hug contents","base component","boolean prop"] },
+    { label: "Design / UX",    words: ["Fitts","Hick","Gestalt","affordance","signifier","mental model","F-pattern","progressive","Doherty","cognitive load","chunking","5-second test","error prevention","recognition","flexibility"] },
+    { label: "AWS",            words: ["Lambda","S3","CloudFront","API Gateway","DynamoDB","SQS","SNS","EventBridge","Step Functions","ECS","EC2","RDS","Aurora","ElastiCache","Secrets Manager","IAM","IAM Role","IAM Policy","AssumeRole","STS","presigned URL","S3 lifecycle","CloudWatch","X-Ray","VPC","CIDR","security group","NACLs","ALB","Cognito","ACM","Route53","WAF","Shield","CDK","SAM","CloudFormation","Terraform"] },
+    { label: "Protocols",      words: ["REST","GraphQL","gRPC","WebSocket","SSE","CORS","preflight","OPTIONS","CSRF","XSS","JWT","OAuth2","PKCE","mTLS","OIDC","HTTP/2","HTTP/3","QUIC","TLS 1.3","idempotent","rate limit","backoff","retry","pagination","cursor","offset","Content-Type","Authorization:","Bearer","ETag","Cache-Control","tRPC","WebSockets"] },
+    { label: "Architecture",   words: ["microservices","monorepo","monolith","modular monolith","service mesh","sidecar","BFF","API gateway","event-driven","event sourcing","CQRS","saga pattern","pub/sub","message queue","dead letter queue","idempotency key","distributed tracing","correlation ID","circuit breaker","bulkhead","retry with backoff","blue/green","canary deploy","feature flag","A/B test","strangler fig","anti-corruption layer","hexagonal","domain model","bounded context","aggregate root","eventual consistency","CAP theorem","two-phase commit","colocation","code splitting","tree shaking","dead code","SSR","SSG","ISR","RSC","streaming","hydration","edge runtime","middleware","optimistic UI","stale-while-revalidate","cache invalidation","micro-frontend","module federation","islands arch","component-driven","atomic design","design tokens"] },
+    { label: "Git / CI",       words: ["git worktree","git rebase -i","git stash pop","git bisect","git reflog","git log --oneline","git diff HEAD~1","git cherry-pick","git fetch --prune","--force-with-lease","git blame","git shortlog","gh pr create","gh pr merge","gh pr view","gh run watch","gh issue list","CODEOWNERS",".gitattributes","squash & merge","nx affected","changesets","semantic versioning","GitHub Actions","workflow","matrix build","lint-staged","husky","pre-commit","trunk-based","DORA metrics","lead time","MTTR","deploy freq","workflow_dispatch","matrix strategy","concurrency group","cancel-in-progress","actions/cache@v4","job needs:","environment secrets","OIDC token","id-token: write","reusable workflow","composite action","step outputs","gh workflow run","status check","branch protection"] },
+    { label: "Bash / Zsh",     words: ["#!/bin/zsh","set -euo pipefail","$?","$!","$()","${:-}","2>&1",">/dev/null","&&","||","| grep","| awk","| xargs","| sort -u","| jq '.'","| head -n","chmod +x","source ~/.zshrc","alias","export PATH","for f in","if [[ -z","trap","read -r"] },
+    { label: "Performance",    words: ["LCP","INP","CLS","FID","TTFB","FCP","bundle analysis","lazy load","prefetch","preload","memoization","virtualization","windowing","debounce","throttle","requestIdleCallback","paint hold","layout thrash","composite layer","vite.config.ts","defineConfig()","rollupOptions","manualChunks","chunk splitting","vendor chunk","dynamic import()","import.meta.env","import.meta.glob","optimizeDeps","vite.resolve.alias","ssr.noExternal","content hash","immutable cache","Cache-Control:immutable","service worker","workbox precache","cache busting","304 Not Modified","modulepreload","prefetch hint"] },
+    { label: "Observability",  words: ["OpenTelemetry","tracing","span","trace ID","Sentry","Datadog","NewRelic.noticeError()","Grafana","NR.addPageAction()","NR.setCustomAttribute()","structured log","log level","alert fatigue","P50","P95","P99","SLA","SLO","SLI","error budget","least privilege","zero trust","RBAC","ABAC","supply chain","SBOM","CVE","CVSS","patch","secrets rotation","key management","HSM","pen test","threat model","STRIDE"] },
+    { label: "Packages",       words: ["Tailwind","Vite","webpack","esbuild","Turbopack","Storybook","Chromatic","Cypress","Playwright","Vitest","React Query","Zustand","Jotai","Zod","Radix UI","shadcn/ui","Framer Motion","D3","Three.js","Matter.js","Figma","PostCSS","Biome","ESLint","Prettier","Jekyll","GitHub Pages","Vercel","Netlify","npm workspaces","npm publish","npm link","npm pack","package.json exports","conditional exports","peer dependencies","npm overrides","publishConfig","prepublishOnly","npm provenance"] },
+    { label: "a11y / i18n",    words: ["aria-label","aria-live","aria-describedby","role=","focus-visible","prefers-reduced-motion","WCAG 2.1","axe-core","screen reader","tab order","skip link","i18next","Intl.DateTimeFormat","Intl.NumberFormat","locale","RTL","pluralization","ICU MessageFormat"] },
+  ];
+
+  const wordToCategory = new Map<string, string>();
+  CATEGORIES.forEach(({ label, words }) => words.forEach(w => wordToCategory.set(w, label)));
+
+  interface SortLabel { text: string; x: number; y: number; tx: number; ty: number; opacity: number; }
   let sortTargets: Map<Matter.Body, { x: number; y: number }> | null = null;
+  let sortLabels: SortLabel[] = [];
   let isSorted = false;
 
   const calcTargets = () => {
     const bodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
     const { left: BL, top: BT, width: BW } = docRect();
     const PAD = 20;
-    const GAP = 6;
-    let cx = BL + PAD;
-    let cy = BT + PAD + 24; // leave room for Skills label
-    let rowH = 0;
-    const targets = new Map<Matter.Body, { x: number; y: number }>();
+    const WORD_GAP = 5;
+    const CAT_GAP = 14;
+    const LABEL_H = 14;
 
+    // Group bodies by category, preserving insertion order
+    const groups = new Map<string, Matter.Body[]>();
     bodies.forEach(body => {
-      const fontSize = (body as any).charSize ?? 14;
-      const w = body.label.length * fontSize * 0.58 + 12;
-      const h = fontSize + 8;
-      if (cx + w > BL + BW - PAD && cx > BL + PAD) {
-        cx = BL + PAD;
-        cy += rowH + GAP;
-        rowH = 0;
-      }
-      targets.set(body, { x: cx + w / 2, y: cy + h / 2 });
-      cx += w + GAP;
-      rowH = Math.max(rowH, h);
+      const cat = wordToCategory.get(body.label) ?? "Other";
+      if (!groups.has(cat)) groups.set(cat, []);
+      groups.get(cat)!.push(body);
     });
-    return targets;
+
+    const targets = new Map<Matter.Body, { x: number; y: number }>();
+    const labels: SortLabel[] = [];
+    let cy = BT + PAD + 24;
+
+    groups.forEach((groupBodies, catName) => {
+      // Category label — flies in from left
+      labels.push({ text: catName, x: BL - 200, y: cy + LABEL_H / 2, tx: BL + PAD, ty: cy + LABEL_H / 2, opacity: 0 });
+      cy += LABEL_H + 6;
+
+      // Words in this group
+      let cx = BL + PAD;
+      let rowH = 0;
+      groupBodies.forEach(body => {
+        const fontSize = (body as any).charSize ?? 14;
+        const w = body.label.length * fontSize * 0.58 + 12;
+        const h = fontSize + 8;
+        if (cx + w > BL + BW - PAD && cx > BL + PAD) {
+          cx = BL + PAD;
+          cy += rowH + WORD_GAP;
+          rowH = 0;
+        }
+        targets.set(body, { x: cx + w / 2, y: cy + h / 2 });
+        cx += w + WORD_GAP;
+        rowH = Math.max(rowH, h);
+      });
+      cy += rowH + CAT_GAP;
+    });
+
+    return { targets, labels };
   };
 
-  // Lerp bodies to targets each frame when sorted
   const tickSort = () => {
     if (!sortTargets) return;
-    engine.gravity.y = 0;
     Composite.allBodies(engine.world).forEach(body => {
       if (body.isStatic) return;
       const t = sortTargets!.get(body);
       if (!t) return;
-      const dx = t.x - body.position.x;
-      const dy = t.y - body.position.y;
-      Body.setPosition(body, { x: body.position.x + dx * 0.12, y: body.position.y + dy * 0.12 });
+      Body.setPosition(body, { x: body.position.x + (t.x - body.position.x) * 0.12, y: body.position.y + (t.y - body.position.y) * 0.12 });
       Body.setVelocity(body, { x: 0, y: 0 });
       Body.setAngle(body, body.angle * 0.85);
       Body.setAngularVelocity(body, 0);
     });
+    sortLabels.forEach(lbl => {
+      lbl.x += (lbl.tx - lbl.x) * 0.12;
+      lbl.y += (lbl.ty - lbl.y) * 0.12;
+      lbl.opacity = Math.min(1, lbl.opacity + 0.04);
+    });
   };
 
-  // Wire sort button
+  // Render sort labels on canvas
+  const drawSortLabels = (sy: number) => {
+    if (!sortLabels.length) return;
+    const color = accentColor();
+    sortLabels.forEach(lbl => {
+      if (lbl.opacity < 0.01) return;
+      ctx.save();
+      ctx.font = `600 ${9 * dpr}px var(--font-sans, sans-serif)`;
+      ctx.fillStyle = color;
+      ctx.globalAlpha = lbl.opacity * 0.5;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.letterSpacing = `${1.5 * dpr}px`;
+      ctx.fillText(lbl.text.toUpperCase(), lbl.x * dpr, (lbl.y - sy) * dpr);
+      ctx.restore();
+    });
+  };
+
   document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
     isSorted = !isSorted;
     const btn = document.getElementById("skills-sort-btn")!;
     if (isSorted) {
-      sortTargets = calcTargets();
+      const { targets, labels } = calcTargets();
+      sortTargets = targets;
+      sortLabels = labels;
       engine.gravity.y = 0;
+      // Disable all collisions
+      Composite.allBodies(engine.world).forEach(body => {
+        if (!body.isStatic) {
+          (body as any).collisionFilter = { mask: 0 };
+          Body.setVelocity(body, { x: 0, y: 0 });
+          Body.setAngularVelocity(body, 0);
+        }
+      });
       btn.textContent = "Unsort";
     } else {
       sortTargets = null;
+      sortLabels = [];
       engine.gravity.y = 2.2;
+      // Re-enable collisions
+      Composite.allBodies(engine.world).forEach(body => {
+        if (!body.isStatic) (body as any).collisionFilter = { mask: 0xFFFFFFFF };
+      });
       btn.textContent = "Sort";
     }
   });
