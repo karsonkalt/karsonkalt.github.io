@@ -104,7 +104,22 @@ export const initGutter = () => {
     Body.setVelocity(body, { x: (Math.random() - 0.5) * 2, y: 0.5 });
     Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06);
     Composite.add(engine.world, body);
+    updateBinUI();
   };
+
+  const ORGANIZE_THRESHOLD = 8;
+  const updateBinUI = () => {
+    const count = Composite.allBodies(engine.world).filter(b => !b.isStatic).length;
+    const hint = document.getElementById("skills-hint") as HTMLElement | null;
+    const btn  = document.getElementById("skills-sort-btn") as HTMLElement | null;
+    if (hint) hint.style.opacity = count === 0 ? "1" : "0";
+    if (btn) {
+      const ready = count >= ORGANIZE_THRESHOLD;
+      btn.style.opacity = ready ? "1" : "0";
+      btn.style.pointerEvents = ready ? "auto" : "none";
+    }
+  };
+  updateBinUI();
 
   // ── rAF loop: tick engine + draw ────────────────────────────────────────
   let last = performance.now();
@@ -286,13 +301,7 @@ export const initGutter = () => {
 
     // After mount: FLIP — record final positions, start from canvas positions
     requestAnimationFrame(() => {
-      // Resize bin to fit content
-      const contentH = overlay.scrollHeight + 48;
-      bin.style.height = contentH + "px";
-      // Rebuild walls to match new bin height
-      walls.forEach(w => Composite.remove(engine.world, w));
-      walls = makeWalls();
-      Composite.add(engine.world, walls);
+      // Walls already match bin height (set by syncBinHeight)
 
       wordEls.forEach((span, body) => {
         // Final position of span relative to viewport
@@ -338,11 +347,48 @@ document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
     enterSort();
   });
 
+  // ── Pre-size bin to match organized layout height ───────────────────────
+  const measureOrganizedHeight = (): number => {
+    const probe = document.createElement("div");
+    probe.style.cssText = `
+      position:fixed;left:-9999px;top:0;
+      width:${bin.getBoundingClientRect().width}px;
+      padding:28px 20px 20px;
+      visibility:hidden;pointer-events:none;
+    `;
+    CATEGORIES.forEach(({ label, words }) => {
+      const lbl = document.createElement("p");
+      lbl.textContent = label;
+      lbl.style.cssText = "margin:0 0 6px;font-size:9px;font-weight:700;";
+      probe.appendChild(lbl);
+      const row = document.createElement("div");
+      row.style.cssText = "display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;";
+      words.forEach(w => {
+        const span = document.createElement("span");
+        span.textContent = w;
+        span.style.cssText = "font-family:'Ubuntu Mono',monospace;font-size:13px;white-space:nowrap;";
+        row.appendChild(span);
+      });
+      probe.appendChild(row);
+    });
+    document.body.appendChild(probe);
+    const h = probe.scrollHeight + 32;
+    probe.remove();
+    return h;
+  };
+
+  const syncBinHeight = () => {
+    bin.style.height = measureOrganizedHeight() + "px";
+    walls.forEach(w => Composite.remove(engine.world, w));
+    walls = makeWalls();
+    Composite.add(engine.world, walls);
+  };
+
+  syncBinHeight();
+
   // ── Resize ──────────────────────────────────────────────────────────────
   window.addEventListener("resize", () => {
     resizeCanvas();
-    walls.forEach((w) => Composite.remove(engine.world, w));
-    walls = makeWalls();
-    Composite.add(engine.world, walls);
+    syncBinHeight();
   });
 };
