@@ -770,18 +770,8 @@
       padding: calc(var(--spacing) * 6);
     }
   }
-  .sm\:block {
-    @media (width >= 40rem) {
-      display: block;
-    }
-  }
-  .sm\:flex {
-    @media (width >= 40rem) {
-      display: flex;
-    }
-  }
-  .sm\:hidden {
-    @media (width >= 40rem) {
+  .min-\[800px\]\:hidden {
+    @media (width >= 800px) {
       display: none;
     }
   }
