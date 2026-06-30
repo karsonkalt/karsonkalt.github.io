@@ -116,7 +116,11 @@ export const initGutter = () => {
     btn.textContent = ready ? "Organize" : "Drop";
     btn.style.cursor = ready ? "pointer" : "default";
     btn.style.pointerEvents = ready ? "auto" : "none";
-    btn.style.color = ready ? "var(--white-60)" : "var(--white-30)";
+    btn.style.color = ready ? "var(--accent-color-link)" : "var(--white-30)";
+    btn.style.border = ready ? "1px solid var(--accent-color-link)" : "none";
+    btn.style.borderRadius = ready ? "3px" : "0";
+    btn.style.padding = ready ? "6px 14px" : "0";
+    btn.style.width = ready ? "auto" : "100%";
   };
   updateBinUI();
 
