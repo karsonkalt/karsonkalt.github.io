@@ -257,6 +257,28 @@ layout: base
   <!-- Artifacts -->
   <section id="section-artifacts" class="mt-20">
     <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Artifacts</p>
+
+    {%- if site.notes.size > 0 -%}
+    <p class="text-[10px] font-semibold tracking-[0.12em] uppercase text-muted mb-4">Patterns</p>
+    <ul class="list-none m-0 mb-10">
+      {%- assign date_format = "%b %-d, %Y" -%}
+      {%- assign sorted_notes = site.notes | sort: "date" | reverse -%}
+      {%- for note in sorted_notes -%}
+      <li>
+        <a href="{{ note.url | relative_url }}"
+           class="link-item flex flex-col gap-1.5 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <span class="text-[10px] font-normal text-muted uppercase tracking-wider">{{ note.date | date: date_format }}</span>
+          <span class="text-lg font-semibold text-primary leading-snug post-title">{{ note.title | escape }}</span>
+          {% if note.description %}
+          <span class="text-sm text-muted font-normal leading-relaxed line-clamp-2">{{ note.description | escape }}</span>
+          {% endif %}
+        </a>
+      </li>
+      {%- endfor -%}
+    </ul>
+    <p class="text-[10px] font-semibold tracking-[0.12em] uppercase text-muted mb-4">Other</p>
+    {%- endif -%}
+
     <ul class="list-none m-0">
 
       <li>
@@ -312,9 +334,8 @@ layout: base
   </section>
 
   <!-- Skills bin -->
-  <div id="skills-bin" class="relative mt-20 w-full" style="height:320px;">
-    <span class="absolute top-3 left-0 text-[10px] font-semibold tracking-[0.15em] uppercase text-muted pointer-events-none">Skills</span>
-    <canvas id="skills-bin-canvas" class="absolute inset-0 w-full h-full" style="cursor:crosshair;"></canvas>
+  <div id="skills-bin" class="relative mt-20 w-full" style="height:320px;cursor:crosshair;border-left:0.5px solid var(--white-20);border-right:0.5px solid var(--white-20);border-bottom:0.5px solid var(--white-20);">
+    <span class="absolute top-3 left-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-muted pointer-events-none select-none">Skills</span>
   </div>
 
 </main>
