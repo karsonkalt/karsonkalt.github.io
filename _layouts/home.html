@@ -259,15 +259,15 @@ layout: base
     <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Artifacts</p>
     <ul class="list-none m-0">
       {%- assign date_format = "%b %-d, %Y" -%}
-      {%- assign sorted_archive = site.archive | sort: "date" | reverse -%}
-      {%- for post in sorted_archive -%}
+      {%- assign sorted_notes = site.notes | sort: "date" | reverse -%}
+      {%- for note in sorted_notes -%}
       <li>
-        <a href="{{ post.url | relative_url }}"
+        <a href="{{ note.url | relative_url }}"
            class="link-item flex flex-col gap-1.5 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
-          <span class="text-[10px] font-normal text-muted uppercase tracking-wider">{{ post.date | date: date_format }}</span>
-          <span class="text-lg font-semibold text-primary leading-snug">{{ post.title | escape }}</span>
-          {% if post.description %}
-          <span class="text-sm text-muted font-normal leading-relaxed line-clamp-2">{{ post.description | escape }}</span>
+          <span class="text-[10px] font-normal text-muted uppercase tracking-wider">{{ note.date | date: date_format }}</span>
+          <span class="text-lg font-semibold text-primary leading-snug">{{ note.title | escape }}</span>
+          {% if note.description %}
+          <span class="text-sm text-muted font-normal leading-relaxed line-clamp-2">{{ note.description | escape }}</span>
           {% endif %}
         </a>
       </li>
