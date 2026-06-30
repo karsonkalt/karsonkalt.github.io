@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Route guard functions"
-date: 2026-06-30 00:00:00 -0400
+date: 2026-04-16 00:00:00 -0400
 tags: [pattern]
 description: "beforeLoad composes typed guard functions. Denials throw typed errors. RouteErrorComponent maps them to UX — inside the app layout."
 ---

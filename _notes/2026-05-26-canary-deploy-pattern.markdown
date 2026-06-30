@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Canary deploy with sticky PR comment"
-date: 2026-06-30 00:00:00 -0400
+date: 2026-05-26 00:00:00 -0400
 tags: [pattern]
 description: "S3 deploy on every PR push. Smart path from changed files. HTML comment as zero-cost state storage. Lands reviewers inside the feature."
 ---

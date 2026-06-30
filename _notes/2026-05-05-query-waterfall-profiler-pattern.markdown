@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Query waterfall profiler"
-date: 2026-06-30 00:00:00 -0400
+date: 2026-05-05 00:00:00 -0400
 tags: [pattern]
 description: "Subscribe to QueryCache events, cluster by start-time, expose on window. Zero component instrumentation."
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Inspector component registry with pre-warm"
-date: 2026-06-30 00:00:00 -0400
+date: 2026-06-25 00:00:00 -0400
 tags: [pattern]
 description: "makeGetInspectorComponent — type/class → component resolver with a byHint() pre-warm path that avoids import cycles."
 ---

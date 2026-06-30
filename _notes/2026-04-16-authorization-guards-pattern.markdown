@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Authorization guards — one API for flags, entitlements, and ABAC"
-date: 2026-06-30 00:00:00 -0400
+date: 2026-04-16 00:00:00 -0400
 tags: [pattern]
 description: "requireFeatureFlag / requireEntitlement / requireAllAbac compose in beforeLoad. Storybook mocks the same session context. Nav gates and route gates can't drift."
 ---
