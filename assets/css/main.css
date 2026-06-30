@@ -444,9 +444,6 @@
   .justify-between {
     justify-content: space-between;
   }
-  .justify-center {
-    justify-content: center;
-  }
   .gap-0 {
     gap: 0;
   }
@@ -581,6 +578,9 @@
   }
   .pb-24 {
     padding-bottom: calc(var(--spacing) * 24);
+  }
+  .text-center {
+    text-align: center;
   }
   .font-mono {
     font-family: var(--font-mono);
