@@ -128,11 +128,6 @@ layout: base
   <!-- Section nav (sticky, scroll-synced) — desktop only -->
   <nav id="section-nav" class="scroll-nav max-[800px]:hidden flex sticky top-0 z-20 items-center gap-0 -mx-4 px-4 mb-8" aria-label="Page sections">
 
-    <!-- Mini name — hidden until stuck -->
-    <span class="scroll-nav-name font-mono font-medium text-sm text-primary uppercase tracking-tight mr-3 whitespace-nowrap overflow-hidden max-w-0 opacity-0 transition-all duration-250">
-      Karson Kalt
-    </span>
-
     <!-- Section tabs (desktop) -->
     <div class="flex items-center gap-0 flex-1 min-w-0">
       <button data-section="section-writing" aria-selected="true"
@@ -149,6 +144,13 @@ layout: base
       </button>
     </div>
 
+    <!-- Back to top — visible only when stuck -->
+    <button id="back-to-top" aria-label="Back to top"
+            class="icon-btn scroll-nav-back-top ml-2 opacity-0 pointer-events-none transition-opacity duration-200">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 15l7-7 7 7"/>
+      </svg>
+    </button>
 
   </nav>
 

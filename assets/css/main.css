@@ -277,9 +277,6 @@
   .mt-20 {
     margin-top: calc(var(--spacing) * 20);
   }
-  .mr-3 {
-    margin-right: calc(var(--spacing) * 3);
-  }
   .mb-0 {
     margin-bottom: 0;
   }
@@ -303,6 +300,9 @@
   }
   .ml-1 {
     margin-left: var(--spacing);
+  }
+  .ml-2 {
+    margin-left: calc(var(--spacing) * 2);
   }
   .line-clamp-2 {
     overflow: hidden;
@@ -354,9 +354,6 @@
   }
   .w-full {
     width: 100%;
-  }
-  .max-w-0 {
-    max-width: 0;
   }
   .max-w-\[680px\] {
     max-width: 680px;
@@ -676,6 +673,11 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
+  .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
   .transition-transform {
     transition-property: transform, translate, scale, rotate;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -689,9 +691,9 @@
     --tw-duration: 150ms;
     transition-duration: 150ms;
   }
-  .duration-250 {
-    --tw-duration: 250ms;
-    transition-duration: 250ms;
+  .duration-200 {
+    --tw-duration: 200ms;
+    transition-duration: 200ms;
   }
   .duration-500 {
     --tw-duration: 500ms;
@@ -1036,15 +1038,6 @@ html.light .scroll-nav--stuck {
 .scroll-tab--active {
   color: var(--white-90);
   border-bottom-color: var(--accent-color-link);
-}
-.scroll-nav--stuck .scroll-nav-name {
-  max-width: 160px;
-  opacity: 1;
-}
-@media (max-width: 380px) {
-  .scroll-nav-name {
-    display: none !important;
-  }
 }
 .no-scrollbar {
   scrollbar-width: none;

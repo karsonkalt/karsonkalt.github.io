@@ -70,13 +70,23 @@ export const initScrollNav = (): void => {
     io.observe(s);
   });
 
-  // Sticky: add bg/shadow once the nav itself is pinned to top
-  // A sentinel div placed just above the nav triggers this.
+  // Back-to-top button
+  const backToTop = document.getElementById("back-to-top");
+  backToTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+  // Sticky: add bg/shadow + reveal back-to-top once nav is pinned
   const sentinel = document.createElement("div");
   sentinel.style.cssText = "position:absolute;height:1px;width:1px;pointer-events:none;";
   nav.parentElement?.insertBefore(sentinel, nav);
   const stickyObs = new IntersectionObserver(
-    ([e]) => nav.classList.toggle("scroll-nav--stuck", !e.isIntersecting),
+    ([e]) => {
+      const stuck = !e.isIntersecting;
+      nav.classList.toggle("scroll-nav--stuck", stuck);
+      if (backToTop) {
+        backToTop.style.opacity = stuck ? "1" : "0";
+        backToTop.style.pointerEvents = stuck ? "auto" : "none";
+      }
+    },
     { threshold: 0 }
   );
   stickyObs.observe(sentinel);
