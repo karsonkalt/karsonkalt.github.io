@@ -222,108 +222,56 @@ export const initGutter = () => {
     { label: "a11y / i18n",    words: ["aria-label","aria-live","aria-describedby","role=","focus-visible","prefers-reduced-motion","WCAG 2.1","axe-core","screen reader","tab order","skip link","i18next","Intl.DateTimeFormat","Intl.NumberFormat","locale","RTL","pluralization","ICU MessageFormat"] },
   ];
 
-  const wordToCategory = new Map<string, string>();
-  CATEGORIES.forEach(({ label, words }) => words.forEach(w => wordToCategory.set(w, label)));
-
   let isSorted = false;
   let sortOverlay: HTMLDivElement | null = null;
 
   const enterSort = () => {
-    // Stop physics on any dropped bodies
-    const droppedBodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
+    // Pause physics
+    const bodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
     engine.gravity.y = 0;
-    droppedBodies.forEach(body => {
+    bodies.forEach(body => {
       (body as any).collisionFilter = { mask: 0 };
       Body.setVelocity(body, { x: 0, y: 0 });
       Body.setAngularVelocity(body, 0);
     });
 
-    // Map dropped word labels → physics body (for FLIP)
-    const labelToBody = new Map<string, Matter.Body>();
-    droppedBodies.forEach(b => labelToBody.set(b.label, b));
+    // Fade canvas out
+    canvas.style.transition = "opacity 300ms ease";
+    canvas.style.opacity = "0";
 
-    // Build overlay from ALL categories
+    // Build overlay: just category title pills in a flex-wrap grid
     const overlay = document.createElement("div");
-    overlay.style.cssText = "position:absolute;inset:0;padding:28px 20px 20px;overflow:visible;pointer-events:none;";
+    overlay.style.cssText = `
+      position:absolute;inset:0;padding:48px 24px 32px;
+      display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px;
+      pointer-events:none;
+    `;
 
-    const WORD_GAP = 5;
-    const CAT_GAP = 16;
-
-    CATEGORIES.forEach(({ label: catName, words }) => {
-      const lbl = document.createElement("p");
-      lbl.textContent = catName;
-      lbl.style.cssText = `
-        margin:0 0 6px;font-size:9px;font-weight:700;letter-spacing:0.13em;
-        text-transform:uppercase;color:var(--white-40);
-        transform:translateX(-24px);opacity:0;
-        transition:transform 400ms cubic-bezier(0.23,1,0.32,1),opacity 300ms ease;
+    CATEGORIES.forEach(({ label: catName }, i) => {
+      const pill = document.createElement("span");
+      pill.textContent = catName;
+      pill.style.cssText = `
+        font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+        color:var(--white-60);
+        border:0.5px solid var(--white-20);border-radius:3px;
+        padding:5px 10px;
+        opacity:0;transform:translateY(6px);
+        transition:opacity 300ms ease,transform 300ms cubic-bezier(0.23,1,0.32,1);
+        transition-delay:${i * 30}ms;
       `;
-      overlay.appendChild(lbl);
-
-      const row = document.createElement("div");
-      row.style.cssText = `display:flex;flex-wrap:wrap;gap:${WORD_GAP}px;margin-bottom:${CAT_GAP}px;`;
-
-      words.forEach(word => {
-        const span = document.createElement("span");
-        span.textContent = word;
-        span.dataset.word = word;
-        span.style.cssText = `
-          font-family:var(--font-mono,"Ubuntu Mono",monospace);
-          font-size:13px;
-          color:var(--accent-color-link);
-          opacity:0;
-          display:inline-block;
-          will-change:transform;
-          transition:opacity 400ms ease, transform 600ms cubic-bezier(0.23,1,0.32,1);
-        `;
-        row.appendChild(span);
-      });
-
-      overlay.appendChild(row);
+      overlay.appendChild(pill);
     });
 
     bin.appendChild(overlay);
     sortOverlay = overlay;
 
-    // FLIP dropped words, stagger-fade everything else
-    requestAnimationFrame(() => {
-      canvas.style.opacity = "0";
-      canvas.style.transition = "opacity 200ms";
-
-      const allSpans = Array.from(overlay.querySelectorAll<HTMLSpanElement>("span[data-word]"));
-
-      // Set FLIP transforms before any opacity
-      allSpans.forEach(span => {
-        const body = labelToBody.get(span.dataset.word!);
-        if (body) {
-          const spanR = span.getBoundingClientRect();
-          const dx = (body.position.x - window.scrollX) - (spanR.left + spanR.width / 2);
-          const dy = (body.position.y - window.scrollY) - (spanR.top + spanR.height / 2);
-          span.style.transform = `translate(${dx}px,${dy}px) rotate(${body.angle}rad)`;
-        }
-        span.style.opacity = "0";
+    // Trigger animation next frame
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      overlay.querySelectorAll("span").forEach(el => {
+        (el as HTMLElement).style.opacity = "1";
+        (el as HTMLElement).style.transform = "translateY(0)";
       });
-
-      // Animate in next frame
-      requestAnimationFrame(() => {
-        // Labels slide in with stagger
-        overlay.querySelectorAll("p").forEach((el, i) => {
-          setTimeout(() => {
-            (el as HTMLElement).style.transform = "translateX(0)";
-            (el as HTMLElement).style.opacity = "1";
-          }, i * 25);
-        });
-
-        // Words: FLIP animate dropped ones, stagger-fade the rest
-        allSpans.forEach((span, i) => {
-          const isDropped = labelToBody.has(span.dataset.word!);
-          setTimeout(() => {
-            span.style.transform = "translate(0,0) rotate(0rad)";
-            span.style.opacity = "0.85";
-          }, isDropped ? 0 : 40 + i * 4);
-        });
-      });
-    });
+    }));
   };
 
 document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
@@ -340,23 +288,15 @@ document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
     probe.style.cssText = `
       position:fixed;left:-9999px;top:0;
       width:${bin.getBoundingClientRect().width}px;
-      padding:28px 20px 20px;
+      padding:48px 24px 32px;
+      display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px;
       visibility:hidden;pointer-events:none;
     `;
-    CATEGORIES.forEach(({ label, words }) => {
-      const lbl = document.createElement("p");
-      lbl.textContent = label;
-      lbl.style.cssText = "margin:0 0 6px;font-size:9px;font-weight:700;";
-      probe.appendChild(lbl);
-      const row = document.createElement("div");
-      row.style.cssText = "display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;";
-      words.forEach(w => {
-        const span = document.createElement("span");
-        span.textContent = w;
-        span.style.cssText = "font-family:'Ubuntu Mono',monospace;font-size:13px;white-space:nowrap;";
-        row.appendChild(span);
-      });
-      probe.appendChild(row);
+    CATEGORIES.forEach(({ label }) => {
+      const pill = document.createElement("span");
+      pill.textContent = label;
+      pill.style.cssText = "font-size:11px;font-weight:600;padding:5px 10px;border:0.5px solid #fff;border-radius:3px;white-space:nowrap;";
+      probe.appendChild(pill);
     });
     document.body.appendChild(probe);
     const h = probe.scrollHeight + 32;
