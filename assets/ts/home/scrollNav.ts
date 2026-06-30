@@ -76,7 +76,7 @@ export const initScrollNav = (): void => {
 
   // Sticky: add bg/shadow + reveal back-to-top once nav is pinned
   const sentinel = document.createElement("div");
-  sentinel.style.cssText = "position:absolute;height:1px;width:1px;pointer-events:none;";
+  sentinel.style.cssText = "height:1px;pointer-events:none;margin-bottom:-1px;";
   nav.parentElement?.insertBefore(sentinel, nav);
   const stickyObs = new IntersectionObserver(
     ([e]) => {
