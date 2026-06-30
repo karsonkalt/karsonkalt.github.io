@@ -52,32 +52,25 @@ export const initGutter = () => {
   const makeWalls = () => {
     const { top: BT, bottom: BB, left: BL, right: BR } = docRect();
     const W = vw();
-    const hidden = { isStatic: true, label: "wall", render: { fillStyle: "transparent" } };
-    const funnel = { isStatic: true, label: "funnel", render: { fillStyle: "transparent" } };
+    const S = { isStatic: true, label: "wall", render: { fillStyle: "transparent" } };
 
-    const walls: Matter.Body[] = [
+    // Full-height angled funnel: (0,0)→(BL,BT) and (W,0)→(BR,BT)
+    const lLen = Math.sqrt(BL * BL + BT * BT);
+    const lAng = Math.atan2(BT, BL) - Math.PI / 2;
+    const rDx  = BR - W;
+    const rLen = Math.sqrt(rDx * rDx + BT * BT);
+    const rAng = Math.atan2(BT, rDx) - Math.PI / 2;
+
+    return [
       // Bin floor
-      Bodies.rectangle(W / 2, BB + WALL / 2, W * 4, WALL, hidden),
-      // Bin left wall
-      Bodies.rectangle(BL - WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, hidden),
-      // Bin right wall
-      Bodies.rectangle(BR + WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, hidden),
-      // Outer left
-      Bodies.rectangle(-WALL / 2, BB / 2, WALL, BB * 2, hidden),
-      // Outer right
-      Bodies.rectangle(W + WALL / 2, BB / 2, WALL, BB * 2, hidden),
+      Bodies.rectangle(W / 2, BB + WALL / 2, W * 4, WALL, S),
+      // Bin side walls
+      Bodies.rectangle(BL - WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, S),
+      Bodies.rectangle(BR + WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, S),
+      // Full-height funnel
+      Bodies.rectangle(BL / 2, BT / 2, 8, lLen, { ...S, angle: lAng }),
+      Bodies.rectangle((W + BR) / 2, BT / 2, 8, rLen, { ...S, angle: rAng }),
     ];
-
-
-    // 45° flares rising from each top corner of the bin
-    const FLARE = 180; // how far up/outward each flare extends
-    const fLen = FLARE * Math.SQRT2;
-    walls.push(
-      Bodies.rectangle(BL - FLARE / 2, BT - FLARE / 2, 8, fLen, { ...funnel, angle: -Math.PI / 4 }),
-      Bodies.rectangle(BR + FLARE / 2, BT - FLARE / 2, 8, fLen, { ...funnel, angle:  Math.PI / 4 }),
-    );
-
-    return walls;
   };
 
   let walls = makeWalls();
@@ -130,25 +123,6 @@ export const initGutter = () => {
     const sy    = window.scrollY;
     const color = accentColor();
     const vh    = window.innerHeight;
-
-    // Draw funnel walls as subtle lines
-    Composite.allBodies(engine.world).forEach((body) => {
-      if (!body.isStatic || body.label !== "funnel") return;
-      const verts = body.vertices;
-      ctx.save();
-      ctx.strokeStyle = color;
-      ctx.globalAlpha = 0.12;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      verts.forEach((v, i) => {
-        const px = v.x * dpr;
-        const py = (v.y - window.scrollY) * dpr;
-        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-      });
-      ctx.closePath();
-      ctx.stroke();
-      ctx.restore();
-    });
 
     Composite.allBodies(engine.world).forEach((body) => {
       if (body.isStatic) return;
