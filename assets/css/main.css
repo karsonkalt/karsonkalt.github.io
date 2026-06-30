@@ -214,6 +214,12 @@
   .static {
     position: static;
   }
+  .sticky {
+    position: sticky;
+  }
+  .top-0 {
+    top: 0;
+  }
   .top-\[calc\(100\%\+6px\)\] {
     top: calc(100% + 6px);
   }
@@ -222,6 +228,9 @@
   }
   .z-10 {
     z-index: 10;
+  }
+  .z-20 {
+    z-index: 20;
   }
   .container {
     width: 100%;
@@ -247,6 +256,9 @@
   .-mx-2 {
     margin-inline: calc(var(--spacing) * -2);
   }
+  .-mx-4 {
+    margin-inline: calc(var(--spacing) * -4);
+  }
   .mx-auto {
     margin-inline: auto;
   }
@@ -255,6 +267,9 @@
   }
   .mt-3 {
     margin-top: calc(var(--spacing) * 3);
+  }
+  .mt-20 {
+    margin-top: calc(var(--spacing) * 20);
   }
   .mb-0 {
     margin-bottom: 0;
@@ -385,6 +400,12 @@
   .justify-between {
     justify-content: space-between;
   }
+  .justify-center {
+    justify-content: center;
+  }
+  .gap-0 {
+    gap: 0;
+  }
   .gap-1 {
     gap: var(--spacing);
   }
@@ -442,6 +463,9 @@
   }
   .bg-b-40 {
     background-color: var(--color-b-40);
+  }
+  .bg-w-05 {
+    background-color: var(--color-w-05);
   }
   .object-cover {
     object-fit: cover;
@@ -554,6 +578,10 @@
   .font-semibold {
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
+  }
+  .tracking-\[0\.12em\] {
+    --tw-tracking: 0.12em;
+    letter-spacing: 0.12em;
   }
   .tracking-\[0\.15em\] {
     --tw-tracking: 0.15em;
@@ -957,6 +985,50 @@ html::before {
 }
 [role="tab"][aria-selected="true"] {
   border-color: var(--white-80);
+}
+.scroll-nav {
+  background: transparent;
+  transition: background 200ms, box-shadow 200ms;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
+}
+.scroll-nav--stuck {
+  background: var(--black-90);
+  box-shadow: 0 1px 0 var(--white-10);
+  backdrop-filter: blur(12px);
+}
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .scroll-nav--stuck {
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+  }
+}
+html.light .scroll-nav--stuck {
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+}
+.scroll-tab {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--white-40);
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 150ms, border-color 150ms;
+}
+.scroll-tab:hover {
+  color: var(--white-70);
+}
+.scroll-tab--active {
+  color: var(--white-90);
+  border-bottom-color: var(--accent-color-link);
 }
 .link-item:hover {
   background-color: var(--white-05);
