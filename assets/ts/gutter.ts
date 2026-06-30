@@ -219,25 +219,29 @@ export const initGutter = () => {
   let sortOverlay: HTMLDivElement | null = null;
 
   const enterSort = () => {
-    // Pause physics
     const bodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
-    engine.gravity.y = 0;
-    bodies.forEach(body => {
-      (body as any).collisionFilter = { mask: 0 };
-      Body.setVelocity(body, { x: 0, y: 0 });
-      Body.setAngularVelocity(body, 0);
+
+    // Open the bottom border
+    bin.style.transition = "border-bottom-color 200ms ease";
+    bin.style.borderBottomColor = "transparent";
+
+    // Remove floor so words fall through, crank gravity
+    const floor = walls.find(w => {
+      const { y } = w.position;
+      return y > (docRect().bottom - 10);
+    });
+    if (floor) Composite.remove(engine.world, floor);
+    engine.gravity.y = 6;
+    bodies.forEach(b => {
+      Body.setAngularVelocity(b, (Math.random() - 0.5) * 0.3);
     });
 
-    // Fade canvas out
-    canvas.style.transition = "opacity 300ms ease";
-    canvas.style.opacity = "0";
-
-    // Build overlay: just category title pills in a flex-wrap grid
+    // Build pill overlay (invisible to start)
     const overlay = document.createElement("div");
     overlay.style.cssText = `
       position:absolute;inset:0;padding:48px 24px 32px;
       display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px;
-      pointer-events:none;
+      pointer-events:none;opacity:0;
     `;
 
     CATEGORIES.forEach(({ label: catName }, i) => {
@@ -248,9 +252,9 @@ export const initGutter = () => {
         color:var(--white-60);
         border:0.5px solid var(--white-20);border-radius:3px;
         padding:5px 10px;
-        opacity:0;transform:translateY(6px);
-        transition:opacity 300ms ease,transform 300ms cubic-bezier(0.23,1,0.32,1);
-        transition-delay:${i * 30}ms;
+        opacity:0;transform:translateY(8px);
+        transition:opacity 300ms ease,transform 350ms cubic-bezier(0.23,1,0.32,1);
+        transition-delay:${i * 25}ms;
       `;
       overlay.appendChild(pill);
     });
@@ -258,13 +262,20 @@ export const initGutter = () => {
     bin.appendChild(overlay);
     sortOverlay = overlay;
 
-    // Trigger animation next frame
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      overlay.querySelectorAll("span").forEach(el => {
-        (el as HTMLElement).style.opacity = "1";
-        (el as HTMLElement).style.transform = "translateY(0)";
-      });
-    }));
+    // After words have fallen (~600ms), fade canvas + reveal pills
+    setTimeout(() => {
+      canvas.style.transition = "opacity 300ms ease";
+      canvas.style.opacity = "0";
+      overlay.style.transition = "opacity 200ms ease";
+      overlay.style.opacity = "1";
+
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        overlay.querySelectorAll("span").forEach(el => {
+          (el as HTMLElement).style.opacity = "1";
+          (el as HTMLElement).style.transform = "translateY(0)";
+        });
+      }));
+    }, 600);
   };
 
 document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
