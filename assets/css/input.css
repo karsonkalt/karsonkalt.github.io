@@ -342,10 +342,6 @@ html.light .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 
   opacity: 1;
 }
 
-.scroll-nav--stuck .scroll-nav-contact {
-  max-width: 120px;
-  opacity: 1;
-}
 
 /* Hide mini-name on very small screens — tabs + contact are enough */
 @media (max-width: 380px) {

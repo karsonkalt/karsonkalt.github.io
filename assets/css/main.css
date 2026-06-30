@@ -298,9 +298,6 @@
   .ml-1 {
     margin-left: var(--spacing);
   }
-  .ml-3 {
-    margin-left: calc(var(--spacing) * 3);
-  }
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
@@ -767,11 +764,6 @@
       padding: calc(var(--spacing) * 6);
     }
   }
-  .sm\:block {
-    @media (width >= 40rem) {
-      display: block;
-    }
-  }
   .sm\:flex {
     @media (width >= 40rem) {
       display: flex;
@@ -1069,10 +1061,6 @@ html.light .scroll-nav--stuck {
 }
 .scroll-nav--stuck .scroll-nav-name {
   max-width: 160px;
-  opacity: 1;
-}
-.scroll-nav--stuck .scroll-nav-contact {
-  max-width: 120px;
   opacity: 1;
 }
 @media (max-width: 380px) {
