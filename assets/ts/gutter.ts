@@ -69,20 +69,13 @@ export const initGutter = () => {
     ];
 
 
-    // Funnel: angled from outer page edge at y=0 → bin edge at y=BT
-    // Only when there are real gutters
-    if (gw() > 40 && BT > 100) {
-      // Left funnel: centre of wall goes from (0,0) toward (BL, BT)
-      const lLen = Math.sqrt(BL * BL + BT * BT);
-      const lAng = Math.atan2(BT, BL) - Math.PI / 2;
-      walls.push(Bodies.rectangle(BL / 2, BT / 2, 8, lLen, { ...funnel, angle: lAng }));
-
-      // Right funnel: from (W,0) → (BR, BT)
-      const rDx = BR - W;
-      const rLen = Math.sqrt(rDx * rDx + BT * BT);
-      const rAng = Math.atan2(BT, rDx) - Math.PI / 2;
-      walls.push(Bodies.rectangle((W + BR) / 2, BT / 2, 8, rLen, { ...funnel, angle: rAng }));
-    }
+    // 45° flares rising from each top corner of the bin
+    const FLARE = 180; // how far up/outward each flare extends
+    const fLen = FLARE * Math.SQRT2;
+    walls.push(
+      Bodies.rectangle(BL - FLARE / 2, BT - FLARE / 2, 8, fLen, { ...funnel, angle: -Math.PI / 4 }),
+      Bodies.rectangle(BR + FLARE / 2, BT - FLARE / 2, 8, fLen, { ...funnel, angle:  Math.PI / 4 }),
+    );
 
     return walls;
   };
