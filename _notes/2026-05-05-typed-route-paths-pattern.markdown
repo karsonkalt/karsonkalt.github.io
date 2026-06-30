@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Typed route path union"
-date: 2026-06-30 00:00:00 -0400
+date: 2026-05-05 00:00:00 -0400
 tags: [pattern]
 description: "Derive AppRoutePath from the generated route tree — one type alias, zero maintenance, compile-time enforcement."
 ---

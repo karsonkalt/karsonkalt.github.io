@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Storybook as offline test runner"
-date: 2026-06-30 00:00:00 -0400
+date: 2026-02-27 00:00:00 -0400
 tags: [pattern]
 description: "VITE_OFFLINE_MODE routes every queryFn to its co-located mock. One source of truth — Storybook renders it, Vitest runs it, no MSW needed."
 ---
