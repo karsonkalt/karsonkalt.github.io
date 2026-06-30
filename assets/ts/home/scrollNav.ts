@@ -54,13 +54,16 @@ export const initScrollNav = (): void => {
     io.observe(s);
   });
 
-  // Sticky: add shadow + bg once user scrolls past hero
-  const hero = document.querySelector<HTMLElement>(".hero-container");
+  // Sticky: add bg/shadow once the nav itself is pinned to top
+  // A sentinel div placed just above the nav triggers this.
+  const sentinel = document.createElement("div");
+  sentinel.style.cssText = "position:absolute;height:1px;width:1px;pointer-events:none;";
+  nav.parentElement?.insertBefore(sentinel, nav);
   const stickyObs = new IntersectionObserver(
     ([e]) => nav.classList.toggle("scroll-nav--stuck", !e.isIntersecting),
-    { rootMargin: "0px 0px 0px 0px", threshold: 0 }
+    { threshold: 0 }
   );
-  if (hero) stickyObs.observe(hero);
+  stickyObs.observe(sentinel);
 
   // Initialise with the first section active
   if (sections[0]) setActive(sections[0].id);
