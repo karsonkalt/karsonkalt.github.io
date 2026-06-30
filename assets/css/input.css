@@ -336,6 +336,26 @@ html.light .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 
   border-bottom-color: var(--accent-color-link);
 }
 
+/* Reveal mini-name and contact when nav is pinned */
+.scroll-nav--stuck .scroll-nav-name {
+  max-width: 160px;
+  opacity: 1;
+}
+
+.scroll-nav--stuck .scroll-nav-contact {
+  max-width: 120px;
+  opacity: 1;
+}
+
+/* Hide mini-name on very small screens — tabs + contact are enough */
+@media (max-width: 380px) {
+  .scroll-nav-name { display: none !important; }
+}
+
+/* Scrollable tab row without visible scrollbar */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* ─── Link item hover ────────────────────────────────────────────────────── */
 
 .link-item:hover {

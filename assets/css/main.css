@@ -271,6 +271,9 @@
   .mt-20 {
     margin-top: calc(var(--spacing) * 20);
   }
+  .mr-3 {
+    margin-right: calc(var(--spacing) * 3);
+  }
   .mb-0 {
     margin-bottom: 0;
   }
@@ -294,6 +297,9 @@
   }
   .ml-1 {
     margin-left: var(--spacing);
+  }
+  .ml-3 {
+    margin-left: calc(var(--spacing) * 3);
   }
   .line-clamp-2 {
     overflow: hidden;
@@ -345,6 +351,9 @@
   }
   .w-full {
     width: 100%;
+  }
+  .max-w-0 {
+    max-width: 0;
   }
   .max-w-\[680px\] {
     max-width: 680px;
@@ -435,6 +444,9 @@
   .overflow-hidden {
     overflow: hidden;
   }
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
   .rounded {
     border-radius: 0.25rem;
   }
@@ -478,6 +490,9 @@
   }
   .px-2\.5 {
     padding-inline: calc(var(--spacing) * 2.5);
+  }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
@@ -595,6 +610,9 @@
     --tw-tracking: var(--tracking-wider);
     letter-spacing: var(--tracking-wider);
   }
+  .whitespace-nowrap {
+    white-space: nowrap;
+  }
   .text-accent {
     color: var(--color-accent);
   }
@@ -615,6 +633,9 @@
   }
   .no-underline {
     text-decoration-line: none;
+  }
+  .opacity-0 {
+    opacity: 0%;
   }
   .opacity-75 {
     opacity: 75%;
@@ -670,6 +691,10 @@
   .duration-150 {
     --tw-duration: 150ms;
     transition-duration: 150ms;
+  }
+  .duration-250 {
+    --tw-duration: 250ms;
+    transition-duration: 250ms;
   }
   .duration-500 {
     --tw-duration: 500ms;
@@ -1029,6 +1054,25 @@ html.light .scroll-nav--stuck {
 .scroll-tab--active {
   color: var(--white-90);
   border-bottom-color: var(--accent-color-link);
+}
+.scroll-nav--stuck .scroll-nav-name {
+  max-width: 160px;
+  opacity: 1;
+}
+.scroll-nav--stuck .scroll-nav-contact {
+  max-width: 120px;
+  opacity: 1;
+}
+@media (max-width: 380px) {
+  .scroll-nav-name {
+    display: none !important;
+  }
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 .link-item:hover {
   background-color: var(--white-05);

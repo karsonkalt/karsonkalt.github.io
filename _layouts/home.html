@@ -139,19 +139,65 @@ layout: base
   </div>
 
   <!-- Section nav (sticky, scroll-synced) -->
-  <nav id="section-nav" class="scroll-nav sticky top-0 z-20 flex gap-0 -mx-4 px-4 mb-8" aria-label="Page sections">
-    <button data-section="section-writing" aria-selected="true"
-            class="scroll-tab px-4 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
-      Writing
-    </button>
-    <button data-section="section-projects" aria-selected="false"
-            class="scroll-tab px-4 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
-      Projects
-    </button>
-    <button data-section="section-artifacts" aria-selected="false"
-            class="scroll-tab px-4 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
-      Artifacts
-    </button>
+  <nav id="section-nav" class="scroll-nav sticky top-0 z-20 flex items-center gap-0 -mx-4 px-4 mb-8" aria-label="Page sections">
+
+    <!-- Mini name — hidden until stuck -->
+    <span class="scroll-nav-name font-mono font-medium text-sm text-primary uppercase tracking-tight mr-3 whitespace-nowrap overflow-hidden max-w-0 opacity-0 transition-all duration-250">
+      Karson Kalt
+    </span>
+
+    <!-- Section tabs -->
+    <div class="flex items-center gap-0 flex-1 min-w-0 overflow-x-auto no-scrollbar">
+      <button data-section="section-writing" aria-selected="true"
+              class="scroll-tab shrink-0 px-3 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
+        Writing
+      </button>
+      <button data-section="section-projects" aria-selected="false"
+              class="scroll-tab shrink-0 px-3 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
+        Projects
+      </button>
+      <button data-section="section-artifacts" aria-selected="false"
+              class="scroll-tab shrink-0 px-3 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
+        Artifacts
+      </button>
+    </div>
+
+    <!-- Mini contact — hidden until stuck -->
+    <div class="scroll-nav-contact dropdown-menu relative select-none ml-3 overflow-hidden max-w-0 opacity-0 transition-all duration-250" tabindex="0">
+      <button id="contact-button-nav" aria-haspopup="true" aria-expanded="false" aria-controls="contact-menu-nav"
+              class="flex items-center gap-1 px-2 py-1 text-accent border border-accent text-xs rounded-sm transition-transform duration-100 hover:scale-[1.03] whitespace-nowrap">
+        Contact
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8L12 15L19 8H5Z"/></svg>
+      </button>
+      <div id="contact-menu-nav" role="menu" aria-labelledby="contact-button-nav"
+           class="dropdown-content hidden flex-col absolute right-0 top-[calc(100%+6px)] min-w-44 shadow-xl z-10 overflow-hidden origin-top-right rounded-sm">
+        <a href="mailto:karson@karsonkalt.dev" role="menuitem"
+           class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
+            <rect x="1.5" y="4.36" width="21" height="15.27" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
+            <polyline points="1.5 4.36 12 14.86 22.5 4.36" stroke="currentColor" fill="none" stroke-miterlimit="10"></polyline>
+          </svg>
+          Email
+        </a>
+        <a href="/assets/docs/karson_kalt_resume_2025_03.pdf" target="_blank" role="menuitem"
+           class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Resume
+        </a>
+        <a href="https://cal.com/karsonkalt/15min" target="_blank" role="menuitem"
+           class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
+            <rect x="1.48" y="3.37" width="21.04" height="4.78" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
+            <rect x="1.48" y="8.15" width="21.04" height="14.35" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
+          </svg>
+          Set up a chat
+        </a>
+      </div>
+    </div>
+
   </nav>
 
   <!-- Writing -->
