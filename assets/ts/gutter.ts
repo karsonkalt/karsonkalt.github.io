@@ -279,7 +279,7 @@ export const initGutter = () => {
           (el as HTMLElement).style.transform = "translateY(0)";
         });
       }));
-    }, 900);
+    }, 250);
   };
 
 document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
