@@ -291,6 +291,90 @@ html::before {
 [role="tab"]:hover { border-color: var(--white-50); }
 [role="tab"][aria-selected="true"] { border-color: var(--white-80); }
 
+/* ─── Scroll-synced section nav ──────────────────────────────────────────── */
+
+.scroll-nav {
+  background: transparent;
+  transition: background 200ms, box-shadow 200ms;
+  /* Extend full bleed while content stays within wrapper */
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
+}
+
+.scroll-nav--stuck {
+  background: var(--black-90);
+  box-shadow: 0 1px 0 var(--white-10);
+  backdrop-filter: blur(12px);
+}
+
+
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
+}
+html.light .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
+
+.scroll-tab {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--white-40);
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 150ms, border-color 150ms;
+}
+
+.scroll-tab:hover { color: var(--white-70); }
+
+.scroll-tab--active {
+  color: var(--white-90);
+  border-bottom-color: var(--accent-color-link);
+}
+
+
+/* Scrollable tab row without visible scrollbar */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Responsive header slots */
+@media (min-width: 800px) { .header-mobile-only { display: none; } }
+@media (max-width: 799px) { .header-desktop-only { display: none; } }
+
+/* Mobile section select — invisible native select overlaid on styled label */
+.section-select-wrap { display: flex; align-items: center; }
+
+@media (min-width: 800px) { .section-select-wrap { display: none; } }
+
+.section-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.section-select option {
+  background: #141414;
+  color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .section-select option { background: #fff; color: #000; }
+}
+html.light .section-select option { background: #fff; color: #000; }
+
 /* ─── Link item hover ────────────────────────────────────────────────────── */
 
 .link-item:hover {

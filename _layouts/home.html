@@ -5,7 +5,9 @@ layout: base
 <main class="pt-8 pb-16 transition-all duration-500">
 
   <!-- Header -->
-  <div class="flex justify-between items-center mb-8 max-[800px]:flex-col max-[800px]:items-start max-[800px]:gap-4">
+  <div class="flex items-center justify-between mb-8">
+
+    <!-- Name -->
     <div class="flex flex-row items-end gap-1.5">
       <h1 class="ml10 m-0 leading-none font-mono uppercase font-medium text-primary text-4xl tracking-tight">
         <span class="text-wrapper relative inline overflow-hidden">
@@ -15,7 +17,10 @@ layout: base
       <span class="domain font-mono text-w-50 text-2xl leading-[1.35] -ml-0.5">.dev</span>
     </div>
 
-    <nav class="flex flex-row items-center gap-6">
+    <!-- Nav: shared items + responsive right-side action -->
+    <nav class="flex items-center gap-4">
+
+      <!-- Appearance (always visible) -->
       <div class="dropdown-menu relative select-none" tabindex="0">
         <button aria-haspopup="true" aria-expanded="false" aria-controls="appearance-menu"
                 class="icon-btn" aria-label="Appearance">
@@ -23,17 +28,10 @@ layout: base
             <path d="m14.622 17.897-10.68-2.913"/><path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z"/><path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15"/>
           </svg>
         </button>
-        <div id="appearance-menu" class="dropdown-content hidden flex-col absolute right-0 top-[calc(100%+6px)] min-w-44 bg-b-40 backdrop-blur-lg shadow-xl z-10 overflow-hidden origin-top-right rounded-sm" role="menu" aria-labelledby="appearance-button" style="animation: grow 200ms;">
-          <button id="theme-toggle" class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 hover:bg-w-05 transition-colors duration-100 w-full cursor-pointer" role="menuitem">
-            <svg class="icon-sun shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-            <svg class="icon-moon shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
+        <div id="appearance-menu" class="dropdown-content hidden flex-col absolute right-0 top-[calc(100%+6px)] min-w-44 shadow-xl z-10 overflow-hidden origin-top-right rounded-sm" role="menu">
+          <button id="theme-toggle" class="flex items-center gap-3 px-4 py-3 text-sm text-primary border-b border-w-10 hover:bg-w-05 transition-colors duration-100 w-full cursor-pointer" role="menuitem">
+            <svg class="icon-sun shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             <span class="icon-sun">Light mode</span>
             <span class="icon-moon">Dark mode</span>
           </button>
@@ -43,62 +41,51 @@ layout: base
           </button>
         </div>
       </div>
-      <a href="http://www.github.com/karsonkalt" target="_blank"
-         class="text-w-50 text-sm no-underline hover:text-w-70 transition-colors duration-150">GitHub</a>
-      <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank"
-         class="text-w-50 text-sm no-underline hover:text-w-70 transition-colors duration-150">LinkedIn</a>
 
-      <div class="dropdown-menu relative select-none" tabindex="0">
+      <!-- Desktop: GitHub + LinkedIn + Contact -->
+      <a href="http://www.github.com/karsonkalt" target="_blank"
+         class="header-desktop-only text-w-50 text-sm no-underline hover:text-w-70 transition-colors duration-150">GitHub</a>
+      <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank"
+         class="header-desktop-only text-w-50 text-sm no-underline hover:text-w-70 transition-colors duration-150">LinkedIn</a>
+
+      <div class="header-desktop-only dropdown-menu relative select-none" tabindex="0">
         <button id="contact-button" aria-haspopup="true" aria-expanded="false" aria-controls="contact-menu"
                 class="flex items-center gap-1.5 px-2.5 py-1 text-accent border border-accent text-sm rounded-sm transition-transform duration-100 hover:scale-[1.03]">
           Contact
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 8L12 15L19 8H5Z" />
-          </svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8L12 15L19 8H5Z"/></svg>
         </button>
-        <div id="contact-menu" role="menu" aria-labelledby="contact-button" data-position="bottom-right"
-             class="dropdown-content hidden flex-col absolute right-0 top-[calc(100%+6px)] min-w-44 bg-b-40 backdrop-blur-lg shadow-xl z-10 overflow-hidden origin-top-right rounded-sm"
-             style="animation: grow 200ms;">
-          <a href="mailto:karson@karsonkalt.dev" role="menuitem"
-             class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
-              <rect x="1.5" y="4.36" width="21" height="15.27" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
-              <polyline points="1.5 4.36 12 14.86 22.5 4.36" stroke="currentColor" fill="none" stroke-miterlimit="10"></polyline>
-            </svg>
+        <div id="contact-menu" role="menu" aria-labelledby="contact-button"
+             class="dropdown-content hidden flex-col absolute right-0 top-[calc(100%+6px)] min-w-44 shadow-xl z-10 overflow-hidden origin-top-right rounded-sm">
+          <a href="mailto:karson@karsonkalt.dev" role="menuitem" class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none"><rect x="1.5" y="4.36" width="21" height="15.27" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect><polyline points="1.5 4.36 12 14.86 22.5 4.36" stroke="currentColor" fill="none" stroke-miterlimit="10"></polyline></svg>
             Email
           </a>
-          <a href="/assets/docs/karson_kalt_resume_2025_03.pdf" target="_blank" role="menuitem"
-             class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-              <polyline points="10 9 9 9 8 9" />
-            </svg>
+          <a href="/assets/docs/karson_kalt_resume_2025_03.pdf" target="_blank" role="menuitem" class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Resume
           </a>
-          <a href="https://cal.com/karsonkalt/15min" target="_blank" role="menuitem"
-             class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none">
-              <rect x="1.48" y="3.37" width="21.04" height="4.78" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
-              <rect x="1.48" y="8.15" width="21.04" height="14.35" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect>
-              <line x1="5.3" y1="12.93" x2="7.22" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="9.13" y1="12.93" x2="11.04" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="12.96" y1="12.93" x2="14.87" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="16.78" y1="12.93" x2="18.7" y2="12.93" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="16.78" y1="17.72" x2="18.7" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="5.3" y1="17.72" x2="7.22" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="9.13" y1="17.72" x2="11.04" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="12.96" y1="17.72" x2="14.87" y2="17.72" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="6.26" y1="0.5" x2="6.26" y2="5.28" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="12" y1="0.5" x2="12" y2="5.28" stroke="currentColor" stroke-miterlimit="10"></line>
-              <line x1="17.74" y1="0.5" x2="17.74" y2="5.28" stroke="currentColor" stroke-miterlimit="10"></line>
-            </svg>
+          <a href="https://cal.com/karsonkalt/15min" target="_blank" role="menuitem" class="flex items-center gap-3 px-4 py-3 text-sm text-primary no-underline border-b border-w-10 last:border-0 hover:bg-w-05 transition-colors duration-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="13" height="13" stroke="currentColor" fill="none"><rect x="1.48" y="3.37" width="21.04" height="4.78" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect><rect x="1.48" y="8.15" width="21.04" height="14.35" stroke="currentColor" fill="none" stroke-miterlimit="10"></rect></svg>
             Set up a chat
           </a>
         </div>
       </div>
+
+      <!-- Mobile: section jump select -->
+      <div class="header-mobile-only section-select-wrap relative">
+        <select id="section-select" aria-label="Jump to section"
+                class="section-select absolute inset-0 opacity-0 w-full h-full cursor-pointer">
+          <option value="section-writing">Writing</option>
+          <option value="section-projects">Projects</option>
+          <option value="section-artifacts">Artifacts</option>
+        </select>
+        <div id="section-select-label"
+             class="flex items-center gap-1.5 px-2.5 py-1 text-accent border border-accent text-sm rounded-sm pointer-events-none whitespace-nowrap">
+          <span id="section-select-text">Writing</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8L12 15L19 8H5Z"/></svg>
+        </div>
+      </div>
+
     </nav>
   </div>
 
@@ -138,8 +125,37 @@ layout: base
     <div class="glare"></div>
   </div>
 
+  <!-- Section nav (sticky, scroll-synced) — desktop only -->
+  <nav id="section-nav" class="scroll-nav max-[800px]:hidden flex sticky top-0 z-20 items-center gap-0 -mx-4 px-4 mb-8" aria-label="Page sections">
+
+    <!-- Section tabs (desktop) -->
+    <div class="flex items-center gap-0 flex-1 min-w-0">
+      <button data-section="section-writing" aria-selected="true"
+              class="scroll-tab shrink-0 px-3 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
+        Writing
+      </button>
+      <button data-section="section-projects" aria-selected="false"
+              class="scroll-tab shrink-0 px-3 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
+        Projects
+      </button>
+      <button data-section="section-artifacts" aria-selected="false"
+              class="scroll-tab shrink-0 px-3 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
+        Artifacts
+      </button>
+    </div>
+
+    <!-- Back to top — visible only when stuck -->
+    <button id="back-to-top" aria-label="Back to top"
+            class="icon-btn scroll-nav-back-top ml-2 opacity-0 pointer-events-none transition-opacity duration-200">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 15l7-7 7 7"/>
+      </svg>
+    </button>
+
+  </nav>
+
   <!-- Writing -->
-  <section class="mb-20">
+  <section id="section-writing" class="mb-20">
     <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Writing</p>
     <ul class="list-none m-0">
       {%- assign date_format = "%b %-d, %Y" -%}
@@ -159,7 +175,7 @@ layout: base
   </section>
 
   <!-- Projects -->
-  <section>
+  <section id="section-projects">
     <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Projects</p>
     <ul class="list-none m-0">
 
@@ -237,6 +253,39 @@ layout: base
 
     </ul>
   </section>
+
+  <!-- Artifacts -->
+  <section id="section-artifacts" class="mt-20">
+    <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Artifacts</p>
+
+    {%- if site.notes.size > 0 -%}
+    {%- assign date_format = "%b %-d, %Y" -%}
+    {%- assign sorted_notes = site.notes | sort: "date" | reverse -%}
+    <div class="grid mb-10" style="grid-template-columns: auto 1fr; row-gap: 0;">
+      {%- for note in sorted_notes -%}
+      <a href="{{ note.url | relative_url }}"
+         class="contents group no-underline">
+        <div class="py-2.5 pr-8 flex flex-col gap-0.5">
+          <span class="text-sm font-semibold text-primary group-hover:text-accent transition-colors duration-100 leading-snug">{{ note.title | escape }}</span>
+          <span class="text-[10px] text-muted tabular-nums">{{ note.date | date: date_format }}</span>
+        </div>
+        <div class="py-2.5 flex items-start">
+          {% if note.description %}
+          <span class="text-sm text-muted leading-snug">{{ note.description | escape }}</span>
+          {% endif %}
+        </div>
+      </a>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+
+  </section>
+
+  <!-- Skills bin -->
+  <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mt-20 mb-10 pb-4 border-b border-w-20">Skills</p>
+  <div id="skills-bin" class="relative w-full">
+    <button id="skills-sort-btn" class="absolute inset-0 w-full text-[10px] font-semibold tracking-[0.12em] uppercase text-muted bg-transparent border-0 cursor-default" style="transition:color 300ms ease;">Drop</button>
+  </div>
 
 </main>
 
