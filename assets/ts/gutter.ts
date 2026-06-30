@@ -112,12 +112,10 @@ export const initGutter = () => {
     const delta = Math.min(now - last, 32);
     last = now;
     Engine.update(engine, delta);
-    if (typeof tickSort === "function") tickSort();
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const sy    = window.scrollY;
-    if (typeof drawSortLabels === "function") drawSortLabels(sy);
+    const sy = window.scrollY;
     const color = accentColor();
     const vh    = window.innerHeight;
 
@@ -206,20 +204,22 @@ export const initGutter = () => {
   const wordToCategory = new Map<string, string>();
   CATEGORIES.forEach(({ label, words }) => words.forEach(w => wordToCategory.set(w, label)));
 
-  interface SortLabel { text: string; x: number; y: number; tx: number; ty: number; opacity: number; }
-  let sortTargets: Map<Matter.Body, { x: number; y: number }> | null = null;
-  let sortLabels: SortLabel[] = [];
   let isSorted = false;
+  let sortOverlay: HTMLDivElement | null = null;
 
-  const calcTargets = () => {
+  const enterSort = () => {
     const bodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
-    const { left: BL, top: BT, width: BW } = docRect();
-    const PAD = 20;
-    const WORD_GAP = 5;
-    const CAT_GAP = 14;
-    const LABEL_H = 14;
+    if (!bodies.length) return;
 
-    // Group bodies by category, preserving insertion order
+    // Stop physics
+    engine.gravity.y = 0;
+    bodies.forEach(body => {
+      (body as any).collisionFilter = { mask: 0 };
+      Body.setVelocity(body, { x: 0, y: 0 });
+      Body.setAngularVelocity(body, 0);
+    });
+
+    // Group by category
     const groups = new Map<string, Matter.Body[]>();
     bodies.forEach(body => {
       const cat = wordToCategory.get(body.label) ?? "Other";
@@ -227,100 +227,115 @@ export const initGutter = () => {
       groups.get(cat)!.push(body);
     });
 
-    const targets = new Map<Matter.Body, { x: number; y: number }>();
-    const labels: SortLabel[] = [];
-    let cy = BT + PAD + 24;
+    // Build overlay DOM — measure layout to size the bin
+    const overlay = document.createElement("div");
+    overlay.style.cssText = "position:absolute;inset:0;padding:28px 20px 20px;overflow:visible;pointer-events:none;";
+
+    const PAD = 20;
+    const WORD_GAP = 5;
+    const CAT_GAP = 16;
+    const LABEL_H = 14;
+    const binR = bin.getBoundingClientRect();
+    const BW = binR.width;
+
+    // Word elements keyed by body, positioned at canvas origin initially
+    const wordEls = new Map<Matter.Body, HTMLSpanElement>();
+    let totalH = 28; // top padding
 
     groups.forEach((groupBodies, catName) => {
-      // Category label — flies in from left
-      labels.push({ text: catName, x: BL - 200, y: cy + LABEL_H / 2, tx: BL + PAD, ty: cy + LABEL_H / 2, opacity: 0 });
-      cy += LABEL_H + 6;
+      // Category label
+      const lbl = document.createElement("p");
+      lbl.textContent = catName;
+      lbl.style.cssText = `
+        margin:0 0 6px;font-size:9px;font-weight:700;letter-spacing:0.13em;
+        text-transform:uppercase;color:var(--white-40);
+        transform:translateX(-24px);opacity:0;
+        transition:transform 400ms cubic-bezier(0.23,1,0.32,1),opacity 300ms ease;
+      `;
+      overlay.appendChild(lbl);
+      totalH += LABEL_H + 6;
 
-      // Words in this group
-      let cx = BL + PAD;
-      let rowH = 0;
+      // Word row container (flex-wrap)
+      const row = document.createElement("div");
+      row.style.cssText = `display:flex;flex-wrap:wrap;gap:${WORD_GAP}px;margin-bottom:${CAT_GAP}px;`;
+
       groupBodies.forEach(body => {
         const fontSize = (body as any).charSize ?? 14;
-        const w = body.label.length * fontSize * 0.58 + 12;
-        const h = fontSize + 8;
-        if (cx + w > BL + BW - PAD && cx > BL + PAD) {
-          cx = BL + PAD;
-          cy += rowH + WORD_GAP;
-          rowH = 0;
-        }
-        targets.set(body, { x: cx + w / 2, y: cy + h / 2 });
-        cx += w + WORD_GAP;
-        rowH = Math.max(rowH, h);
+        const span = document.createElement("span");
+        span.textContent = body.label;
+        span.style.cssText = `
+          font-family:var(--font-mono,"Ubuntu Mono",monospace);
+          font-size:${fontSize}px;
+          color:var(--accent-color-link);
+          opacity:0;
+          transition:opacity 300ms ease, transform 500ms cubic-bezier(0.23,1,0.32,1);
+          display:inline-block;
+          will-change:transform;
+        `;
+        row.appendChild(span);
+        wordEls.set(body, span);
       });
-      cy += rowH + CAT_GAP;
+
+      overlay.appendChild(row);
+      // Rough height per row (will be measured after mount)
+      totalH += Math.ceil(groupBodies.length / Math.floor(BW / 80)) * 24 + CAT_GAP;
     });
 
-    return { targets, labels };
+    bin.appendChild(overlay);
+    sortOverlay = overlay;
+
+    // After mount: FLIP — record final positions, start from canvas positions
+    requestAnimationFrame(() => {
+      // Resize bin to fit content
+      const contentH = overlay.scrollHeight + 48;
+      bin.style.height = contentH + "px";
+      // Rebuild walls to match new bin height
+      walls.forEach(w => Composite.remove(engine.world, w));
+      walls = makeWalls();
+      Composite.add(engine.world, walls);
+
+      wordEls.forEach((span, body) => {
+        // Final position of span relative to viewport
+        const spanR = span.getBoundingClientRect();
+        // Current canvas position (viewport space)
+        const fromX = body.position.x - window.scrollX;
+        const fromY = body.position.y - window.scrollY;
+        // Delta from final to current (FLIP: set transform to offset, then remove)
+        const dx = fromX - (spanR.left + spanR.width / 2);
+        const dy = fromY - (spanR.top + spanR.height / 2);
+        span.style.transform = `translate(${dx}px,${dy}px) rotate(${body.angle}rad)`;
+        span.style.opacity = "0.9";
+      });
+
+      // Hide canvas words (they'll overlap otherwise)
+      canvas.style.opacity = "0";
+      canvas.style.transition = "opacity 200ms";
+
+      // Animate labels in
+      requestAnimationFrame(() => {
+        overlay.querySelectorAll("p").forEach((lbl, i) => {
+          setTimeout(() => {
+            (lbl as HTMLElement).style.transform = "translateX(0)";
+            (lbl as HTMLElement).style.opacity = "1";
+          }, i * 30);
+        });
+
+        // Animate words to final position
+        wordEls.forEach((span) => {
+          requestAnimationFrame(() => {
+            span.style.transform = "translate(0,0) rotate(0rad)";
+          });
+        });
+      });
+    });
   };
 
-  const tickSort = () => {
-    if (!sortTargets) return;
-    Composite.allBodies(engine.world).forEach(body => {
-      if (body.isStatic) return;
-      const t = sortTargets!.get(body);
-      if (!t) return;
-      Body.setPosition(body, { x: body.position.x + (t.x - body.position.x) * 0.12, y: body.position.y + (t.y - body.position.y) * 0.12 });
-      Body.setVelocity(body, { x: 0, y: 0 });
-      Body.setAngle(body, body.angle * 0.85);
-      Body.setAngularVelocity(body, 0);
-    });
-    sortLabels.forEach(lbl => {
-      lbl.x += (lbl.tx - lbl.x) * 0.12;
-      lbl.y += (lbl.ty - lbl.y) * 0.12;
-      lbl.opacity = Math.min(1, lbl.opacity + 0.04);
-    });
-  };
-
-  // Render sort labels on canvas
-  const drawSortLabels = (sy: number) => {
-    if (!sortLabels.length) return;
-    const color = accentColor();
-    sortLabels.forEach(lbl => {
-      if (lbl.opacity < 0.01) return;
-      ctx.save();
-      ctx.font = `600 ${9 * dpr}px var(--font-sans, sans-serif)`;
-      ctx.fillStyle = color;
-      ctx.globalAlpha = lbl.opacity * 0.5;
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.letterSpacing = `${1.5 * dpr}px`;
-      ctx.fillText(lbl.text.toUpperCase(), lbl.x * dpr, (lbl.y - sy) * dpr);
-      ctx.restore();
-    });
-  };
-
-  document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
-    isSorted = !isSorted;
+document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
+    if (isSorted) return;
+    isSorted = true;
     const btn = document.getElementById("skills-sort-btn")!;
-    if (isSorted) {
-      const { targets, labels } = calcTargets();
-      sortTargets = targets;
-      sortLabels = labels;
-      engine.gravity.y = 0;
-      // Disable all collisions
-      Composite.allBodies(engine.world).forEach(body => {
-        if (!body.isStatic) {
-          (body as any).collisionFilter = { mask: 0 };
-          Body.setVelocity(body, { x: 0, y: 0 });
-          Body.setAngularVelocity(body, 0);
-        }
-      });
-      btn.textContent = "Unsort";
-    } else {
-      sortTargets = null;
-      sortLabels = [];
-      engine.gravity.y = 2.2;
-      // Re-enable collisions
-      Composite.allBodies(engine.world).forEach(body => {
-        if (!body.isStatic) (body as any).collisionFilter = { mask: 0xFFFFFFFF };
-      });
-      btn.textContent = "Sort";
-    }
+    btn.style.display = "none";
+    enterSort();
   });
 
   // ── Resize ──────────────────────────────────────────────────────────────
