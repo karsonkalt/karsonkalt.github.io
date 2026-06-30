@@ -195,21 +195,21 @@ export const initGutter = () => {
     holdInterval = setInterval(() => spawnAt(lastDocX, lastDocY), 130);
   };
 
-  document.addEventListener("mousedown", (e) => startSpawn(e.clientX, e.clientY));
-  document.addEventListener("mousemove", (e) => {
+  window.addEventListener("mousedown", (e) => startSpawn(e.clientX, e.clientY));
+  window.addEventListener("mousemove", (e) => {
     lastDocX = e.clientX;
     lastDocY = e.clientY + window.scrollY;
   });
-  document.addEventListener("mouseup", () => {
+  window.addEventListener("mouseup", () => {
     if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
   });
 
   // Touch
-  document.addEventListener("touchstart", (e) => {
+  window.addEventListener("touchstart", (e) => {
     const t = e.touches[0];
     startSpawn(t.clientX, t.clientY);
   }, { passive: true });
-  document.addEventListener("touchend", () => {
+  window.addEventListener("touchend", () => {
     if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
   });
 
