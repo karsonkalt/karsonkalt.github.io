@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/main.css && webpack --config webpack.config.js",
-    "dev": "concurrently --kill-others --names \"tw,wp,jk\" --prefix-colors \"cyan,yellow,green\" \"npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/main.css --watch\" \"webpack --config webpack.config.js --watch\" \"bundle exec jekyll serve --livereload\""
+    "dev": "concurrently --kill-others --names \"tw,wp,jk\" --prefix-colors \"cyan,yellow,green\" \"npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/main.css --watch\" \"webpack --config webpack.config.js --watch\" \"bundle exec jekyll serve --livereload --open\""
   },
   "author": "",
   "license": "ISC",
