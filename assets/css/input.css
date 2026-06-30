@@ -356,6 +356,35 @@ html.light .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* Mobile section select */
+.section-select {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--white-90);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 4px;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+}
+
+.section-select option {
+  background: #141414;
+  color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .section-select { color: var(--black-90); }
+  html:not(.dark) .section-select option { background: #fff; color: #000; }
+}
+html.light .section-select { color: var(--black-90); }
+html.light .section-select option { background: #fff; color: #000; }
+
 /* ─── Link item hover ────────────────────────────────────────────────────── */
 
 .link-item:hover {

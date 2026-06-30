@@ -146,8 +146,8 @@ layout: base
       Karson Kalt
     </span>
 
-    <!-- Section tabs -->
-    <div class="flex items-center gap-0 flex-1 min-w-0 overflow-x-auto no-scrollbar">
+    <!-- Section tabs (desktop) -->
+    <div class="hidden sm:flex items-center gap-0 flex-1 min-w-0">
       <button data-section="section-writing" aria-selected="true"
               class="scroll-tab shrink-0 px-3 py-3 text-xs font-semibold tracking-[0.12em] uppercase transition-colors duration-150 cursor-pointer">
         Writing
@@ -162,8 +162,16 @@ layout: base
       </button>
     </div>
 
-    <!-- Mini contact — hidden until stuck -->
-    <div class="scroll-nav-contact dropdown-menu relative select-none ml-3 overflow-hidden max-w-0 opacity-0 transition-all duration-250" tabindex="0">
+    <!-- Section select (mobile) -->
+    <select id="section-select" aria-label="Jump to section"
+            class="section-select sm:hidden flex-1 min-w-0">
+      <option value="section-writing">Writing</option>
+      <option value="section-projects">Projects</option>
+      <option value="section-artifacts">Artifacts</option>
+    </select>
+
+    <!-- Mini contact — desktop only, hidden until stuck -->
+    <div class="scroll-nav-contact hidden sm:block dropdown-menu relative select-none ml-3 overflow-hidden max-w-0 opacity-0 transition-all duration-250" tabindex="0">
       <button id="contact-button-nav" aria-haspopup="true" aria-expanded="false" aria-controls="contact-menu-nav"
               class="flex items-center gap-1 px-2 py-1 text-accent border border-accent text-xs rounded-sm transition-transform duration-100 hover:scale-[1.03] whitespace-nowrap">
         Contact

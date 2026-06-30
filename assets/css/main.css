@@ -444,9 +444,6 @@
   .overflow-hidden {
     overflow: hidden;
   }
-  .overflow-x-auto {
-    overflow-x: auto;
-  }
   .rounded {
     border-radius: 0.25rem;
   }
@@ -770,6 +767,21 @@
       padding: calc(var(--spacing) * 6);
     }
   }
+  .sm\:block {
+    @media (width >= 40rem) {
+      display: block;
+    }
+  }
+  .sm\:flex {
+    @media (width >= 40rem) {
+      display: flex;
+    }
+  }
+  .sm\:hidden {
+    @media (width >= 40rem) {
+      display: none;
+    }
+  }
 }
 :root {
   --black-100: #000000ff;
@@ -1073,6 +1085,41 @@ html.light .scroll-nav--stuck {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+.section-select {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--white-90);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 4px;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+}
+.section-select option {
+  background: #141414;
+  color: #fff;
+}
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .section-select {
+    color: var(--black-90);
+  }
+  html:not(.dark) .section-select option {
+    background: #fff;
+    color: #000;
+  }
+}
+html.light .section-select {
+  color: var(--black-90);
+}
+html.light .section-select option {
+  background: #fff;
+  color: #000;
 }
 .link-item:hover {
   background-color: var(--white-05);

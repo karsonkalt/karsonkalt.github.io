@@ -7,12 +7,15 @@ export const initScrollNav = (): void => {
     .map((t) => document.getElementById(t.dataset.section!))
     .filter(Boolean) as HTMLElement[];
 
+  const select = document.getElementById("section-select") as HTMLSelectElement | null;
+
   const setActive = (id: string) => {
     tabs.forEach((t) => {
       const active = t.dataset.section === id;
       t.setAttribute("aria-selected", String(active));
       t.classList.toggle("scroll-tab--active", active);
     });
+    if (select && select.value !== id) select.value = id;
   };
 
   // Click → smooth scroll
@@ -25,6 +28,15 @@ export const initScrollNav = (): void => {
       const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
       window.scrollTo({ top, behavior: "smooth" });
     });
+  });
+
+  // Select → smooth scroll (mobile)
+  select?.addEventListener("change", () => {
+    const target = document.getElementById(select.value);
+    if (!target) return;
+    const navH = nav.getBoundingClientRect().height;
+    const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
+    window.scrollTo({ top, behavior: "smooth" });
   });
 
   // Scroll-spy via IntersectionObserver
