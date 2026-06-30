@@ -5,6 +5,18 @@ author:
 
 baseurl: ""
 
+collections:
+  notes:
+    output: true
+    permalink: /notes/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: notes
+    values:
+      layout: post
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag

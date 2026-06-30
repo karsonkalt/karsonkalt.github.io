@@ -255,30 +255,24 @@ layout: base
   </section>
 
   <!-- Artifacts -->
-  <section id="section-artifacts" class="mt-20">
+  <section id="section-artifacts" class="mb-20">
     <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Artifacts</p>
-
-    {%- if site.notes.size > 0 -%}
-    {%- assign date_format = "%b %-d, %Y" -%}
-    {%- assign sorted_notes = site.notes | sort: "date" | reverse -%}
-    <div class="grid mb-10" style="grid-template-columns: auto 1fr; row-gap: 0;">
+    <ul class="list-none m-0">
+      {%- assign date_format = "%b %-d, %Y" -%}
+      {%- assign sorted_notes = site.notes | sort: "date" | reverse -%}
       {%- for note in sorted_notes -%}
-      <a href="{{ note.url | relative_url }}"
-         class="contents group no-underline">
-        <div class="py-2.5 pr-8 flex flex-col gap-0.5">
-          <span class="text-sm font-semibold text-primary group-hover:text-accent transition-colors duration-100 leading-snug">{{ note.title | escape }}</span>
-          <span class="text-[10px] text-muted tabular-nums">{{ note.date | date: date_format }}</span>
-        </div>
-        <div class="py-2.5 flex items-start">
+      <li>
+        <a href="{{ note.url | relative_url }}"
+           class="link-item flex flex-col gap-1.5 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
+          <span class="text-[10px] font-normal text-muted uppercase tracking-wider">{{ note.date | date: date_format }}</span>
+          <span class="text-lg font-semibold text-primary leading-snug">{{ note.title | escape }}</span>
           {% if note.description %}
-          <span class="text-sm text-muted leading-snug">{{ note.description | escape }}</span>
+          <span class="text-sm text-muted font-normal leading-relaxed line-clamp-2">{{ note.description | escape }}</span>
           {% endif %}
-        </div>
-      </a>
+        </a>
+      </li>
       {%- endfor -%}
-    </div>
-    {%- endif -%}
-
+    </ul>
   </section>
 
   <!-- Skills bin -->
