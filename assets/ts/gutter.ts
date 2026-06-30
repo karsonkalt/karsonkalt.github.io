@@ -307,7 +307,7 @@ document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
       probe.appendChild(pill);
     });
     document.body.appendChild(probe);
-    const h = probe.scrollHeight + 32;
+    const h = probe.scrollHeight;
     probe.remove();
     return h;
   };
