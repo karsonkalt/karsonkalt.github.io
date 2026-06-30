@@ -1,11 +1,7 @@
 import * as Matter from "matter-js";
 import { CHARS } from "./shared/chars";
 
-console.log("[gutter] script loaded");
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("[gutter] DOMContentLoaded, bin el:", document.getElementById("skills-bin"));
-  initGutter();
-});
+document.addEventListener("DOMContentLoaded", () => initGutter());
 
 const MIN_FONT = 11;
 const MAX_FONT = 20;
@@ -56,8 +52,7 @@ export const initGutter = () => {
   const makeWalls = () => {
     const { top: BT, bottom: BB, left: BL, right: BR } = docRect();
     const W = vw();
-    console.log("[gutter] bin doc rect:", { BT, BB, BL, BR, W, scrollY: window.scrollY });
-    const opts = { isStatic: true, label: "wall", render: { fillStyle: "rgba(255,0,0,0.4)" } };
+    const opts = { isStatic: true, label: "wall", render: { fillStyle: "transparent" } };
 
     const walls: Matter.Body[] = [
       // Bin floor
@@ -72,12 +67,6 @@ export const initGutter = () => {
       Bodies.rectangle(W + WALL / 2, BB / 2, WALL, BB * 2, opts),
     ];
 
-    // Viewport corner bevels — tiny nudge for off-screen spawns
-    const B = 100;
-    walls.push(
-      Bodies.rectangle(B / 2, B / 2, B * 1.5, 8, { ...opts, angle:  Math.PI / 4 }),
-      Bodies.rectangle(W - B / 2, B / 2, B * 1.5, 8, { ...opts, angle: -Math.PI / 4 }),
-    );
 
     // Funnel: angled from outer page edge at y=0 → bin edge at y=BT
     // Only when there are real gutters
@@ -133,7 +122,6 @@ export const initGutter = () => {
     Body.setVelocity(body, { x: (Math.random() - 0.5) * 2, y: 0.5 });
     Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06);
     Composite.add(engine.world, body);
-    console.log("[gutter] spawned", char, "at doc", { docX, docY }, "scrollY", window.scrollY);
   };
 
   // ── rAF loop: tick engine + draw ────────────────────────────────────────
@@ -149,23 +137,27 @@ export const initGutter = () => {
     const color = accentColor();
     const vh    = window.innerHeight;
 
+    // Draw funnel walls as subtle lines
     Composite.allBodies(engine.world).forEach((body) => {
-      if (body.isStatic) {
-        // Debug: draw walls as red boxes
-        const verts = body.vertices;
-        ctx.save();
-        ctx.fillStyle = "rgba(255,0,0,0.25)";
-        ctx.beginPath();
-        verts.forEach((v, i) => {
-          const vx = v.x * dpr;
-          const vy = (v.y - window.scrollY) * dpr;
-          i === 0 ? ctx.moveTo(vx, vy) : ctx.lineTo(vx, vy);
-        });
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-        return;
-      }
+      if (!body.isStatic || body.label !== "wall") return;
+      const verts = body.vertices;
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = 0.12;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      verts.forEach((v, i) => {
+        const px = v.x * dpr;
+        const py = (v.y - window.scrollY) * dpr;
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      });
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    Composite.allBodies(engine.world).forEach((body) => {
+      if (body.isStatic) return;
       // Document-space y → viewport y
       const vx = body.position.x;
       const vy = body.position.y - sy;
@@ -195,10 +187,6 @@ export const initGutter = () => {
   let lastDocX = 0;
   let lastDocY = 0;
 
-  const isGutter = (cx: number) =>
-    gw() >= 60 && (cx < gw() || cx > vw() - gw());
-  const isNarrow = () => gw() < 60;
-
   const startSpawn = (clientX: number, clientY: number) => {
     lastDocX = clientX;
     lastDocY = clientY + window.scrollY;
@@ -206,16 +194,10 @@ export const initGutter = () => {
     holdInterval = setInterval(() => spawnAt(lastDocX, lastDocY), 130);
   };
 
-  document.addEventListener("mousedown", (e) => {
-    if (isNarrow() || isGutter(e.clientX)) startSpawn(e.clientX, e.clientY);
-  });
+  document.addEventListener("mousedown", (e) => startSpawn(e.clientX, e.clientY));
   document.addEventListener("mousemove", (e) => {
     lastDocX = e.clientX;
     lastDocY = e.clientY + window.scrollY;
-    if (holdInterval && !isNarrow() && !isGutter(e.clientX)) {
-      clearInterval(holdInterval);
-      holdInterval = null;
-    }
   });
   document.addEventListener("mouseup", () => {
     if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
