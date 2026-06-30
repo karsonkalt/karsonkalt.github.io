@@ -2,7 +2,7 @@
 layout: base
 ---
 
-<main class="pt-8 pb-16 transition-all duration-500 flex flex-col">
+<main class="pt-8 pb-16 transition-all duration-500">
 
   <!-- Header -->
   <div class="flex justify-between items-center mb-8 max-[800px]:flex-col max-[800px]:items-start max-[800px]:gap-4">
@@ -48,7 +48,22 @@ layout: base
       <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank"
          class="text-w-50 text-sm no-underline hover:text-w-70 transition-colors duration-150">LinkedIn</a>
 
-      <div class="dropdown-menu relative select-none" tabindex="0">
+      <!-- Section jump — mobile only, lives in header -->
+      <div class="section-select-wrap sm:hidden relative">
+        <select id="section-select" aria-label="Jump to section"
+                class="section-select absolute inset-0 opacity-0 w-full h-full cursor-pointer">
+          <option value="section-writing">Writing</option>
+          <option value="section-projects">Projects</option>
+          <option value="section-artifacts">Artifacts</option>
+        </select>
+        <div id="section-select-label"
+             class="flex items-center gap-1.5 px-2.5 py-1 text-accent border border-accent text-sm rounded-sm pointer-events-none whitespace-nowrap">
+          <span id="section-select-text">Writing</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8L12 15L19 8H5Z"/></svg>
+        </div>
+      </div>
+
+      <div class="dropdown-menu relative select-none hidden sm:block" tabindex="0">
         <button id="contact-button" aria-haspopup="true" aria-expanded="false" aria-controls="contact-menu"
                 class="flex items-center gap-1.5 px-2.5 py-1 text-accent border border-accent text-sm rounded-sm transition-transform duration-100 hover:scale-[1.03]">
           Contact
@@ -103,7 +118,7 @@ layout: base
   </div>
 
   <!-- Hero card -->
-  <div class="hero-container relative mb-20 rounded order-2 sm:order-1" style="transform-style: preserve-3d;">
+  <div class="hero-container relative mb-20 rounded" style="transform-style: preserve-3d;">
     <div class="flex overflow-hidden rounded"
          style="background-image: linear-gradient(30deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.05) 100%); transform-style: preserve-3d;">
       <div class="flex-1 p-8 flex flex-col gap-3 max-[800px]:p-6" style="transform-style: preserve-3d;">
@@ -138,8 +153,8 @@ layout: base
     <div class="glare"></div>
   </div>
 
-  <!-- Section nav (sticky, scroll-synced) -->
-  <nav id="section-nav" class="scroll-nav sticky top-0 z-20 flex items-center gap-0 -mx-4 px-4 mb-8 order-1 sm:order-2" aria-label="Page sections">
+  <!-- Section nav (sticky, scroll-synced) — desktop only -->
+  <nav id="section-nav" class="scroll-nav hidden sm:flex sticky top-0 z-20 items-center gap-0 -mx-4 px-4 mb-8" aria-label="Page sections">
 
     <!-- Mini name — hidden until stuck -->
     <span class="scroll-nav-name font-mono font-medium text-sm text-primary uppercase tracking-tight mr-3 whitespace-nowrap overflow-hidden max-w-0 opacity-0 transition-all duration-250">
@@ -162,20 +177,6 @@ layout: base
       </button>
     </div>
 
-    <!-- Section select (mobile) — styled like the contact button -->
-    <div class="section-select-wrap sm:hidden relative flex-1 min-w-0">
-      <select id="section-select" aria-label="Jump to section"
-              class="section-select absolute inset-0 opacity-0 w-full cursor-pointer">
-        <option value="section-writing">Writing</option>
-        <option value="section-projects">Projects</option>
-        <option value="section-artifacts">Artifacts</option>
-      </select>
-      <div id="section-select-label"
-           class="flex items-center gap-1.5 px-2.5 py-1 text-accent border border-accent text-xs rounded-sm pointer-events-none whitespace-nowrap w-fit">
-        <span id="section-select-text">Writing</span>
-        <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8L12 15L19 8H5Z"/></svg>
-      </div>
-    </div>
 
   </nav>
 

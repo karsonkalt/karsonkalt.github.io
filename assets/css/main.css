@@ -238,12 +238,6 @@
   .z-20 {
     z-index: 20;
   }
-  .order-1 {
-    order: 1;
-  }
-  .order-2 {
-    order: 2;
-  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -357,9 +351,6 @@
   }
   .w-44 {
     width: calc(var(--spacing) * 44);
-  }
-  .w-fit {
-    width: fit-content;
   }
   .w-full {
     width: 100%;
@@ -779,14 +770,9 @@
       padding: calc(var(--spacing) * 6);
     }
   }
-  .sm\:order-1 {
+  .sm\:block {
     @media (width >= 40rem) {
-      order: 1;
-    }
-  }
-  .sm\:order-2 {
-    @media (width >= 40rem) {
-      order: 2;
+      display: block;
     }
   }
   .sm\:flex {
@@ -1053,34 +1039,15 @@ html::before {
   box-shadow: 0 1px 0 var(--white-10);
   backdrop-filter: blur(12px);
 }
-@media (max-width: 639px) {
-  .scroll-nav {
-    background: var(--black-90);
-    box-shadow: 0 1px 0 var(--white-10);
-    backdrop-filter: blur(12px);
-  }
-}
 @media (prefers-color-scheme: light) {
   html:not(.dark) .scroll-nav--stuck {
     background: rgba(255,255,255,0.92);
     box-shadow: 0 1px 0 rgba(0,0,0,0.08);
   }
-  @media (max-width: 639px) {
-    html:not(.dark) .scroll-nav {
-      background: rgba(255,255,255,0.92);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
-    }
-  }
 }
-html.light .scroll-nav--stuck, html.light .scroll-nav {
+html.light .scroll-nav--stuck {
   background: rgba(255,255,255,0.92);
   box-shadow: 0 1px 0 rgba(0,0,0,0.08);
-}
-@media (min-width: 640px) {
-  html.light .scroll-nav:not(.scroll-nav--stuck) {
-    background: transparent;
-    box-shadow: none;
-  }
 }
 .scroll-tab {
   all: unset;

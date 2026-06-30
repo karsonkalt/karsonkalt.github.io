@@ -309,26 +309,11 @@ html::before {
   backdrop-filter: blur(12px);
 }
 
-/* On mobile the nav is above the hero so it's always visible — always show bg */
-@media (max-width: 639px) {
-  .scroll-nav {
-    background: var(--black-90);
-    box-shadow: 0 1px 0 var(--white-10);
-    backdrop-filter: blur(12px);
-  }
-}
 
 @media (prefers-color-scheme: light) {
   html:not(.dark) .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
-  @media (max-width: 639px) {
-    html:not(.dark) .scroll-nav { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
-  }
 }
-html.light .scroll-nav--stuck,
-html.light .scroll-nav { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
-@media (min-width: 640px) {
-  html.light .scroll-nav:not(.scroll-nav--stuck) { background: transparent; box-shadow: none; }
-}
+html.light .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(0,0,0,0.08); }
 
 .scroll-tab {
   all: unset;
