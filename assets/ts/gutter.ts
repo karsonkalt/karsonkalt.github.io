@@ -6,89 +6,87 @@ document.addEventListener("DOMContentLoaded", () => initGutter());
 const MIN_FONT = 11;
 const MAX_FONT = 20;
 const CONTENT_WIDTH = 800;
-const WALL = 60; // static wall thickness
+const WALL = 60;
 
 export const initGutter = () => {
   const bin = document.getElementById("skills-bin");
   if (!bin) return;
 
-  const { Bodies, Body, Composite, Engine, Runner } = Matter;
+  const { Bodies, Body, Composite, Engine } = Matter;
   const dpr = window.devicePixelRatio || 1;
 
-  // ── Canvas (fixed, viewport-sized) ─────────────────────────────────────
+  // ── Canvas: fixed, viewport-sized ──────────────────────────────────────
   const canvas = document.createElement("canvas");
   canvas.style.cssText =
     "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;";
   document.body.appendChild(canvas);
   const ctx = canvas.getContext("2d")!;
 
-  const resize = () => {
+  const resizeCanvas = () => {
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
   };
-  resize();
+  resizeCanvas();
 
-  // ── Physics engine (document-space CSS pixels, no dpr scaling) ─────────
+  // ── Engine (no Runner — we tick manually in rAF) ────────────────────────
   const engine = Engine.create({ gravity: { y: 2.2 } });
 
+  // ── Document-space helpers ──────────────────────────────────────────────
+  // getBoundingClientRect() + scrollY = true document position
+  const docRect = () => {
+    const r = bin.getBoundingClientRect();
+    const sy = window.scrollY;
+    return {
+      top:    r.top    + sy,
+      bottom: r.bottom + sy,
+      left:   r.left,
+      right:  r.right,
+      width:  r.width,
+    };
+  };
+
   const vw = () => window.innerWidth;
-  const vh = () => window.innerHeight;
-  const sy = () => window.scrollY;
   const gw = () => Math.max(0, (vw() - CONTENT_WIDTH) / 2);
 
-  // Bin metrics in document space
-  const binTop = () => bin.offsetTop;
-  const binBottom = () => bin.offsetTop + bin.offsetHeight;
-  const binLeft = () => bin.offsetLeft;
-  const binRight = () => bin.offsetLeft + bin.offsetWidth;
-
-  // ── Walls ───────────────────────────────────────────────────────────────
+  // ── Build static walls ──────────────────────────────────────────────────
   const makeWalls = () => {
+    const { top: BT, bottom: BB, left: BL, right: BR } = docRect();
     const W = vw();
-    const BT = binTop();
-    const BB = binBottom();
-    const BL = binLeft();
-    const BR = binRight();
-    const g = gw();
     const opts = { isStatic: true, label: "wall", render: { fillStyle: "transparent" } };
 
     const walls: Matter.Body[] = [
       // Bin floor
       Bodies.rectangle(W / 2, BB + WALL / 2, W * 4, WALL, opts),
-      // Bin left wall
-      Bodies.rectangle(BL - WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 3, opts),
+      // Bin left wall (full height of bin)
+      Bodies.rectangle(BL - WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, opts),
       // Bin right wall
-      Bodies.rectangle(BR + WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 3, opts),
-      // Outer left wall (full page height)
+      Bodies.rectangle(BR + WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, opts),
+      // Outer left (extends full page height)
       Bodies.rectangle(-WALL / 2, BB / 2, WALL, BB * 2, opts),
-      // Outer right wall
+      // Outer right
       Bodies.rectangle(W + WALL / 2, BB / 2, WALL, BB * 2, opts),
     ];
 
-    // Viewport corner bevels (small angled walls so off-screen clicks
-    // get a nudge inward before the long funnel takes over)
-    const BEVEL = 120;
+    // Viewport corner bevels — tiny nudge for off-screen spawns
+    const B = 100;
     walls.push(
-      Bodies.rectangle(BEVEL / 2, BEVEL / 2, BEVEL * 1.5, 10, { ...opts, angle: Math.PI / 4 }),
-      Bodies.rectangle(W - BEVEL / 2, BEVEL / 2, BEVEL * 1.5, 10, { ...opts, angle: -Math.PI / 4 }),
+      Bodies.rectangle(B / 2, B / 2, B * 1.5, 8, { ...opts, angle:  Math.PI / 4 }),
+      Bodies.rectangle(W - B / 2, B / 2, B * 1.5, 8, { ...opts, angle: -Math.PI / 4 }),
     );
 
-    // Funnel: angled walls from outer edges at top → bin walls at bin top
-    // Only add when there are gutters wide enough to matter
-    if (g > 40 && BT > 200) {
-      // Left funnel wall: from (0, 0) → (BL, BT), represented as a tilted rect
-      const lx = (0 + BL) / 2;
-      const ly = (0 + BT) / 2;
-      const llen = Math.sqrt(BL * BL + BT * BT);
-      const lang = Math.atan2(BT, BL) - Math.PI / 2;
-      walls.push(Bodies.rectangle(lx, ly, 10, llen, { ...opts, angle: lang }));
+    // Funnel: angled from outer page edge at y=0 → bin edge at y=BT
+    // Only when there are real gutters
+    if (gw() > 40 && BT > 100) {
+      // Left funnel: centre of wall goes from (0,0) toward (BL, BT)
+      const lLen = Math.sqrt(BL * BL + BT * BT);
+      const lAng = Math.atan2(BT, BL) - Math.PI / 2;
+      walls.push(Bodies.rectangle(BL / 2, BT / 2, 8, lLen, { ...opts, angle: lAng }));
 
-      // Right funnel wall: from (W, 0) → (BR, BT)
-      const rx = (W + BR) / 2;
-      const ry = (0 + BT) / 2;
-      const rlen = Math.sqrt((W - BR) * (W - BR) + BT * BT);
-      const rang = Math.atan2(BT, BR - W) - Math.PI / 2;
-      walls.push(Bodies.rectangle(rx, ry, 10, rlen, { ...opts, angle: rang }));
+      // Right funnel: from (W,0) → (BR, BT)
+      const rDx = BR - W;
+      const rLen = Math.sqrt(rDx * rDx + BT * BT);
+      const rAng = Math.atan2(BT, rDx) - Math.PI / 2;
+      walls.push(Bodies.rectangle((W + BR) / 2, BT / 2, 8, rLen, { ...opts, angle: rAng }));
     }
 
     return walls;
@@ -97,20 +95,20 @@ export const initGutter = () => {
   let walls = makeWalls();
   Composite.add(engine.world, walls);
 
-  // ── Spawn ───────────────────────────────────────────────────────────────
-  const isLightMode = () => {
+  // ── Colour helpers ──────────────────────────────────────────────────────
+  const isLight = () => {
     const cl = document.documentElement.classList;
     if (cl.contains("light")) return true;
     if (cl.contains("dark")) return false;
     return window.matchMedia("(prefers-color-scheme: light)").matches;
   };
-
   const accentColor = () => {
-    const prop = isLightMode() ? "--accent-color-link-light" : "--accent-color-link-dark";
+    const prop = isLight() ? "--accent-color-link-light" : "--accent-color-link-dark";
     return getComputedStyle(document.documentElement).getPropertyValue(prop).trim()
-      || (isLightMode() ? "#1d4ed8" : "#60a5fa");
+      || (isLight() ? "#1d4ed8" : "#60a5fa");
   };
 
+  // ── Spawn ───────────────────────────────────────────────────────────────
   const spawnAt = (docX: number, docY: number) => {
     const char = CHARS[Math.floor(Math.random() * CHARS.length)];
     const fontSize = MIN_FONT + Math.random() * (MAX_FONT - MIN_FONT);
@@ -124,38 +122,44 @@ export const initGutter = () => {
       label: char,
       render: { fillStyle: "transparent" },
     });
-    (body as any).charSize = fontSize;
+    (body as any).charSize    = fontSize;
     (body as any).charOpacity = 0.7 + Math.random() * 0.3;
+
     Body.setVelocity(body, { x: (Math.random() - 0.5) * 2, y: 0.5 });
     Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06);
     Composite.add(engine.world, body);
   };
 
-  // ── Render loop ─────────────────────────────────────────────────────────
-  Runner.run(Runner.create(), engine);
+  // ── rAF loop: tick engine + draw ────────────────────────────────────────
+  let last = performance.now();
+  const draw = (now: number) => {
+    const delta = Math.min(now - last, 32); // cap at 32ms
+    last = now;
+    Engine.update(engine, delta);
 
-  const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const scroll = sy();
+
+    const sy    = window.scrollY;
     const color = accentColor();
+    const vh    = window.innerHeight;
 
     Composite.allBodies(engine.world).forEach((body) => {
       if (body.isStatic) return;
-      // Document-space → viewport-space → canvas-space
+      // Document-space y → viewport y
       const vx = body.position.x;
-      const vy = body.position.y - scroll;
-      if (vy < -60 || vy > vh() + 60) return; // off-screen, skip
+      const vy = body.position.y - sy;
+      if (vy < -80 || vy > vh + 80) return;
 
-      const size: number = (body as any).charSize ?? 14;
+      const size: number    = (body as any).charSize    ?? 14;
       const opacity: number = (body as any).charOpacity ?? 0.8;
 
       ctx.save();
       ctx.translate(vx * dpr, vy * dpr);
       ctx.rotate(body.angle);
-      ctx.font = `${size * dpr}px "Ubuntu Mono", monospace`;
-      ctx.fillStyle = color;
-      ctx.globalAlpha = opacity;
-      ctx.textAlign = "center";
+      ctx.font         = `${size * dpr}px "Ubuntu Mono", monospace`;
+      ctx.fillStyle    = color;
+      ctx.globalAlpha  = opacity;
+      ctx.textAlign    = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(body.label, 0, 0);
       ctx.restore();
@@ -163,48 +167,43 @@ export const initGutter = () => {
 
     requestAnimationFrame(draw);
   };
-  draw();
+  requestAnimationFrame(draw);
 
   // ── Input ───────────────────────────────────────────────────────────────
   let holdInterval: ReturnType<typeof setInterval> | null = null;
   let lastDocX = 0;
   let lastDocY = 0;
 
-  const isGutterClick = (clientX: number) =>
-    gw() >= 60 && (clientX < gw() || clientX > vw() - gw());
+  const isGutter = (cx: number) =>
+    gw() >= 60 && (cx < gw() || cx > vw() - gw());
+  const isNarrow = () => gw() < 60;
 
-  const isNarrowScreen = () => gw() < 60;
-
-  const handleDown = (clientX: number, clientY: number) => {
+  const startSpawn = (clientX: number, clientY: number) => {
     lastDocX = clientX;
-    lastDocY = clientY + sy();
+    lastDocY = clientY + window.scrollY;
     spawnAt(lastDocX, lastDocY);
     holdInterval = setInterval(() => spawnAt(lastDocX, lastDocY), 130);
   };
 
   document.addEventListener("mousedown", (e) => {
-    if (isNarrowScreen() || isGutterClick(e.clientX)) {
-      handleDown(e.clientX, e.clientY);
-    }
+    if (isNarrow() || isGutter(e.clientX)) startSpawn(e.clientX, e.clientY);
   });
-
   document.addEventListener("mousemove", (e) => {
     lastDocX = e.clientX;
-    lastDocY = e.clientY + sy();
-    if (holdInterval && !isNarrowScreen() && !isGutterClick(e.clientX)) {
+    lastDocY = e.clientY + window.scrollY;
+    if (holdInterval && !isNarrow() && !isGutter(e.clientX)) {
       clearInterval(holdInterval);
       holdInterval = null;
     }
   });
-
   document.addEventListener("mouseup", () => {
     if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
   });
 
-  // Touch support
+  // Touch
   document.addEventListener("touchstart", (e) => {
     const t = e.touches[0];
-    handleDown(t.clientX, t.clientY);
+    startSpawn(t.clientX, t.clientY);
   }, { passive: true });
   document.addEventListener("touchend", () => {
     if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
@@ -212,7 +211,7 @@ export const initGutter = () => {
 
   // ── Resize ──────────────────────────────────────────────────────────────
   window.addEventListener("resize", () => {
-    resize();
+    resizeCanvas();
     walls.forEach((w) => Composite.remove(engine.world, w));
     walls = makeWalls();
     Composite.add(engine.world, walls);
