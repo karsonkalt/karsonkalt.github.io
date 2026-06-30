@@ -263,12 +263,12 @@ layout: base
       {%- for note in sorted_notes -%}
       <li>
         <a href="{{ note.url | relative_url }}"
-           class="link-item flex flex-col gap-1.5 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
-          <span class="text-[10px] font-normal text-muted uppercase tracking-wider">{{ note.date | date: date_format }}</span>
-          <span class="text-lg font-semibold text-primary leading-snug">{{ note.title | escape }}</span>
+           class="link-item flex items-baseline justify-between gap-6 py-3 px-2 -mx-2 no-underline hover:scale-[1.01] transition-transform duration-100">
+          <span class="text-sm font-semibold text-primary leading-snug shrink-0">{{ note.title | escape }}</span>
           {% if note.description %}
-          <span class="text-sm text-muted font-normal leading-relaxed line-clamp-2">{{ note.description | escape }}</span>
+          <span class="text-sm text-muted font-normal leading-snug truncate">{{ note.description | escape }}</span>
           {% endif %}
+          <span class="text-[10px] text-muted tabular-nums shrink-0 ml-auto">{{ note.date | date: date_format }}</span>
         </a>
       </li>
       {%- endfor -%}
