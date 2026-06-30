@@ -266,7 +266,7 @@ export const initGutter = () => {
     bin.appendChild(overlay);
     sortOverlay = overlay;
 
-    // After words have fallen (~600ms), fade canvas + reveal pills
+    // After words have fallen (~600ms) + a brief pause, fade canvas + reveal pills
     setTimeout(() => {
       canvas.style.transition = "opacity 300ms ease";
       canvas.style.opacity = "0";
@@ -279,7 +279,7 @@ export const initGutter = () => {
           (el as HTMLElement).style.transform = "translateY(0)";
         });
       }));
-    }, 600);
+    }, 900);
   };
 
 document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
