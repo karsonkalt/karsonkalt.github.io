@@ -229,42 +229,27 @@ export const initGutter = () => {
   let sortOverlay: HTMLDivElement | null = null;
 
   const enterSort = () => {
-    const bodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
-    if (!bodies.length) return;
-
-    // Stop physics
+    // Stop physics on any dropped bodies
+    const droppedBodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
     engine.gravity.y = 0;
-    bodies.forEach(body => {
+    droppedBodies.forEach(body => {
       (body as any).collisionFilter = { mask: 0 };
       Body.setVelocity(body, { x: 0, y: 0 });
       Body.setAngularVelocity(body, 0);
     });
 
-    // Group by category
-    const groups = new Map<string, Matter.Body[]>();
-    bodies.forEach(body => {
-      const cat = wordToCategory.get(body.label) ?? "Other";
-      if (!groups.has(cat)) groups.set(cat, []);
-      groups.get(cat)!.push(body);
-    });
+    // Map dropped word labels → physics body (for FLIP)
+    const labelToBody = new Map<string, Matter.Body>();
+    droppedBodies.forEach(b => labelToBody.set(b.label, b));
 
-    // Build overlay DOM — measure layout to size the bin
+    // Build overlay from ALL categories
     const overlay = document.createElement("div");
     overlay.style.cssText = "position:absolute;inset:0;padding:28px 20px 20px;overflow:visible;pointer-events:none;";
 
-    const PAD = 20;
     const WORD_GAP = 5;
     const CAT_GAP = 16;
-    const LABEL_H = 14;
-    const binR = bin.getBoundingClientRect();
-    const BW = binR.width;
 
-    // Word elements keyed by body, positioned at canvas origin initially
-    const wordEls = new Map<Matter.Body, HTMLSpanElement>();
-    let totalH = 28; // top padding
-
-    groups.forEach((groupBodies, catName) => {
-      // Category label
+    CATEGORIES.forEach(({ label: catName, words }) => {
       const lbl = document.createElement("p");
       lbl.textContent = catName;
       lbl.style.cssText = `
@@ -274,72 +259,68 @@ export const initGutter = () => {
         transition:transform 400ms cubic-bezier(0.23,1,0.32,1),opacity 300ms ease;
       `;
       overlay.appendChild(lbl);
-      totalH += LABEL_H + 6;
 
-      // Word row container (flex-wrap)
       const row = document.createElement("div");
       row.style.cssText = `display:flex;flex-wrap:wrap;gap:${WORD_GAP}px;margin-bottom:${CAT_GAP}px;`;
 
-      groupBodies.forEach(body => {
-        const fontSize = (body as any).charSize ?? 14;
+      words.forEach(word => {
         const span = document.createElement("span");
-        span.textContent = body.label;
+        span.textContent = word;
+        span.dataset.word = word;
         span.style.cssText = `
           font-family:var(--font-mono,"Ubuntu Mono",monospace);
-          font-size:${fontSize}px;
+          font-size:13px;
           color:var(--accent-color-link);
           opacity:0;
-          transition:opacity 300ms ease, transform 500ms cubic-bezier(0.23,1,0.32,1);
           display:inline-block;
           will-change:transform;
+          transition:opacity 400ms ease, transform 600ms cubic-bezier(0.23,1,0.32,1);
         `;
         row.appendChild(span);
-        wordEls.set(body, span);
       });
 
       overlay.appendChild(row);
-      // Rough height per row (will be measured after mount)
-      totalH += Math.ceil(groupBodies.length / Math.floor(BW / 80)) * 24 + CAT_GAP;
     });
 
     bin.appendChild(overlay);
     sortOverlay = overlay;
 
-    // After mount: FLIP — record final positions, start from canvas positions
+    // FLIP dropped words, stagger-fade everything else
     requestAnimationFrame(() => {
-      // Walls already match bin height (set by syncBinHeight)
-
-      wordEls.forEach((span, body) => {
-        // Final position of span relative to viewport
-        const spanR = span.getBoundingClientRect();
-        // Current canvas position (viewport space)
-        const fromX = body.position.x - window.scrollX;
-        const fromY = body.position.y - window.scrollY;
-        // Delta from final to current (FLIP: set transform to offset, then remove)
-        const dx = fromX - (spanR.left + spanR.width / 2);
-        const dy = fromY - (spanR.top + spanR.height / 2);
-        span.style.transform = `translate(${dx}px,${dy}px) rotate(${body.angle}rad)`;
-        span.style.opacity = "0.9";
-      });
-
-      // Hide canvas words (they'll overlap otherwise)
       canvas.style.opacity = "0";
       canvas.style.transition = "opacity 200ms";
 
-      // Animate labels in
+      const allSpans = Array.from(overlay.querySelectorAll<HTMLSpanElement>("span[data-word]"));
+
+      // Set FLIP transforms before any opacity
+      allSpans.forEach(span => {
+        const body = labelToBody.get(span.dataset.word!);
+        if (body) {
+          const spanR = span.getBoundingClientRect();
+          const dx = (body.position.x - window.scrollX) - (spanR.left + spanR.width / 2);
+          const dy = (body.position.y - window.scrollY) - (spanR.top + spanR.height / 2);
+          span.style.transform = `translate(${dx}px,${dy}px) rotate(${body.angle}rad)`;
+        }
+        span.style.opacity = "0";
+      });
+
+      // Animate in next frame
       requestAnimationFrame(() => {
-        overlay.querySelectorAll("p").forEach((lbl, i) => {
+        // Labels slide in with stagger
+        overlay.querySelectorAll("p").forEach((el, i) => {
           setTimeout(() => {
-            (lbl as HTMLElement).style.transform = "translateX(0)";
-            (lbl as HTMLElement).style.opacity = "1";
-          }, i * 30);
+            (el as HTMLElement).style.transform = "translateX(0)";
+            (el as HTMLElement).style.opacity = "1";
+          }, i * 25);
         });
 
-        // Animate words to final position
-        wordEls.forEach((span) => {
-          requestAnimationFrame(() => {
+        // Words: FLIP animate dropped ones, stagger-fade the rest
+        allSpans.forEach((span, i) => {
+          const isDropped = labelToBody.has(span.dataset.word!);
+          setTimeout(() => {
             span.style.transform = "translate(0,0) rotate(0rad)";
-          });
+            span.style.opacity = "0.85";
+          }, isDropped ? 0 : 40 + i * 4);
         });
       });
     });
