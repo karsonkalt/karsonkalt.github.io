@@ -52,24 +52,18 @@ export const initGutter = () => {
   const makeWalls = () => {
     const { top: BT, bottom: BB, left: BL, right: BR } = docRect();
     const W = vw();
-    const S = { isStatic: true, label: "wall", render: { fillStyle: "transparent" } };
-
-    // Full-height angled funnel: (0,0)→(BL,BT) and (W,0)→(BR,BT)
-    const lLen = Math.sqrt(BL * BL + BT * BT);
-    const lAng = Math.atan2(BT, BL) - Math.PI / 2;
-    const rDx  = BR - W;
-    const rLen = Math.sqrt(rDx * rDx + BT * BT);
-    const rAng = Math.atan2(BT, rDx) - Math.PI / 2;
+    const S     = { isStatic: true, label: "wall", render: { fillStyle: "transparent" } };
+    const FLARE = 300; // px each flare extends at 45°
 
     return [
       // Bin floor
       Bodies.rectangle(W / 2, BB + WALL / 2, W * 4, WALL, S),
-      // Bin side walls
-      Bodies.rectangle(BL - WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, S),
-      Bodies.rectangle(BR + WALL / 2, (BT + BB) / 2, WALL, (BB - BT) * 4, S),
-      // Full-height funnel
-      Bodies.rectangle(BL / 2, BT / 2, 8, lLen, { ...S, angle: lAng }),
-      Bodies.rectangle((W + BR) / 2, BT / 2, 8, rLen, { ...S, angle: rAng }),
+      // Bin side walls — exact bin height
+      Bodies.rectangle(BL - WALL / 2, (BT + BB) / 2, WALL, BB - BT, S),
+      Bodies.rectangle(BR + WALL / 2, (BT + BB) / 2, WALL, BB - BT, S),
+      // 45° flares from bin top corners extending upward/outward
+      Bodies.rectangle(BL - FLARE / 2, BT - FLARE / 2, 8, FLARE * Math.SQRT2, { ...S, angle: -Math.PI / 4 }),
+      Bodies.rectangle(BR + FLARE / 2, BT - FLARE / 2, 8, FLARE * Math.SQRT2, { ...S, angle:  Math.PI / 4 }),
     ];
   };
 
@@ -125,7 +119,21 @@ export const initGutter = () => {
     const vh    = window.innerHeight;
 
     Composite.allBodies(engine.world).forEach((body) => {
-      if (body.isStatic) return;
+      if (body.isStatic) {
+        const verts = body.vertices;
+        ctx.save();
+        ctx.strokeStyle = "rgba(255,0,0,0.6)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        verts.forEach((v, i) => {
+          i === 0 ? ctx.moveTo(v.x * dpr, (v.y - window.scrollY) * dpr)
+                  : ctx.lineTo(v.x * dpr, (v.y - window.scrollY) * dpr);
+        });
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+        return;
+      }
       // Document-space y → viewport y
       const vx = body.position.x;
       const vy = body.position.y - sy;

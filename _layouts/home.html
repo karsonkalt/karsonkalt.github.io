@@ -259,82 +259,30 @@ layout: base
     <p class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted mb-6 pb-4 border-b border-w-20">Artifacts</p>
 
     {%- if site.notes.size > 0 -%}
-    <p class="text-[10px] font-semibold tracking-[0.12em] uppercase text-muted mb-4">Patterns</p>
-    <ul class="list-none m-0 mb-10">
-      {%- assign date_format = "%b %-d, %Y" -%}
-      {%- assign sorted_notes = site.notes | sort: "date" | reverse -%}
+    {%- assign date_format = "%b %-d, %Y" -%}
+    {%- assign sorted_notes = site.notes | sort: "date" | reverse -%}
+    <div class="grid mb-10" style="grid-template-columns: auto 1fr; row-gap: 0;">
       {%- for note in sorted_notes -%}
-      <li>
-        <a href="{{ note.url | relative_url }}"
-           class="link-item flex flex-col gap-1.5 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
-          <span class="text-[10px] font-normal text-muted uppercase tracking-wider">{{ note.date | date: date_format }}</span>
-          <span class="text-lg font-semibold text-primary leading-snug post-title">{{ note.title | escape }}</span>
+      <a href="{{ note.url | relative_url }}"
+         class="contents group no-underline">
+        <div class="py-2.5 pr-8 flex flex-col gap-0.5">
+          <span class="text-sm font-semibold text-primary group-hover:text-accent transition-colors duration-100 leading-snug">{{ note.title | escape }}</span>
+          <span class="text-[10px] text-muted tabular-nums">{{ note.date | date: date_format }}</span>
+        </div>
+        <div class="py-2.5 flex items-start">
           {% if note.description %}
-          <span class="text-sm text-muted font-normal leading-relaxed line-clamp-2">{{ note.description | escape }}</span>
+          <span class="text-sm text-muted leading-snug">{{ note.description | escape }}</span>
           {% endif %}
-        </a>
-      </li>
+        </div>
+      </a>
       {%- endfor -%}
-    </ul>
-    <p class="text-[10px] font-semibold tracking-[0.12em] uppercase text-muted mb-4">Other</p>
+    </div>
     {%- endif -%}
 
-    <ul class="list-none m-0">
-
-      <li>
-        <a href="https://www.figma.com/community" target="_blank"
-           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
-          <div class="w-10 h-10 shrink-0 mt-0.5 rounded flex items-center justify-center bg-w-05 border border-w-10">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted">
-              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/>
-            </svg>
-          </div>
-          <div class="flex flex-col gap-1 min-w-0">
-            <span class="text-[10px] text-muted uppercase tracking-wider">Figma Community</span>
-            <span class="text-base font-semibold text-primary">Design System Token Architecture</span>
-            <span class="text-sm text-muted leading-relaxed line-clamp-2">Token taxonomy, alias layer conventions, and multi-brand theming patterns used in production.</span>
-          </div>
-        </a>
-      </li>
-
-      <li>
-        <a href="https://github.com/karsonkalt" target="_blank"
-           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
-          <div class="w-10 h-10 shrink-0 mt-0.5 rounded flex items-center justify-center bg-w-05 border border-w-10">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted">
-              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-            </svg>
-          </div>
-          <div class="flex flex-col gap-1 min-w-0">
-            <span class="text-[10px] text-muted uppercase tracking-wider">GitHub</span>
-            <span class="text-base font-semibold text-primary">Open Source Contributions</span>
-            <span class="text-sm text-muted leading-relaxed line-clamp-2">Patches, plugins, and tooling across graph visualization, dev tooling, and component libraries.</span>
-          </div>
-        </a>
-      </li>
-
-      <li>
-        <a href="https://www.linkedin.com/in/kaltkarson/" target="_blank"
-           class="link-item flex items-start gap-4 py-5 px-2 -mx-2 no-underline transition-transform duration-100 hover:scale-[1.01]">
-          <div class="w-10 h-10 shrink-0 mt-0.5 rounded flex items-center justify-center bg-w-05 border border-w-10">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-muted">
-              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-            </svg>
-          </div>
-          <div class="flex flex-col gap-1 min-w-0">
-            <span class="text-[10px] text-muted uppercase tracking-wider">Talks & Writing</span>
-            <span class="text-base font-semibold text-primary">Conference & Internal Talks</span>
-            <span class="text-sm text-muted leading-relaxed line-clamp-2">Presentations on graph-based security visualization, query UX design, and frontend architecture patterns.</span>
-          </div>
-        </a>
-      </li>
-
-    </ul>
   </section>
 
   <!-- Skills bin -->
-  <div id="skills-bin" class="relative mt-20 w-full" style="height:320px;cursor:crosshair;border-left:0.5px solid var(--white-20);border-right:0.5px solid var(--white-20);border-bottom:0.5px solid var(--white-20);">
+  <div id="skills-bin" class="relative mt-20 w-full" style="height:320px;border-left:0.5px solid var(--white-20);border-right:0.5px solid var(--white-20);border-bottom:0.5px solid var(--white-20);">
     <span class="absolute top-3 left-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-muted pointer-events-none select-none">Skills</span>
   </div>
 

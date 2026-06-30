@@ -291,9 +291,6 @@
   .mb-3 {
     margin-bottom: calc(var(--spacing) * 3);
   }
-  .mb-4 {
-    margin-bottom: calc(var(--spacing) * 4);
-  }
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
   }
@@ -439,11 +436,11 @@
   .justify-between {
     justify-content: space-between;
   }
-  .justify-center {
-    justify-content: center;
-  }
   .gap-0 {
     gap: 0;
+  }
+  .gap-0\.5 {
+    gap: calc(var(--spacing) * 0.5);
   }
   .gap-1 {
     gap: var(--spacing);
@@ -513,9 +510,6 @@
   .bg-b-40 {
     background-color: var(--color-b-40);
   }
-  .bg-w-05 {
-    background-color: var(--color-w-05);
-  }
   .object-cover {
     object-fit: cover;
   }
@@ -537,6 +531,9 @@
   .py-1 {
     padding-block: var(--spacing);
   }
+  .py-2\.5 {
+    padding-block: calc(var(--spacing) * 2.5);
+  }
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
   }
@@ -551,6 +548,9 @@
   }
   .pt-14 {
     padding-top: calc(var(--spacing) * 14);
+  }
+  .pr-8 {
+    padding-right: calc(var(--spacing) * 8);
   }
   .pb-4 {
     padding-bottom: calc(var(--spacing) * 4);
@@ -755,6 +755,13 @@
     -webkit-user-select: none;
     user-select: none;
   }
+  .group-hover\:text-accent {
+    &:is(:where(.group):hover *) {
+      @media (hover: hover) {
+        color: var(--color-accent);
+      }
+    }
+  }
   .last\:border-0 {
     &:last-child {
       border-style: var(--tw-border-style);
@@ -934,6 +941,14 @@ html.light::before {
 .icon-btn:hover::after {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+#back-to-top::after {
+  left: auto;
+  right: 0;
+  transform: translateY(3px);
+}
+#back-to-top:hover::after {
+  transform: translateY(0);
 }
 #theme-toggle .icon-sun {
   display: block;
