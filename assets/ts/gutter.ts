@@ -188,8 +188,14 @@ export const initGutter = () => {
   let lastDocX = 0;
   let lastDocY = 0;
 
+  const clampX = (clientX: number) => {
+    const g = gw();
+    const margin = 20;
+    return Math.max(g + margin, Math.min(vw() - g - margin, clientX));
+  };
+
   const startSpawn = (clientX: number, clientY: number) => {
-    lastDocX = clientX;
+    lastDocX = clampX(clientX);
     lastDocY = clientY + window.scrollY;
     spawnAt(lastDocX, lastDocY);
     holdInterval = setInterval(() => spawnAt(lastDocX, lastDocY), 130);
