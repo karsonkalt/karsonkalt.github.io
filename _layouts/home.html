@@ -162,13 +162,20 @@ layout: base
       </button>
     </div>
 
-    <!-- Section select (mobile) -->
-    <select id="section-select" aria-label="Jump to section"
-            class="section-select sm:hidden flex-1 min-w-0">
-      <option value="section-writing">Writing</option>
-      <option value="section-projects">Projects</option>
-      <option value="section-artifacts">Artifacts</option>
-    </select>
+    <!-- Section select (mobile) — styled like the contact button -->
+    <div class="section-select-wrap sm:hidden relative flex-1 min-w-0">
+      <select id="section-select" aria-label="Jump to section"
+              class="section-select absolute inset-0 opacity-0 w-full cursor-pointer">
+        <option value="section-writing">Writing</option>
+        <option value="section-projects">Projects</option>
+        <option value="section-artifacts">Artifacts</option>
+      </select>
+      <div id="section-select-label"
+           class="flex items-center gap-1.5 px-2.5 py-1 text-accent border border-accent text-xs rounded-sm pointer-events-none whitespace-nowrap w-fit">
+        <span id="section-select-text">Writing</span>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8L12 15L19 8H5Z"/></svg>
+      </div>
+    </div>
 
   </nav>
 

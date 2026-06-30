@@ -8,6 +8,22 @@ export const initScrollNav = (): void => {
     .filter(Boolean) as HTMLElement[];
 
   const select = document.getElementById("section-select") as HTMLSelectElement | null;
+  const selectText = document.getElementById("section-select-text");
+
+  // Map section id → display label
+  const sectionLabel: Record<string, string> = {
+    "section-writing": "Writing",
+    "section-projects": "Projects",
+    "section-artifacts": "Artifacts",
+  };
+
+  const scrollTo = (id: string) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const navH = nav.getBoundingClientRect().height;
+    const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
 
   const setActive = (id: string) => {
     tabs.forEach((t) => {
@@ -16,28 +32,16 @@ export const initScrollNav = (): void => {
       t.classList.toggle("scroll-tab--active", active);
     });
     if (select && select.value !== id) select.value = id;
+    if (selectText) selectText.textContent = sectionLabel[id] ?? id;
   };
 
-  // Click → smooth scroll
+  // Click → smooth scroll (desktop tabs)
   tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const target = document.getElementById(tab.dataset.section!);
-      if (!target) return;
-      // offset for sticky nav height
-      const navH = nav.getBoundingClientRect().height;
-      const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
-      window.scrollTo({ top, behavior: "smooth" });
-    });
+    tab.addEventListener("click", () => scrollTo(tab.dataset.section!));
   });
 
   // Select → smooth scroll (mobile)
-  select?.addEventListener("change", () => {
-    const target = document.getElementById(select.value);
-    if (!target) return;
-    const navH = nav.getBoundingClientRect().height;
-    const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
-    window.scrollTo({ top, behavior: "smooth" });
-  });
+  select?.addEventListener("change", () => scrollTo(select.value));
 
   // Scroll-spy via IntersectionObserver
   // We watch each section with a rootMargin that fires when the section
