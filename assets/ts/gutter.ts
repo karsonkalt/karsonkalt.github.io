@@ -1,7 +1,11 @@
 import * as Matter from "matter-js";
 import { CHARS } from "./shared/chars";
 
-document.addEventListener("DOMContentLoaded", () => initGutter());
+console.log("[gutter] script loaded");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("[gutter] DOMContentLoaded, bin el:", document.getElementById("skills-bin"));
+  initGutter();
+});
 
 const MIN_FONT = 11;
 const MAX_FONT = 20;
@@ -52,7 +56,8 @@ export const initGutter = () => {
   const makeWalls = () => {
     const { top: BT, bottom: BB, left: BL, right: BR } = docRect();
     const W = vw();
-    const opts = { isStatic: true, label: "wall", render: { fillStyle: "transparent" } };
+    console.log("[gutter] bin doc rect:", { BT, BB, BL, BR, W, scrollY: window.scrollY });
+    const opts = { isStatic: true, label: "wall", render: { fillStyle: "rgba(255,0,0,0.4)" } };
 
     const walls: Matter.Body[] = [
       // Bin floor
@@ -128,6 +133,7 @@ export const initGutter = () => {
     Body.setVelocity(body, { x: (Math.random() - 0.5) * 2, y: 0.5 });
     Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06);
     Composite.add(engine.world, body);
+    console.log("[gutter] spawned", char, "at doc", { docX, docY }, "scrollY", window.scrollY);
   };
 
   // ── rAF loop: tick engine + draw ────────────────────────────────────────
@@ -144,7 +150,22 @@ export const initGutter = () => {
     const vh    = window.innerHeight;
 
     Composite.allBodies(engine.world).forEach((body) => {
-      if (body.isStatic) return;
+      if (body.isStatic) {
+        // Debug: draw walls as red boxes
+        const verts = body.vertices;
+        ctx.save();
+        ctx.fillStyle = "rgba(255,0,0,0.25)";
+        ctx.beginPath();
+        verts.forEach((v, i) => {
+          const vx = v.x * dpr;
+          const vy = (v.y - window.scrollY) * dpr;
+          i === 0 ? ctx.moveTo(vx, vy) : ctx.lineTo(vx, vy);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
       // Document-space y → viewport y
       const vx = body.position.x;
       const vy = body.position.y - sy;
