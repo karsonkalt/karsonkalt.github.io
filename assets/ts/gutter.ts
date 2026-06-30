@@ -109,9 +109,10 @@ export const initGutter = () => {
   // ── rAF loop: tick engine + draw ────────────────────────────────────────
   let last = performance.now();
   const draw = (now: number) => {
-    const delta = Math.min(now - last, 32); // cap at 32ms
+    const delta = Math.min(now - last, 32);
     last = now;
     Engine.update(engine, delta);
+    if (typeof tickSort === "function") tickSort();
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -120,21 +121,7 @@ export const initGutter = () => {
     const vh    = window.innerHeight;
 
     Composite.allBodies(engine.world).forEach((body) => {
-      if (body.isStatic) {
-        const verts = body.vertices;
-        ctx.save();
-        ctx.strokeStyle = "rgba(255,0,0,0.6)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        verts.forEach((v, i) => {
-          i === 0 ? ctx.moveTo(v.x * dpr, (v.y - window.scrollY) * dpr)
-                  : ctx.lineTo(v.x * dpr, (v.y - window.scrollY) * dpr);
-        });
-        ctx.closePath();
-        ctx.stroke();
-        ctx.restore();
-        return;
-      }
+      if (body.isStatic) return;
       // Document-space y → viewport y
       const vx = body.position.x;
       const vy = body.position.y - sy;
@@ -190,6 +177,68 @@ export const initGutter = () => {
   }, { passive: true });
   window.addEventListener("touchend", () => {
     if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
+  });
+
+  // ── Sort ────────────────────────────────────────────────────────────────
+  let sortTargets: Map<Matter.Body, { x: number; y: number }> | null = null;
+  let isSorted = false;
+
+  const calcTargets = () => {
+    const bodies = Composite.allBodies(engine.world).filter(b => !b.isStatic);
+    const { left: BL, top: BT, width: BW } = docRect();
+    const PAD = 20;
+    const GAP = 6;
+    let cx = BL + PAD;
+    let cy = BT + PAD + 24; // leave room for Skills label
+    let rowH = 0;
+    const targets = new Map<Matter.Body, { x: number; y: number }>();
+
+    bodies.forEach(body => {
+      const fontSize = (body as any).charSize ?? 14;
+      const w = body.label.length * fontSize * 0.58 + 12;
+      const h = fontSize + 8;
+      if (cx + w > BL + BW - PAD && cx > BL + PAD) {
+        cx = BL + PAD;
+        cy += rowH + GAP;
+        rowH = 0;
+      }
+      targets.set(body, { x: cx + w / 2, y: cy + h / 2 });
+      cx += w + GAP;
+      rowH = Math.max(rowH, h);
+    });
+    return targets;
+  };
+
+  // Lerp bodies to targets each frame when sorted
+  const tickSort = () => {
+    if (!sortTargets) return;
+    engine.gravity.y = 0;
+    Composite.allBodies(engine.world).forEach(body => {
+      if (body.isStatic) return;
+      const t = sortTargets!.get(body);
+      if (!t) return;
+      const dx = t.x - body.position.x;
+      const dy = t.y - body.position.y;
+      Body.setPosition(body, { x: body.position.x + dx * 0.12, y: body.position.y + dy * 0.12 });
+      Body.setVelocity(body, { x: 0, y: 0 });
+      Body.setAngle(body, body.angle * 0.85);
+      Body.setAngularVelocity(body, 0);
+    });
+  };
+
+  // Wire sort button
+  document.getElementById("skills-sort-btn")?.addEventListener("click", () => {
+    isSorted = !isSorted;
+    const btn = document.getElementById("skills-sort-btn")!;
+    if (isSorted) {
+      sortTargets = calcTargets();
+      engine.gravity.y = 0;
+      btn.textContent = "Unsort";
+    } else {
+      sortTargets = null;
+      engine.gravity.y = 2.2;
+      btn.textContent = "Sort";
+    }
   });
 
   // ── Resize ──────────────────────────────────────────────────────────────
