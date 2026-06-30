@@ -283,7 +283,13 @@ layout: base
 
   <!-- Skills bin -->
   <div id="skills-bin" class="relative mt-20 w-full" style="height:480px;border-left:0.5px solid var(--white-20);border-right:0.5px solid var(--white-20);border-bottom:0.5px solid var(--white-20);">
-    <span class="absolute top-3 left-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-muted pointer-events-none select-none">Skills</span>
+    <div class="absolute top-2 left-4 right-4 flex items-center justify-between pointer-events-none" style="pointer-events:none;">
+      <span class="text-[10px] font-semibold tracking-[0.15em] uppercase text-muted select-none">Skills</span>
+      <button id="skills-sort-btn" class="pointer-events-auto text-[10px] font-semibold tracking-[0.12em] uppercase text-muted hover:text-primary transition-colors duration-150" style="all:unset;cursor:pointer;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--white-50);">Sort</button>
+    </div>
+    <!-- Sorted grid (hidden by default) -->
+    <div id="skills-grid" class="absolute inset-0 pt-8 px-4 pb-4 hidden">
+    </div>
   </div>
 
 </main>
