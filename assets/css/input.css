@@ -353,8 +353,14 @@ html.light .scroll-nav--stuck { background: rgba(255,255,255,0.92); box-shadow: 
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* Responsive header slots */
+@media (min-width: 800px) { .header-mobile-only { display: none; } }
+@media (max-width: 799px) { .header-desktop-only { display: none; } }
+
 /* Mobile section select — invisible native select overlaid on styled label */
-.section-select-wrap { display: flex; align-items: center; padding: 8px 0; }
+.section-select-wrap { display: flex; align-items: center; }
+
+@media (min-width: 800px) { .section-select-wrap { display: none; } }
 
 .section-select {
   appearance: none;
