@@ -19,7 +19,7 @@ export const initSkillsSort = () => {
   const bin     = document.getElementById("skills-bin");
   const btn     = document.getElementById("skills-sort-btn");
   const grid    = document.getElementById("skills-grid");
-  const canvas  = bin?.querySelector("canvas") as HTMLCanvasElement | null;
+  const canvas  = document.getElementById("gutter-canvas") as HTMLCanvasElement | null;
   if (!bin || !btn || !grid) return;
 
   let sorted = false;

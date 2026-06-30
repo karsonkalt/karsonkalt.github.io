@@ -17,6 +17,7 @@ export const initGutter = () => {
 
   // ── Canvas: fixed, viewport-sized ──────────────────────────────────────
   const canvas = document.createElement("canvas");
+  canvas.id = "gutter-canvas";
   canvas.style.cssText =
     "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;";
   document.body.appendChild(canvas);
@@ -170,7 +171,10 @@ export const initGutter = () => {
     holdInterval = setInterval(() => spawnAt(lastDocX, lastDocY), 130);
   };
 
-  window.addEventListener("mousedown", (e) => startSpawn(e.clientX, e.clientY));
+  window.addEventListener("mousedown", (e) => {
+    if ((e.target as HTMLElement).closest("button, a, input, select, [role='button']")) return;
+    startSpawn(e.clientX, e.clientY);
+  });
   window.addEventListener("mousemove", (e) => {
     lastDocX = e.clientX;
     lastDocY = e.clientY + window.scrollY;
