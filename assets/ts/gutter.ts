@@ -113,17 +113,10 @@ export const initGutter = () => {
     const btn = document.getElementById("skills-sort-btn") as HTMLButtonElement | null;
     if (!btn) return;
     const ready = count >= ORGANIZE_THRESHOLD;
-    if (ready) {
-      btn.textContent = "Organize";
-      btn.style.cursor = "pointer";
-      btn.style.pointerEvents = "auto";
-      btn.style.color = "var(--white-50)";
-    } else {
-      btn.textContent = "Click anywhere to drop";
-      btn.style.cursor = "default";
-      btn.style.pointerEvents = "none";
-      btn.style.color = "var(--white-40)";
-    }
+    btn.textContent = ready ? "Organize" : "Drop";
+    btn.style.cursor = ready ? "pointer" : "default";
+    btn.style.pointerEvents = ready ? "auto" : "none";
+    btn.style.color = ready ? "var(--white-60)" : "var(--white-30)";
   };
   updateBinUI();
 
