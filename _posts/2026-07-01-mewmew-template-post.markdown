@@ -20,34 +20,42 @@ I wanted something I could drop in a directory and open in a browser. No install
 import { html, render, useState, useEffect } from 'https://esm.sh/htm/preact/standalone'
 ```
 
-`htm` lets you write components as tagged template literals — no JSX, no transpilation step. The browser runs it directly.
+`htm` lets you write components as tagged template literals — no JSX, no transpilation. The browser runs it directly.
 
-The file ships with a small design system (CSS custom properties, utility classes, flex layout primitives) and six base components: `Box`, `Txt`, `Btn`, `Ghost`, `Nav`, `Pre`, `Field`. That's enough to build a real app shell. The default layout is `list → inspector` — sidebar on the left, detail pane on the right — but it's just a starting point.
+The file ships with a small design system (CSS custom properties, utility classes, flex layout primitives) and seven base components: `Box`, `Txt`, `Btn`, `Ghost`, `Nav`, `Pre`, `Field`. The default shell is `list → inspector` — sidebar left, detail pane right.
 
-## Why not just use a framework
+## Built for agents
 
-I still use proper frameworks for real products. But I build a lot of one-off tools: a query viewer, a data diff explorer, a lightweight admin panel for a personal project. These don't need a monorepo. They don't need CI. They just need to work.
+The template has a MODE block that the agent is required to fill in before writing any product code:
 
-With mewmew I can go from nothing to a functioning UI in about ten minutes. When I'm done, the artifact is one file I can check in anywhere, share over Slack, or open on any machine without setup.
+```
+ * ── MODE (agent-maintained) ──────────────────────────────
+ *   current: not yet set — replace this line after first implementation pass
+ *
+ *   Patterns to pick from (or combine):
+ *     list → inspector     sidebar list, detail pane opens on selection
+ *     data-viz             chart-first layout, tables are secondary
+ *     query viewer         input (sql/j1ql/filter) + result table below
+ *     data dense           multi-column table, filters prominent, minimal chrome
+ *     dashboard            metric cards + trend charts, read-only overview
+ *     form / wizard        sequential input, validation, submit flow
+ *     canvas               freeform spatial layout (graph, diagram, map)
+```
 
-## Why it works as an AI starting point
+The agent can't skip this. Before touching the app shell it has to name the layout pattern — which forces the right questions up front: what is the primary view, what is the user doing, what's the interaction model. That decision lives in the file, updated as the app evolves, so a later agent can read the current state without reverse-engineering it.
 
-This is the part I didn't expect to matter as much as it does.
+The `*` suffix convention does the same thing for components: anything added by an agent or user gets a `*` marker in the doc comment. A future agent reads the inventory and immediately knows what's portable base system vs. what's project-specific.
 
-When I hand the template to an AI agent and say "implement X on top of this," the constraints in the file act as a shared vocabulary. The comment block at the top is a literal spec:
+## In practice
 
-- Every layout container is `<${Box}>`. Never a raw `<div>`.
-- Token classes only. No inline colors.
-- Buttons are `<${Btn}>` or `<${Ghost}>`.
+The GIF below is the historian workbench — a query tool I built on top of this template to explore time-series graph snapshots.
 
-The agent doesn't have to invent a component model. It doesn't drift toward some other CSS approach it saw in training. It follows the system that's already there.
+![historian workbench]({{ site.baseurl }}/assets/img/historian-workbench.gif)
 
-I also added a `* suffix` convention — any class or component the agent introduces gets a `*` marker in a doc comment, so the next agent (or me) knows what's portable base system vs. what's specific to this project. That small discipline keeps the template reusable across projects.
+That app is ~1000 lines in a single file. No bundler, no build step. The full mewmew base is in my [notes](/notes) if you want to copy it.
 
 ## The tradeoff
 
-No build step means no TypeScript, no tree-shaking, no bundled output. The `esm.sh` import requires a network connection the first time (it caches after). For anything that ships to real users or needs significant performance, this is the wrong tool.
+No build step means no TypeScript, no tree-shaking, no bundled output. The `esm.sh` import needs a network connection the first time. For anything that ships to real users or needs significant scale, this is the wrong tool.
 
-But for internal tools, prototypes, and exploratory UIs — it's exactly right. The constraints aren't limitations. They're what make it fast.
-
-The file is in my [notes](/notes) if you want to grab it.
+For internal tools, prototypes, and exploratory UIs it's right. The constraints aren't limitations — they're what make it fast.
