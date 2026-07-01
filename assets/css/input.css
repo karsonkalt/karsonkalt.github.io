@@ -443,10 +443,14 @@ html.light .dropdown-content {
   font-family: var(--font-mono);
   font-size: 0.875em;
   background: var(--white-10);
-  color: #e6edf3;
+  color: var(--white-100);
   padding: 0.15em 0.4em;
   border-radius: 3px;
 }
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) .post-content pre code { color: #e6edf3; }
+}
+:root.light .post-content pre code { color: #e6edf3; }
 .post-content blockquote { border-left: 2px solid var(--white-20); padding-left: 1rem; color: var(--text-secondary); }
 
 .copy-button {
